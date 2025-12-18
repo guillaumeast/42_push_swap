@@ -10,7 +10,7 @@ void	extract_from_a_to_b(t_stack *a, t_stack *b)
 	int		min;
 	int		max;
 
-	k = 2 * square_root_rounded((int)a->cap);
+	k = 3 * square_root_rounded((int)a->cap);
 	min = 0;
 	max = k;
 	while (min < (int)a->cap)
