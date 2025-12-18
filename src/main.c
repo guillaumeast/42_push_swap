@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-static bool free_and_exit(t_stack *a, t_stack *b);
+static void free_and_exit(t_stack *a, t_stack *b);
 
 int	main(int argc, char **argv)
 {
@@ -18,13 +18,13 @@ int	main(int argc, char **argv)
 		free_and_exit(&a, &b);
 	if (!stack_convert_to_sorted_indexes(&a))
 		free_and_exit(&a, &b);
-	// TODO: extract
+	extract_from_a_to_b(&a, &b);
 	// TODO: rebuild
 	stack_free(&a, &b);
 	return (0);
 }
 
-static bool free_and_exit(t_stack *a, t_stack *b)
+static void free_and_exit(t_stack *a, t_stack *b)
 {
 	stack_free(a, b);
 	write(2, "Error\n", 6);

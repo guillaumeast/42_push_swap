@@ -5,8 +5,8 @@
 1. Parse `args`
 2. Validate `args` (`arg is not an integer`, `arg > INT_MAX`, `arg < INT_MIN`, duplicate args, ...)
 3. Replace each `value` with `sorted_index`
-1. Vider `A` par `chunks`
-2. Reconstruire `A` depuis `B` avec méthode `greedy`
+4. Vider `A` par `chunks`
+5. Reconstruire `A` depuis `B` avec méthode `greedy`
 
 ## Extraction
 
