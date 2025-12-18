@@ -1,10 +1,16 @@
 #include "push_swap.h"
 #include "libft.h"
 
+static void	extract_from_a_to_b(t_stack *a, t_stack *b);
 static void	extract_chunk(t_stack *a, t_stack *b, int min, int max);
 static int	get_cheapest_index(t_stack *a, int min, int max);
 
-void	extract_from_a_to_b(t_stack *a, t_stack *b)
+void	step_1(t_stack *a, t_stack *b)
+{
+	extract_from_a_to_b(a, b);
+}
+
+static void	extract_from_a_to_b(t_stack *a, t_stack *b)
 {
 	int		k;
 	int		min;

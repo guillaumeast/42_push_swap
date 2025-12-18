@@ -1,11 +1,16 @@
 #include "push_swap.h"
 
+static void	rebuild_from_b_to_a(t_stack *a, t_stack *b);
 static void	compute_indexes(t_stack *stack, int *max_i, int *second_max_i);
 static int	get_cost(t_stack *stack, int index);
 static void	rebuild_index(t_stack *a, t_stack *b, size_t index);
 
-#include <stdio.h>	// TODO: tmp DEBUG
-void	rebuild_from_b_to_a(t_stack *a, t_stack *b)
+void	step_2(t_stack *a, t_stack *b)
+{
+	rebuild_from_b_to_a(a, b);
+}
+
+static void	rebuild_from_b_to_a(t_stack *a, t_stack *b)
 {
 	int		max_index;
 	int		second_max_index;
@@ -14,13 +19,11 @@ void	rebuild_from_b_to_a(t_stack *a, t_stack *b)
 	bool	swap_next;
 
 	swap_next = false;
-	// debug_print_stack(a, b, B);
 	while (b->count > 0)
 	{
 		compute_indexes(b, &max_index, &second_max_index);
 		max_cost = get_cost(b, max_index);
 		second_max_cost = get_cost(b, second_max_index);
-		// fprintf(stderr, "[DEBUG] max_i = %i (cost = %i) | second_max_i = %i (cost = %i) | swap_next = %i\n", max_index, max_cost, second_max_index, second_max_cost, swap_next);
 		if (swap_next || second_max_cost == -1 || max_cost < second_max_cost)
 		{
 			rebuild_index(a, b, (size_t)max_index);
@@ -33,7 +36,6 @@ void	rebuild_from_b_to_a(t_stack *a, t_stack *b)
 			rebuild_index(a, b, (size_t)second_max_index);
 			swap_next = true;
 		}
-		// debug_print_stack(a, b, B);
 	}
 }
 
