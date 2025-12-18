@@ -43,17 +43,17 @@ void	rotate_reverse(t_stack *a, t_stack *b, t_stack_choice choice)
 {
 	if (choice == A && a->count > 1)
 	{
-		write(1, "rra\n", 3);
+		write(1, "rra\n", 4);
 		rotate_reverse_stack(a);
 	}
 	else if (choice == B && b->count > 1)
 	{
-		write(1, "rrb\n", 3);
+		write(1, "rrb\n", 4);
 		rotate_reverse_stack(b);
 	}
 	else if (choice == BOTH && (a->count > 1 || b->count > 1))
 	{
-		write(1, "rrr\n", 3);
+		write(1, "rrr\n", 4);
 		rotate_reverse_stack(a);
 		rotate_reverse_stack(b);
 	}

@@ -26,7 +26,7 @@ typedef struct s_sort_data
 
 /*---------- args.c ----------*/
 
-bool	parse_args(char **argv, t_stack *a);
+bool	parse_args(int argc, char **argv, t_stack *a, t_stack *b);
 
 /*---------- stack.c ----------*/
 
@@ -42,6 +42,10 @@ bool	sort(int **array, size_t size);
 
 void	extract_from_a_to_b(t_stack *a, t_stack *b);
 
+/*---------- rebuild.c ----------*/
+
+void	rebuild_from_b_to_a(t_stack *a, t_stack *b);
+
 /*---------- push_swap.c ----------*/
 
 void	push(t_stack *a, t_stack *b, t_stack_choice choice);
@@ -51,5 +55,8 @@ void	swap(t_stack *a, t_stack *b, t_stack_choice choice);
 
 void	rotate(t_stack *a, t_stack *b, t_stack_choice choice);
 void	rotate_reverse(t_stack *a, t_stack *b, t_stack_choice choice);
+
+// TODO: tmp DEBUG
+void debug_print_stack(t_stack *a, t_stack *b, t_stack_choice choice);
 
 #endif

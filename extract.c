@@ -2,7 +2,7 @@
 #include "libft.h"
 
 static void	extract_chunk(t_stack *a, t_stack *b, int min, int max);
-static int	find_cheapest_index(t_stack *a, int min, int max);
+static int	get_cheapest_index(t_stack *a, int min, int max);
 
 void	extract_from_a_to_b(t_stack *a, t_stack *b)
 {
@@ -30,7 +30,7 @@ static void	extract_chunk(t_stack *a, t_stack *b, int min, int max)
 	median = min + ((max - min) / 2);
 	while (true)
 	{
-		i = find_cheapest_index(a, min, max);
+		i = get_cheapest_index(a, min, max);
 		if (i == -1)
 			break ;
 		if (i <= (int)a->count - 1 - i)
@@ -50,7 +50,7 @@ static void	extract_chunk(t_stack *a, t_stack *b, int min, int max)
 	}
 }
 
-static int	find_cheapest_index(t_stack *a, int min, int max)
+static int	get_cheapest_index(t_stack *a, int min, int max)
 {
 	int	first_from_top;
 	int	first_from_bottom;
@@ -70,7 +70,7 @@ static int	find_cheapest_index(t_stack *a, int min, int max)
 	first_from_bottom = i;
 	cost_from_top = first_from_top;
 	cost_from_bottom = (int)a->count - first_from_bottom;
-	if (cost_from_top < cost_from_bottom)
+	if (cost_from_top <= cost_from_bottom)
 		return (first_from_top);
 	return (first_from_bottom);
 }
