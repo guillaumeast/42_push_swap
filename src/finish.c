@@ -3,22 +3,17 @@
 bool	is_sorted(t_stack *stack)
 {
 	size_t	i;
+	int		breaks;
 
+	breaks = 0;
 	i = 0;
-	while (i < stack->count - 1)
+	while (i < stack->count)
 	{
-		if (stack->values[i + 1] == 0)
-		{
-			i++;
-			continue ;
-		}
-		if (stack->values[i] > stack->values[i + 1])
-			return (false);
+		if (stack->values[i] > stack->values[(i + 1) % stack->count])
+			breaks++;
 		i++;
 	}
-	if (stack->values[0] != 0 && stack->values[i] > stack->values[0])
-		return (false);
-	return (true);
+	return (breaks <= 1);
 }
 
 bool	finish(t_stack *a, t_stack *b)
