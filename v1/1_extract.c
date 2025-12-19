@@ -5,9 +5,10 @@ static void	extract_from_a_to_b(t_stack *a, t_stack *b);
 static void	extract_chunk(t_stack *a, t_stack *b, int min, int max);
 static int	get_cheapest_index(t_stack *a, int min, int max);
 
-void	step_1(t_stack *a, t_stack *b)
+bool	step_1(t_stack *a, t_stack *b)
 {
 	extract_from_a_to_b(a, b);
+	return (true);
 }
 
 static void	extract_from_a_to_b(t_stack *a, t_stack *b)

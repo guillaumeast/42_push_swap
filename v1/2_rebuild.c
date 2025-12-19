@@ -5,9 +5,10 @@ static void	compute_indexes(t_stack *stack, int *max_i, int *second_max_i);
 static int	get_cost(t_stack *stack, int index);
 static void	rebuild_index(t_stack *a, t_stack *b, size_t index);
 
-void	step_2(t_stack *a, t_stack *b)
+bool	step_2(t_stack *a, t_stack *b)
 {
 	rebuild_from_b_to_a(a, b);
+	return (true);
 }
 
 static void	rebuild_from_b_to_a(t_stack *a, t_stack *b)

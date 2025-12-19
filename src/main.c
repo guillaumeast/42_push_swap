@@ -21,11 +21,13 @@ int	main(int argc, char **argv)
 	fprintf(stderr, "===> START\n");
 	debug_print(&a, &b);
 	fprintf(stderr, "\n===> STEP 1\n");
-	step_1(&a, &b);
+	if (!step_1(&a, &b))
+		free_and_exit(&a, &b);
 	if (b.count > 0 || !is_sorted(&a))
 	{
 		fprintf(stderr, "\n===> STEP 2\n");
-		step_2(&a, &b);
+		if (!step_2(&a, &b))
+			free_and_exit(&a, &b);
 		debug_print(&a, &b);
 		debug_print_move_count();
 	}

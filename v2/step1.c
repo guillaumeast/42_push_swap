@@ -4,13 +4,12 @@ static bool	should_insert_from_b(t_stack *a, t_stack *b, size_t index);
 static bool	should_swap(t_stack *a, size_t index);
 static bool	value_is_sorted(t_stack *a, size_t index);
 
-void	step_1(t_stack *a, t_stack *b)
+bool	step_1(t_stack *a, t_stack *b)
 {
 	int	first_kept_value;
 
 	first_kept_value = -1;
-	size_t i = 1;
-	while (i++ < 6 && !is_sorted(a) && a->values[0] != first_kept_value)
+	while (!is_sorted(a) && a->values[0] != first_kept_value)
 	{
 		if (should_swap(a, 0))
 			swap(a, b, A);
@@ -31,6 +30,7 @@ void	step_1(t_stack *a, t_stack *b)
 		debug_print(a, b);
 	}
 	debug_print_move_count();
+	return (true);
 }
 
 static bool	should_insert_from_b(t_stack *a, t_stack *b, size_t index)
