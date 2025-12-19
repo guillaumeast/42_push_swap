@@ -26,7 +26,10 @@ typedef struct s_sort_data
 
 /*----------------------------------------------------*/
 // TODO: tmp DEBUG
-void debug_print(t_stack *a, t_stack *b);
+#include <stdio.h>
+int	g_move_count;
+void	debug_print_move_count(void);
+void	debug_print(t_stack *a, t_stack *b);
 /*----------------------------------------------------*/
 
 /*---------- args.c ----------*/
@@ -45,10 +48,10 @@ bool	sort(int **array, size_t size);
 
 /*----------------------------------------------------*/
 // TODO: tmp depending on version
-
 void	step_1(t_stack *a, t_stack *b);
 void	step_2(t_stack *a, t_stack *b);
-
+bool	is_sorted(t_stack *stack);
+bool	finish(t_stack *a, t_stack *b);
 /*----------------------------------------------------*/
 
 

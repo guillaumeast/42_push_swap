@@ -10,17 +10,20 @@ void	rotate(t_stack *a, t_stack *b, t_stack_choice choice)
 	{
 		write(1, "ra\n", 3);
 		rotate_stack(a);
+		g_move_count++;
 	}
 	else if (choice == B && b->count > 1)
 	{
 		write(1, "rb\n", 3);
 		rotate_stack(b);
+		g_move_count++;
 	}
 	else if (choice == BOTH && (a->count > 1 || b->count > 1))
 	{
 		write(1, "rr\n", 3);
 		rotate_stack(a);
 		rotate_stack(b);
+		g_move_count++;
 	}
 }
 
@@ -45,17 +48,20 @@ void	rotate_reverse(t_stack *a, t_stack *b, t_stack_choice choice)
 	{
 		write(1, "rra\n", 4);
 		rotate_reverse_stack(a);
+		g_move_count++;
 	}
 	else if (choice == B && b->count > 1)
 	{
 		write(1, "rrb\n", 4);
 		rotate_reverse_stack(b);
+		g_move_count++;
 	}
 	else if (choice == BOTH && (a->count > 1 || b->count > 1))
 	{
 		write(1, "rrr\n", 4);
 		rotate_reverse_stack(a);
 		rotate_reverse_stack(b);
+		g_move_count++;
 	}
 }
 

@@ -5,7 +5,14 @@ static void	print_sep(int max_value_len);
 static int	get_max_len(t_stack *a, t_stack *b);
 static int	get_value_len(int nb);
 
-void debug_print(t_stack *a, t_stack *b)
+int	g_move_count = 0;
+
+void	debug_print_move_count(void)
+{
+	fprintf(stderr, "===> MOVE COUNT = %i\n", g_move_count);
+}
+
+void	debug_print(t_stack *a, t_stack *b)
 {
 	size_t	i;
 	size_t	max_stack_count;
