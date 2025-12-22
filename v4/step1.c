@@ -1,6 +1,13 @@
 #include "v4.h"
 #include "push_swap.h"
 
+// bool	step_1(t_stack *a, t_stack *b)
+// {
+// 	while (a->count > 2)
+// 		push(a, b, B);
+// 	return (true);
+// }
+
 static void	optimized_swap(t_stack *a, t_stack *b, int *b_min, int *b_max);
 static void	optimized_rotate(t_stack *a, t_stack *b, int *b_min, int *b_max);
 static void	push_and_update(t_stack *a, t_stack *b, int *b_min, int *b_max);

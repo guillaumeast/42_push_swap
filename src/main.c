@@ -18,25 +18,25 @@ int	main(int argc, char **argv)
 		free_and_exit(&a, &b);
 
 	/*---------- TODO: tmp DEBUG + versionning ----------*/
-	fprintf(stderr, "===> START\n");
-	debug_print(&a, &b);
-	fprintf(stderr, "\n===> STEP 1\n");
+	// fprintf(stderr, "===> START\n");
+	// debug_print(&a, &b);
+	// fprintf(stderr, "\n===> STEP 1\n");
 	if (!step_1(&a, &b))
 		free_and_exit(&a, &b);
-	debug_print(&a, &b);
-	debug_print_move_count();
+	// debug_print(&a, &b);
+	// debug_print_move_count();
 	if (b.count > 0 || !is_sorted(&a))
 	{
-		fprintf(stderr, "\n===> STEP 2\n");
+		// fprintf(stderr, "\n===> STEP 2\n");
 		if (!step_2(&a, &b))
 			free_and_exit(&a, &b);
-		debug_print(&a, &b);
-		debug_print_move_count();
+		// debug_print(&a, &b);
+		// debug_print_move_count();
 	}
-	fprintf(stderr, "\n===> FINISH\n");
+	// fprintf(stderr, "\n===> FINISH\n");
 	finish(&a, &b);
-	debug_print(&a, &b);
-	debug_print_move_count();
+	// debug_print(&a, &b);
+	// debug_print_move_count();
 	/*---------------------------------------------------*/
 
 	stack_free(&a, &b);
