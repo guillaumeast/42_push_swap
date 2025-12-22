@@ -24,23 +24,58 @@ int	main(int argc, char **argv)
 	if (!step_1(&a, &b))
 		free_and_exit(&a, &b);
 	// debug_print(&a, &b);
-	// debug_print_move_count();
 	if (b.count > 0 || !is_sorted(&a))
 	{
 		// fprintf(stderr, "\n===> STEP 2\n");
 		if (!step_2(&a, &b))
 			free_and_exit(&a, &b);
 		// debug_print(&a, &b);
-		// debug_print_move_count();
 	}
 	// fprintf(stderr, "\n===> FINISH\n");
 	finish(&a, &b);
 	// debug_print(&a, &b);
-	// debug_print_move_count();
 	/*---------------------------------------------------*/
 
 	stack_free(&a, &b);
 	return (0);
+}
+
+bool	is_sorted(t_stack *stack)
+{
+	size_t	i;
+	int		breaks;
+
+	breaks = 0;
+	i = 0;
+	while (i < stack->count)
+	{
+		if (stack->values[i] > stack->values[(i + 1) % stack->count])
+			breaks++;
+		i++;
+	}
+	return (breaks <= 1);
+}
+
+bool	finish(t_stack *a, t_stack *b)
+{
+	size_t	zero_index;
+
+	if (b->count > 0 || !is_sorted(a))
+		return (false);
+	zero_index = 0;
+	while (a->values[zero_index] != 0)
+		zero_index++;
+	if (zero_index <= a->count / 2)
+	{
+		while (a->values[0] != 0)
+			rotate(a, b, A);
+	}
+	else
+	{
+		while (a->values[0] != 0)
+			rotate_reverse(a, b, A);
+	}
+	return (true);
 }
 
 static void free_and_exit(t_stack *a, t_stack *b)

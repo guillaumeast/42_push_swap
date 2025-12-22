@@ -7,11 +7,6 @@ static int	get_value_len(int nb);
 
 int	g_move_count = 0;
 
-void	debug_print_move_count(void)
-{
-	fprintf(stderr, "===> MOVE COUNT = %i\n", g_move_count);
-}
-
 void	debug_print(t_stack *a, t_stack *b)
 {
 	size_t	i;
@@ -39,6 +34,7 @@ void	debug_print(t_stack *a, t_stack *b)
 	print_sep(max_value_len);
 	fprintf(stderr, "| %*zu | %*zu |\n", max_value_len, a->count, max_value_len, b->count);
 	print_sep(max_value_len);
+	fprintf(stderr, "===> MOVE COUNT = %i\n", g_move_count);
 }
 
 static void	print_sep(int max_value_len)

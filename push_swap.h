@@ -24,6 +24,25 @@ typedef struct s_sort_data
 	int		*tmp;
 }	t_sort_data;
 
+typedef struct s_tail
+{
+	size_t	start_index;
+	int		*array;
+	size_t	max_len;
+	int		*pos;
+	int		*prev;
+}	t_tail;
+
+typedef struct s_lis
+{
+	size_t	start_index;
+	bool	*keep;
+	size_t	keep_count;
+	bool	*swap;
+	size_t	swap_count;
+	size_t	final_len;
+}	t_lis;
+
 /*----------------------------------------------------*/
 // TODO: tmp DEBUG
 #include <stdio.h>
@@ -50,10 +69,18 @@ bool	sort(int **array, size_t size);
 // TODO: tmp depending on version
 bool	step_1(t_stack *a, t_stack *b);
 bool	step_2(t_stack *a, t_stack *b);
-bool	is_sorted(t_stack *stack);
-bool	finish(t_stack *a, t_stack *b);
-/*----------------------------------------------------*/
 
+/*---------- tail.c ----------*/
+
+t_tail	*tail_get(t_stack *stack, size_t start_index);
+void	tail_free(t_tail **tail);
+
+/*---------- lis.c ----------*/
+
+t_lis	*lis_get_best(t_stack *stack);
+void	lis_free(t_lis **lis);
+
+/*----------------------------------------------------*/
 
 /*---------- push_swap.c ----------*/
 
@@ -64,5 +91,10 @@ void	swap(t_stack *a, t_stack *b, t_stack_choice choice);
 
 void	rotate(t_stack *a, t_stack *b, t_stack_choice choice);
 void	rotate_reverse(t_stack *a, t_stack *b, t_stack_choice choice);
+
+/*---------- finish.c ----------*/
+
+bool	is_sorted(t_stack *stack);
+bool	finish(t_stack *a, t_stack *b);
 
 #endif

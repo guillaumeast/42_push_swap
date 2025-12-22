@@ -1,12 +1,9 @@
 #include "libft.h"
-#include "v4.h"
+#include "push_swap.h"
 #include <stdlib.h>
 
 static t_tail	*tail_new(size_t start_index, size_t capacity);
 static void		tail_update(t_tail *tail, int value, int index);
-// static void		tail_print(t_tail *tail, size_t capacity);
-
-// TODO: resolve LIS from TAIL
 
 t_tail	*tail_get(t_stack *stack, size_t start_index)
 {
@@ -93,37 +90,3 @@ void	tail_free(t_tail **tail)
 	free(*tail);
 	*tail = NULL;
 }
-
-// static void	tail_print(t_tail *tail, size_t capacity)
-// {
-// 	size_t	i;
-
-// 	fprintf(stderr, "\n-----TAIL-----\n");
-// 	fprintf(stderr, "start_index = %zu\n", tail->start_index);
-// 	fprintf(stderr, "max_len     = %zu\n", tail->max_len);
-// 	fprintf(stderr, "array       = [");
-// 	i = 0;
-// 	while (i < tail->max_len)
-// 	{
-// 		fprintf(stderr, "%i ", tail->array[i]);
-// 		i++;
-// 	}
-// 	fprintf(stderr, "]\n");
-// 	fprintf(stderr, "pos         = [");
-// 	i = 0;
-// 	while (i < tail->max_len)
-// 	{
-// 		fprintf(stderr, "%i ", tail->pos[i]);
-// 		i++;
-// 	}
-// 	fprintf(stderr, "]\n");
-// 	fprintf(stderr, "prev        = [");
-// 	i = 0;
-// 	while (i < capacity)
-// 	{
-// 		fprintf(stderr, "%i ", tail->prev[i]);
-// 		i++;
-// 	}
-// 	fprintf(stderr, "]\n");
-// 	fprintf(stderr, "--------------\n");
-// }
