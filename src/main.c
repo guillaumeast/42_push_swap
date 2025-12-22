@@ -23,6 +23,8 @@ int	main(int argc, char **argv)
 	fprintf(stderr, "\n===> STEP 1\n");
 	if (!step_1(&a, &b))
 		free_and_exit(&a, &b);
+	debug_print(&a, &b);
+	debug_print_move_count();
 	if (b.count > 0 || !is_sorted(&a))
 	{
 		fprintf(stderr, "\n===> STEP 2\n");
