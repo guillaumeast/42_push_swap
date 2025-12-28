@@ -18,6 +18,7 @@ void	push(t_stack *a, t_stack *b, t_stack_choice choice)
 		push_stack(a, b);
 		g_move_count++;
 	}
+	// debug_print(a, b);
 }
 
 static void	push_stack(t_stack *from, t_stack *to)
@@ -59,6 +60,7 @@ void	swap(t_stack *a, t_stack *b, t_stack_choice choice)
 		swap_stack(b);
 		g_move_count++;
 	}
+	// debug_print(a, b);
 }
 
 static void	swap_stack(t_stack *stack)
