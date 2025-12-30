@@ -5,17 +5,24 @@ CFLAGS		= -Wall -Wextra -Werror -g3
 LIBFT_DIR	:= libft
 LIBFT		:= $(LIBFT_DIR)/libft.a
 
-VERSION		:= v4
+VERSION		:= v6
 SRCS		:= \
-	$(wildcard src/*.c) \
-	$(wildcard src/init/*.c) \
-	$(wildcard src/moves/*.c) \
 	$(wildcard src/$(VERSION)/*.c) \
+	$(wildcard src/$(VERSION)/init/*.c) \
+	$(wildcard src/$(VERSION)/moves/*.c) \
 	$(wildcard src/$(VERSION)/lis/*.c)
-INCLUDES	:= -I. -I$(LIBFT_DIR)
+INCLUDES	:= -Isrc/$(VERSION) -I$(LIBFT_DIR)
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
+
+BONUS_NAME	:= checker
+BONUS_SRCS	:= \
+	$(wildcard bonus/*.c) \
+	$(wildcard src/init/*.c) \
+	$(wildcard src/moves/*.c) \
+	src/debug_print.c
+BONUS_OBJS	:= $(BONUS_SRCS:%.c=$(OBJ_DIR)/%.o)
 
 TESTER_DIR	:= tester_SimonCROS
 TESTER_NAME	:= complexity
@@ -37,6 +44,9 @@ $(NAME): $(OBJS) $(LIBFT)
 $(OBJ_DIR)/%.o : %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+
+bonus: $(BONUS_OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(BONUS_OBJS) $(LIBFT) -o $(BONUS_NAME)
 
 test: re
 	@$(MAKE) -C $(TESTER_DIR) fr
