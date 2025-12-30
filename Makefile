@@ -5,13 +5,12 @@ CFLAGS		= -Wall -Wextra -Werror -g3
 LIBFT_DIR	:= libft
 LIBFT		:= $(LIBFT_DIR)/libft.a
 
-VERSION		:= v6
 SRCS		:= \
-	$(wildcard src/$(VERSION)/*.c) \
-	$(wildcard src/$(VERSION)/init/*.c) \
-	$(wildcard src/$(VERSION)/moves/*.c) \
-	$(wildcard src/$(VERSION)/lis/*.c)
-INCLUDES	:= -Isrc/$(VERSION) -I$(LIBFT_DIR)
+	$(wildcard src/*.c) \
+	$(wildcard src/init/*.c) \
+	$(wildcard src/moves/*.c) \
+	$(wildcard src/lis/*.c)
+INCLUDES	:= -I. -I$(LIBFT_DIR)
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
