@@ -1,0 +1,7 @@
+- Do **bonus**
+- Nominette `args.c`
+- Add `README.md`
+- Remove `debug_print.c`
+- Copy `libft` files instead of submodule
+- Remove **tester**
+- Remove **docs**

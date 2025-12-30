@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 17:03:35 by gastesan          #+#    #+#             */
-/*   Updated: 2025/12/30 17:06:11 by gastesan         ###   ########.fr       */
+/*   Updated: 2025/12/30 17:20:17 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,26 +67,18 @@ static size_t	get_target_index(t_stack *a, int b_value)
 {
 	size_t	i;
 	int		target_index;
-	int		target_value;
 	int		smallest_index;
-	int		smallest_value;
 
 	target_index = -1;
-	target_value = INT_MAX;
 	smallest_index = -1;
 	i = 0;
 	while (i < a->count)
 	{
-		if (smallest_index == -1 || a->values[i] <= smallest_value)
-		{
+		if (smallest_index == -1 || a->values[i] <= a->values[smallest_index])
 			smallest_index = (int)i;
-			smallest_value = a->values[i];
-		}
-		if (a->values[i] > b_value && a->values[i] <= target_value)
-		{
+		if (a->values[i] > b_value
+			&& (target_index == -1 || a->values[i] <= a->values[target_index]))
 			target_index = (int)i;
-			target_value = a->values[i];
-		}
 		i++;
 	}
 	if (target_index != -1)
@@ -119,35 +111,17 @@ static void	compute_cost(t_move *mv, t_stack *a, t_stack *b)
 
 static void	execute_move(t_move *move, t_stack *a, t_stack *b)
 {
-	while (move->ra > 0)
-	{
+	while (move->ra-- > 0)
 		rotate(a, b, A);
-		move->ra--;
-	}
-	while (move->rb > 0)
-	{
+	while (move->rb-- > 0)
 		rotate(a, b, B);
-		move->rb--;
-	}
-	while (move->rr > 0)
-	{
+	while (move->rr-- > 0)
 		rotate(a, b, BOTH);
-		move->rr--;
-	}
-	while (move->rra > 0)
-	{
+	while (move->rra-- > 0)
 		rotate_reverse(a, b, A);
-		move->rra--;
-	}
-	while (move->rrb > 0)
-	{
+	while (move->rrb-- > 0)
 		rotate_reverse(a, b, B);
-		move->rrb--;
-	}
-	while (move->rrr > 0)
-	{
+	while (move->rrr-- > 0)
 		rotate_reverse(a, b, BOTH);
-		move->rrr--;
-	}
 	push(a, b, A);
 }
