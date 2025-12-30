@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sort.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/30 17:04:26 by gastesan          #+#    #+#             */
+/*   Updated: 2025/12/30 17:09:00 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 #include <stdlib.h>
 
@@ -9,7 +21,7 @@ bool	sort(int **array, size_t size)
 	t_sort_data	data;
 
 	data.array = *array;
-	data.tmp = malloc(size * sizeof *data.tmp);
+	data.tmp = malloc(size * sizeof * data.tmp);
 	if (!data.tmp)
 		return (false);
 	merge_sort(&data, 0, size - 1);

@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/30 17:03:39 by gastesan          #+#    #+#             */
+/*   Updated: 2025/12/30 17:07:07 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
 
-static void free_and_exit(t_stack *a, t_stack *b);
+static void	free_and_exit(t_stack *a, t_stack *b);
 
 int	main(int argc, char **argv)
 {
@@ -16,24 +28,14 @@ int	main(int argc, char **argv)
 		free_and_exit(&a, &b);
 	if (!stack_convert_to_sorted_indexes(&a))
 		free_and_exit(&a, &b);
-
-	/*---------- TODO: tmp DEBUG + versionning ----------*/
-	// fprintf(stderr, "==========> START <==========\n");
-	// debug_print(&a, &b);
-	// fprintf(stderr, "\n==========> STEP 1 <==========\n");
 	if (!step_1(&a, &b))
 		free_and_exit(&a, &b);
 	if (b.count > 0 || !is_sorted(&a))
 	{
-		// fprintf(stderr, "\n==========> STEP 2 <==========\n");
 		if (!step_2(&a, &b))
 			free_and_exit(&a, &b);
 	}
-	// fprintf(stderr, "\n==========> FINISH <==========\n");
 	finish(&a, &b);
-	// debug_print(&a, &b);
-	/*---------------------------------------------------*/
-
 	stack_free(&a, &b);
 	return (0);
 }
@@ -76,7 +78,7 @@ bool	finish(t_stack *a, t_stack *b)
 	return (true);
 }
 
-static void free_and_exit(t_stack *a, t_stack *b)
+static void	free_and_exit(t_stack *a, t_stack *b)
 {
 	stack_free(a, b);
 	write(2, "Error\n", 6);

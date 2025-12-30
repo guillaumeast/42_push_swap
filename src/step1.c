@@ -1,11 +1,16 @@
-#include "push_swap.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   step1.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/30 17:03:32 by gastesan          #+#    #+#             */
+/*   Updated: 2025/12/30 17:03:33 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-// bool	step_1(t_stack *a, t_stack *b)
-// {
-// 	while (a->count > 2)
-// 		push(a, b, B);
-// 	return (true);
-// }
+#include "push_swap.h"
 
 static void	optimized_swap(t_stack *a, t_stack *b, int *b_min, int *b_max);
 static void	optimized_rotate(t_stack *a, t_stack *b, int *b_min, int *b_max);

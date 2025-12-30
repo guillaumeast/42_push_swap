@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lis.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/30 17:04:16 by gastesan          #+#    #+#             */
+/*   Updated: 2025/12/30 17:10:11 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "push_swap.h"
 #include <stdlib.h>
@@ -69,15 +81,15 @@ static t_lis	*lis_new(t_tail *tail, t_stack *stack)
 
 	if (!tail || !stack)
 		return (NULL);
-	lis = malloc(sizeof *lis);
+	lis = malloc(sizeof * lis);
 	if (!lis)
 		return (NULL);
-	lis->keep = malloc(stack->count * sizeof *lis->keep);
-	lis->swap = malloc(stack->count * sizeof *lis->keep);
+	lis->keep = malloc(stack->count * sizeof * lis->keep);
+	lis->swap = malloc(stack->count * sizeof * lis->keep);
 	if (!lis->keep || !lis->swap)
 		return (lis_free(&lis), NULL);
-	ft_memset(lis->keep, false, stack->count * sizeof *lis->keep);
-	ft_memset(lis->swap, false, stack->count * sizeof *lis->swap);
+	ft_memset(lis->keep, false, stack->count * sizeof * lis->keep);
+	ft_memset(lis->swap, false, stack->count * sizeof * lis->swap);
 	lis->keep_count = 0;
 	lis->swap_count = 0;
 	lis->final_len = 0;

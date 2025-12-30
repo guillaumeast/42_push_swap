@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   push_swap.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/30 17:04:02 by gastesan          #+#    #+#             */
+/*   Updated: 2025/12/30 17:04:03 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 #include <unistd.h>
 
@@ -18,7 +30,6 @@ void	push(t_stack *a, t_stack *b, t_stack_choice choice)
 		push_stack(a, b);
 		g_move_count++;
 	}
-	// debug_print(a, b);
 }
 
 static void	push_stack(t_stack *from, t_stack *to)
@@ -60,7 +71,6 @@ void	swap(t_stack *a, t_stack *b, t_stack_choice choice)
 		swap_stack(b);
 		g_move_count++;
 	}
-	// debug_print(a, b);
 }
 
 static void	swap_stack(t_stack *stack)

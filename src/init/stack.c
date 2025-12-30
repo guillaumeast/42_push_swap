@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   stack.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/30 17:04:29 by gastesan          #+#    #+#             */
+/*   Updated: 2025/12/30 17:08:37 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "push_swap.h"
 #include <stdlib.h>
 
@@ -9,8 +21,8 @@ bool	stack_init(t_stack *a, t_stack *b, size_t capacity)
 	b->cap = capacity;
 	a->count = 0;
 	b->count = 0;
-	a->values = malloc(capacity * sizeof *a->values);
-	b->values = malloc(capacity * sizeof *a->values);
+	a->values = malloc(capacity * sizeof * a->values);
+	b->values = malloc(capacity * sizeof * a->values);
 	return (a->values && b->values);
 }
 
@@ -19,7 +31,7 @@ bool	stack_convert_to_sorted_indexes(t_stack *a)
 	int		*array;
 	size_t	i;
 
-	array = malloc(a->cap * sizeof *array);
+	array = malloc(a->cap * sizeof * array);
 	if (!array)
 		return (false);
 	i = 0;

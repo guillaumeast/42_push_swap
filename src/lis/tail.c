@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tail.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/30 17:04:13 by gastesan          #+#    #+#             */
+/*   Updated: 2025/12/30 17:09:51 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "push_swap.h"
 #include <stdlib.h>
@@ -28,23 +40,23 @@ static t_tail	*tail_new(size_t start_index, size_t capacity)
 {
 	t_tail	*tail;
 
-	tail = malloc(sizeof *tail);
+	tail = malloc(sizeof * tail);
 	if (!tail)
 		return (NULL);
 	tail->start_index = start_index;
 	tail->array = NULL;
 	tail->pos = NULL;
 	tail->prev = NULL;
-	tail->array = malloc(capacity * sizeof *tail->array);
-	tail->pos = malloc(capacity * sizeof *tail->pos);
-	tail->prev = malloc(capacity * sizeof *tail->prev);
+	tail->array = malloc(capacity * sizeof * tail->array);
+	tail->pos = malloc(capacity * sizeof * tail->pos);
+	tail->prev = malloc(capacity * sizeof * tail->prev);
 	if (!tail->array || !tail->pos || !tail->prev)
 	{
 		tail_free(&tail);
 		return (NULL);
 	}
-	ft_memset(tail->pos, -1, capacity * sizeof *tail->pos);
-	ft_memset(tail->prev, -1, capacity * sizeof *tail->prev);
+	ft_memset(tail->pos, -1, capacity * sizeof * tail->pos);
+	ft_memset(tail->prev, -1, capacity * sizeof * tail->prev);
 	tail->max_len = 0;
 	return (tail);
 }
@@ -52,7 +64,7 @@ static t_tail	*tail_new(size_t start_index, size_t capacity)
 static void	tail_update(t_tail *tail, int value, int index)
 {
 	size_t	lower_index;
-	int 	left;
+	int		left;
 	int		mid;
 	int		right;
 

@@ -43,6 +43,19 @@ typedef struct s_lis
 	size_t	final_len;
 }	t_lis;
 
+typedef struct s_move
+{
+	size_t	b_index;
+	size_t	a_target_index;
+	size_t	ra;
+	size_t	rra;
+	size_t	rb;
+	size_t	rrb;
+	size_t	rr;
+	size_t	rrr;
+	size_t	total_cost;
+}	t_move;
+
 /*----------------------------------------------------*/
 // TODO: tmp DEBUG
 #include <stdio.h>

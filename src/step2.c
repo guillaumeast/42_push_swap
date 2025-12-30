@@ -1,20 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   step2.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/30 17:03:35 by gastesan          #+#    #+#             */
+/*   Updated: 2025/12/30 17:06:11 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "push_swap.h"
 #include <limits.h>
 #include <stdlib.h>
-
-typedef struct s_move
-{
-	size_t	b_index;
-	size_t	a_target_index;
-	size_t	ra;
-	size_t	rra;
-	size_t	rb;
-	size_t	rrb;
-	size_t	rr;
-	size_t	rrr;
-	size_t	total_cost;
-}	t_move;
 
 static t_move	*get_next_move(t_stack *a, t_stack *b);
 static size_t	get_target_index(t_stack *a, int b_value);
@@ -46,7 +45,7 @@ static t_move	*get_next_move(t_stack *a, t_stack *b)
 	i = 0;
 	while (i < b->count)
 	{
-		tmp_move = malloc(sizeof *tmp_move);
+		tmp_move = malloc(sizeof * tmp_move);
 		if (!tmp_move)
 			return (free(best_move), NULL);
 		tmp_move->b_index = i;

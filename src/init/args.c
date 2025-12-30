@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   args.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/30 17:04:22 by gastesan          #+#    #+#             */
+/*   Updated: 2025/12/30 17:08:08 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "push_swap.h"
 #include <limits.h>
@@ -6,7 +18,7 @@
 static bool		parse_splitted_args(char ***args, t_stack *a);
 static size_t	get_total_count(char ***args);
 static bool		is_numeric(char *arg);
-static bool 	is_unique(int nb, t_stack *stack);
+static bool		is_unique(int nb, t_stack *stack);
 static void		free_splitted_args(char ***args);
 
 bool	parse_args(int argc, char **argv, t_stack *a, t_stack *b)
@@ -15,7 +27,7 @@ bool	parse_args(int argc, char **argv, t_stack *a, t_stack *b)
 	char	***args;
 	bool	res;
 
-	args = malloc((size_t)argc * sizeof *args);
+	args = malloc((size_t)argc * sizeof * args);
 	if (!args)
 		return (false);
 	i = 1;
@@ -100,7 +112,7 @@ static bool	is_numeric(char *arg)
 	return (true);
 }
 
-static bool is_unique(int nb, t_stack *stack)
+static bool	is_unique(int nb, t_stack *stack)
 {
 	size_t	i;
 
