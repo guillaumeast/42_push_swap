@@ -32,6 +32,8 @@ TEST1_MAX	:= 700
 TEST2_ARGC	:= 500
 TEST2_MAX	:= 5500
 
+VIS_BIN		:= push_swap_visualizer/build/bin/visualizer
+
 all: $(NAME)
 
 $(LIBFT):
@@ -53,6 +55,9 @@ test: re
 	@./$(TESTER_BIN) $(TEST1_ARGC) $(TEST_ITER) $(TEST1_MAX) || true
 	@echo "\n----------"
 	@./$(TESTER_BIN) $(TEST2_ARGC) $(TEST_ITER) $(TEST2_MAX)
+
+vis: re
+	@$(VIS_BIN)
 
 clean:
 	rm -rf $(OBJ_DIR)

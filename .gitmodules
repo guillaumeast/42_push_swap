@@ -4,3 +4,6 @@
 [submodule "tester_SimonCROS"]
 	path = tester_SimonCROS
 	url = https://github.com/SimonCROS/push_swap_tester
+[submodule "push_swap_visualizer"]
+	path = push_swap_visualizer
+	url = https://github.com/o-reo/push_swap_visualizer
