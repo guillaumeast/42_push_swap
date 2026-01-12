@@ -6,25 +6,25 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 17:04:29 by gastesan          #+#    #+#             */
-/*   Updated: 2026/01/11 22:56:54 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/01/12 22:13:02 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
-#include <stdlib.h>
+// #include "push_swap.h"
+// #include <stdlib.h>
 
 // static int	get_index(int value, const int *array, size_t size);
 
-bool	stack_init(t_stack *a, t_stack *b, size_t capacity)
-{
-	a->cap = capacity;
-	b->cap = capacity;
-	a->count = 0;
-	b->count = 0;
-	a->values = malloc(capacity * sizeof * a->values);
-	b->values = malloc(capacity * sizeof * a->values);
-	return (a->values && b->values);
-}
+// bool	stack_init(t_stack *a, t_stack *b, size_t capacity)
+// {
+// 	a->cap = capacity;
+// 	b->cap = capacity;
+// 	a->count = 0;
+// 	b->count = 0;
+// 	a->values = malloc(capacity * sizeof * a->values);
+// 	b->values = malloc(capacity * sizeof * a->values);
+// 	return (a->values && b->values);
+// }
 
 // bool	stack_convert_to_sorted_indexes(t_stack *a)
 // {
@@ -75,10 +75,10 @@ bool	stack_init(t_stack *a, t_stack *b, size_t capacity)
 // 	return (-1);
 // }
 
-void	stack_free(t_stack *a, t_stack *b)
-{
-	if (a->values)
-		free(a->values);
-	if (b->values)
-		free(b->values);
-}
+// void	stack_free(t_stack *a, t_stack *b)
+// {
+// 	if (a->values)
+// 		free(a->values);
+// 	if (b->values)
+// 		free(b->values);
+// }

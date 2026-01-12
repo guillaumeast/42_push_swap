@@ -37,7 +37,7 @@ typedef enum e_move
 
 /*---------- stack.c ----------*/
 
-t_stack	stack_new(int *values, size_t count);
+t_stack	stack_new(int *values, size_t offset, size_t count, size_t len);
 bool	stack_dup(t_stack *dst, t_stack *src);
 int		stack_get_value(t_stack *stack, size_t index);
 

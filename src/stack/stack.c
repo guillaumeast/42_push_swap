@@ -2,14 +2,14 @@
 #include "stack.h"
 #include <stdlib.h>
 
-t_stack	stack_new(int *values, size_t count)
+t_stack	stack_new(int *values, size_t offset, size_t count, size_t len)
 {
 	t_stack	stack;
 
 	stack.values = values;
-	stack.offset = 0;
+	stack.offset = offset;
 	stack.cap = count;
-	stack.len = 0;
+	stack.len = len;
 	return (stack);
 }
 
