@@ -27,13 +27,13 @@ static void	rotate(t_stack *stack, bool reverse)
 	if (reverse)
 	{
 		stack->offset = (stack->offset - 1) % stack->cap;
-		while (stack->values[stack->offset] == -1)
+		while (stack->values[stack->offset] == EMPTY_CELL)
 			stack->offset = (stack->offset - 1) % stack->cap;
 	}
 	else
 	{
 		stack->offset = (stack->offset + 1) % stack->cap;
-		while (stack->values[stack->offset] == -1)
+		while (stack->values[stack->offset] == EMPTY_CELL)
 			stack->offset = (stack->offset + 1) % stack->cap;
 	}
 }
@@ -58,7 +58,7 @@ static void	swap(t_stack *stack)
 		return ;
 
 	i = stack->offset + 1;
-	while (stack->values[i] == -1)
+	while (stack->values[i] == EMPTY_CELL)
 		i = (i + 1) % stack->cap;
 	tmp = stack->values[stack->offset];
 	stack->values[stack->offset] = stack->values[i];
@@ -76,19 +76,19 @@ t_move	stack_push(t_stack *from, t_stack *to, t_target target)
 	i = (to->offset = (to->offset - 1) % to->cap);
 	deleted = to->values[i];
 	to->values[i] = from->values[from->offset];
-	from->values[from->offset] = -1;
+	from->values[from->offset] = EMPTY_CELL;
 	from->len--;
+	to->len++;
 	if (from->len > 0)
-		while (from->values[from->offset] == -1)
+		while (from->values[from->offset] == EMPTY_CELL)
 			from->offset = (from->offset + 1) % from->cap;
-	while (to->len > 0 && deleted != -1)
+	while (deleted != EMPTY_CELL)
 	{
 		i = (i - 1) % to->cap;
 		tmp_for_swap = to->values[i];
 		to->values[i] = deleted;
 		deleted = tmp_for_swap;
 	}
-	to->len++;
 	if (target == A)
 		return (PA);
 	return (PB);

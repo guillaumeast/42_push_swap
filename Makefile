@@ -7,9 +7,14 @@ LIBFT		:= $(LIBFT_DIR)/libft.a
 
 SRCS		:= \
 	$(wildcard src/*.c) \
-	$(wildcard src/args/*.c) \
-	$(wildcard src/stack/*.c)
-INCLUDES	:= -Isrc/args -Isrc/stack -I$(LIBFT_DIR)
+	$(wildcard src/1_args/*.c) \
+	$(wildcard src/2_stack/*.c) \
+	$(wildcard src/3_k_sort/*.c)
+INCLUDES	:= \
+	-I$(LIBFT_DIR) \
+	-Isrc/1_args \
+	-Isrc/2_stack \
+	-Isrc/3_k_sort
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

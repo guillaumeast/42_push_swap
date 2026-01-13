@@ -86,18 +86,21 @@ echo
 test_should_do_nothing
 
 test_should_throw_error " 2" "./push_swap 1 2 3 1" "                              -> duplicate      ->   " "..."
-test_should_throw_error " 3" "./push_swap 1 \"\" 3 4" "                             -> empty arg      ->   " "..."
-test_should_throw_error " 4" "./push_swap 1 + 3 4" "                              -> invalid '+'    ->   " "..."
-test_should_throw_error " 5" "./push_swap 1 - 3 4" "                              -> invalid '-'    ->   " "..."
-test_should_throw_error " 6" "./push_swap 1 2a3 4" "                              -> invalid '2a3'  ->   " "..."
-test_should_throw_error " 7" "./push_swap 1 2 -2147483649" "                      -> int underflow  ->   " "..."
-test_should_throw_error " 8" "./push_swap 1 2 2147483648" "                       -> int overflow   ->   " "..."
-test_should_throw_error " 9" "./push_swap 1 2 +2147483648" "                      -> int overflow   ->   " "..."
+test_should_throw_error " 3" "./push_swap \"\"" "                                   -> single empty   ->   " "..."
+test_should_throw_error " 4" "./push_swap 1 \"\" 3 4" "                             -> empty arg      ->   " "..."
+test_should_throw_error " 5" "./push_swap 1 + 3 4" "                              -> invalid '+'    ->   " "..."
+test_should_throw_error " 6" "./push_swap 1 - 3 4" "                              -> invalid '-'    ->   " "..."
+test_should_throw_error " 7" "./push_swap 1 2a3 4" "                              -> invalid '2a3'  ->   " "..."
+test_should_throw_error " 8" "./push_swap 1 2 -2147483649" "                      -> int underflow  ->   " "..."
+test_should_throw_error " 9" "./push_swap 1 2 2147483648" "                       -> int overflow   ->   " "..."
+test_should_throw_error "10" "./push_swap 1 2 +2147483648" "                      -> int overflow   ->   " "..."
+test_should_throw_error "11" "./push_swap 1 a2 3" "                               -> invalid start  ->   " "..."
+test_should_throw_error "12" "./push_swap \"\" \"\" \"\" \"\"" "                          -> all empty args ->   " "..."
 
-test_should_work "10" "./push_swap -2147483648 \"5 1\" +2147483647" "        -> space          ->   " "............."
-test_should_work "11" "./push_swap -2147483648 \" 5 1\" +2147483647" "       -> leading space  ->   " "............."
-test_should_work "12" "./push_swap -2147483648 \"5 1 \" +2147483647" "       -> trailing space ->   " "............."
-test_should_work "13" "./push_swap -2147483648 \"   5   1   \" +2147483647" "-> multi spaces   ->   " "............."
+test_should_work "13" "./push_swap -2147483648 \"5 1\" +2147483647" "        -> space          ->   " "............."
+test_should_work "14" "./push_swap -2147483648 \" 5 1\" +2147483647" "       -> leading space  ->   " "............."
+test_should_work "15" "./push_swap -2147483648 \"5 1 \" +2147483647" "       -> trailing space ->   " "............."
+test_should_work "16" "./push_swap -2147483648 \"   5   1   \" +2147483647" "-> multi spaces   ->   " "............."
 
 echo
 echo "=== End of tests ==="

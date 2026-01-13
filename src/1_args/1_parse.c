@@ -1,14 +1,12 @@
 #include "libft.h"
 #include "args.h"
 #include "check_priv.h"
-#include "replace_priv.h"
+#include "normalize_priv.h"
 #include <stdbool.h>
 #include <stdlib.h>
 
 static size_t	get_args_count(int argc, char **argv);
-static size_t	count_words(char *str);
 static bool		check_and_add_arg(t_args *args, char *str);
-static void		free_str_array(char **str_array);
 
 t_args	*parse_args(int argc, char **argv)
 {
@@ -33,7 +31,7 @@ t_args	*parse_args(int argc, char **argv)
 			return (free(res->values), free(res), NULL);
 		i++;
 	}
-	if (!replace_by_sorted_indexes(res->values, res->count))
+	if (!normalize(res->values, res->count))
 		return (free(res->values), free(res), NULL);
 	return (res);
 }
@@ -47,29 +45,8 @@ static size_t	get_args_count(int argc, char **argv)
 	count = 0;
 	while (i < argc)
 	{
-		count += count_words(argv[i]);
+		count += str_count_words(argv[i], ' ');
 		i++;
-	}
-	return (count);
-}
-
-static size_t	count_words(char *str)
-{
-	bool	in_word;
-	size_t	count;
-
-	in_word = false;
-	count = 0;
-	while (*str)
-	{
-		if (!in_word && *str != ' ')
-		{
-			in_word = true;
-			count++;
-		}
-		else if (in_word && *str == ' ')
-			in_word = false;
-		str++;
 	}
 	return (count);
 }
@@ -81,7 +58,7 @@ static bool	check_and_add_arg(t_args *args, char *str)
 
 	if (!str || ! *str)
 		return (false);
-	splitted = ft_split(str, ' ');
+	splitted = str_split(str, ' ');
 	if (!splitted)
 		return (false);
 	i = 0;
@@ -93,23 +70,10 @@ static bool	check_and_add_arg(t_args *args, char *str)
 			args->values, 
 			args->count
 		))
-			return (free_str_array(splitted), false);
+			return (str_array_free(&splitted), false);
 		args->count++;
 		i++;
 	}
-	free_str_array(splitted);
+	str_array_free(&splitted);
 	return (true);
-}
-
-static void	free_str_array(char **str_array)
-{
-	size_t	i;
-
-	i = 0;
-	while (str_array[i])
-	{
-		free(str_array[i]);
-		i++;
-	}
-	free(str_array);
 }

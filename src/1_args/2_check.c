@@ -3,14 +3,14 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-static bool	is_numeric(char *arg);
+static bool	is_int(char *arg);
 static bool	is_unique(int nb, int *array, size_t size);
 
 bool	check_arg(char *arg, int *ret, int *args_array, size_t size)
 {
 	long	tmp;
 
-	if (!is_numeric(arg) || ft_strlen(arg) > 11)
+	if (!is_int(arg))
 		return (false);
 	tmp = ft_atol(arg);
 	if (tmp < INT_MIN || tmp > INT_MAX)
@@ -21,24 +21,22 @@ bool	check_arg(char *arg, int *ret, int *args_array, size_t size)
 	return (true);
 }
 
-static bool	is_numeric(char *arg)
+static bool	is_int(char *arg)
 {
 	size_t	i;
 
-	if (arg[0] == '\0')
+	i = 0;
+	if (arg[i] == '\0')
 		return (false);
-	if (arg[0] != '-' && arg[0] != '+' && (arg[0] < '0' || arg[0] > '9'))
+	if ((arg[i] != '-' || arg[i] != '+') && arg[i++] == '\0')
 		return (false);
-	if ((arg[0] == '-' || arg[0] == '+') && (arg[1] < '0' || arg[1] > '9'))
-		return (false);
-	i = 1;
-	while (arg[i] != '\0' && arg[i] != ' ')
+	while (arg[i] != '\0')
 	{
 		if (arg[i] < '0' || arg[i] > '9')
 			return (false);
 		i++;
 	}
-	return (true);
+	return (i <= 11);
 }
 
 static bool	is_unique(int nb, int *array, size_t size)

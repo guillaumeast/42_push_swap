@@ -5,6 +5,7 @@
 
 // TODO: tmp DEBUG
 #include <stdio.h>
+static void	test(t_stack *a, t_stack *b);
 
 static void	free_and_exit(t_stack *a, t_stack *b);
 
@@ -23,7 +24,9 @@ int	main(int argc, char **argv)
 	free(args);
 	if (!stack_init(&b, NULL, a.cap))
 		free_and_exit(&a, &b);
-	stack_print(&a, &b);
+	/*--- TEST ---*/
+	test(&a, &b);
+	/*--- TEST ---*/
 	free(a.values);
 	free(b.values);
 	return (0);
@@ -37,4 +40,82 @@ static void	free_and_exit(t_stack *a, t_stack *b)
 		free(b->values);
 	write(2, "Error\n", 6);
 	exit(EXIT_FAILURE);
+}
+
+static void	test(t_stack *a, t_stack *b)
+{
+	stack_print(a, b);
+
+	// A moves
+	printf("swap A\n");
+	stack_swap(a, b, A);
+	stack_print(a, b);
+
+	printf("rotate A\n");
+	stack_rotate(a, b, A, false);
+	stack_print(a, b);
+
+	printf("reverse rotate A\n");
+	stack_rotate(a, b, A, true);
+	stack_print(a, b);
+
+	// Push from A to B
+	printf("push from A to B\n");
+	stack_push(a, b, B);
+	stack_print(a, b);
+
+	printf("push from A to B\n");
+	stack_push(a, b, B);
+	stack_print(a, b);
+
+	printf("push from A to B\n");
+	stack_push(a, b, B);
+	stack_print(a, b);
+
+	printf("push from A to B\n");
+	stack_push(a, b, B);
+	stack_print(a, b);
+
+	// B moves
+	printf("swap B\n");
+	stack_swap(a, b, B);
+	stack_print(a, b);
+
+	printf("rotate B\n");
+	stack_rotate(a, b, B, false);
+	stack_print(a, b);
+
+	printf("reverse rotate B\n");
+	stack_rotate(a, b, B, true);
+	stack_print(a, b);
+
+	// Both moves
+	printf("swap BOTH\n");
+	stack_swap(a, b, BOTH);
+	stack_print(a, b);
+
+	printf("rotate BOTH\n");
+	stack_rotate(a, b, BOTH, false);
+	stack_print(a, b);
+
+	printf("reverse rotate BOTH\n");
+	stack_rotate(a, b, BOTH, true);
+	stack_print(a, b);
+
+	// Push from B to A
+	printf("push from B to A\n");
+	stack_push(b, a, A);
+	stack_print(a, b);
+
+	printf("push from B to A\n");
+	stack_push(b, a, A);
+	stack_print(a, b);
+
+	printf("push from B to A\n");
+	stack_push(b, a, A);
+	stack_print(a, b);
+
+	printf("push from B to A\n");
+	stack_push(b, a, A);
+	stack_print(a, b);
 }

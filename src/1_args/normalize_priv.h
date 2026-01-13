@@ -4,6 +4,6 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-bool	replace_by_sorted_indexes(int *array, size_t size);
+bool	normalize(int *array, size_t size);
 
 #endif
