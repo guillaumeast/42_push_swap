@@ -22,7 +22,7 @@ bool	replace_by_sorted_indexes(int *array, size_t size)
 	if (!tmp)
 		return (false);
 	ft_memcpy(tmp, array, size * sizeof * array);
-	if (!sort(&array, size))
+	if (!sort(&tmp, size))
 		return (false);
 	i = 0;
 	while (i < size)

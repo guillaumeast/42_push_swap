@@ -78,17 +78,17 @@ t_move	stack_push(t_stack *from, t_stack *to, t_target target)
 	to->values[i] = from->values[from->offset];
 	from->values[from->offset] = -1;
 	from->len--;
-	to->len++;
 	if (from->len > 0)
 		while (from->values[from->offset] == -1)
 			from->offset = (from->offset + 1) % from->cap;
-	while (deleted != -1)
+	while (to->len > 0 && deleted != -1)
 	{
 		i = (i - 1) % to->cap;
 		tmp_for_swap = to->values[i];
 		to->values[i] = deleted;
 		deleted = tmp_for_swap;
 	}
+	to->len++;
 	if (target == A)
 		return (PA);
 	return (PB);

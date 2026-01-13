@@ -1,40 +1,36 @@
-#include "push_swap.h"
+#include "stack.h"
 #include <stdio.h>
 
 static void	print_sep(int max_value_len);
 static int	get_max_len(t_stack *a, t_stack *b);
 static int	get_value_len(int nb);
 
-int	g_move_count = 0;
-
-void	debug_print(t_stack *a, t_stack *b)
+void	stack_print(t_stack *a, t_stack *b)
 {
 	size_t	i;
-	size_t	max_stack_count;
+	size_t	idx_a;
+	size_t	idx_b;
 	int		max_value_len;
 
 	max_value_len = get_max_len(a, b);
-	max_stack_count = a->count;
-	if (b->count > a->count)
-		max_stack_count = b->count;
 	print_sep(max_value_len);
 	fprintf(stderr, "| %*s | %*s |\n", max_value_len, "A", max_value_len, "B");
 	print_sep(max_value_len);
 	i = 0;
-	while (i < max_stack_count)
+	idx_a = a->offset;
+	idx_b = b->offset;
+	while (i < a->cap)
 	{
-		if (i < a->count && i < b->count)
-			fprintf(stderr, "| %*i | %*i |\n", max_value_len, a->values[i], max_value_len, b->values[i]);
-		else if (i < a->count)
-			fprintf(stderr, "| %*i | %*s |\n", max_value_len, a->values[i], max_value_len, "");
-		else
-			fprintf(stderr, "| %*s | %*i |\n", max_value_len, "", max_value_len, b->values[i]);
+		fprintf(stderr, "| %*i | %*i |\n", max_value_len, a->values[idx_a],
+			max_value_len, b->values[idx_b]);
+		idx_a = (idx_a + 1) % a->cap;
+		idx_b = (idx_b + 1) % b->cap;
 		i++;
 	}
 	print_sep(max_value_len);
-	fprintf(stderr, "| %*zu | %*zu |\n", max_value_len, a->count, max_value_len, b->count);
+	fprintf(stderr, "| %*zu | %*zu |\n", max_value_len, a->len,
+		max_value_len, b->len);
 	print_sep(max_value_len);
-	fprintf(stderr, "===> MOVE COUNT = %i\n", g_move_count);
 }
 
 static void	print_sep(int max_value_len)
@@ -60,7 +56,7 @@ static int	get_max_len(t_stack *a, t_stack *b)
 
 	i = 0;
 	max_len = 0;
-	while (i < a->count)
+	while (i < a->cap)
 	{
 		len = get_value_len(a->values[i]);
 		if (len > max_len)
@@ -68,7 +64,7 @@ static int	get_max_len(t_stack *a, t_stack *b)
 		i++;
 	}
 	i = 0;
-	while (i < b->count)
+	while (i < b->cap)
 	{
 		len = get_value_len(b->values[i]);
 		if (len > max_len)

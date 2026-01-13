@@ -1,8 +1,10 @@
 #!/bin/bash
 
 # Colors
+YELLOW='\033[0;33m'
 GREEN='\033[0;32m'
 RED='\033[0;31m'
+GRAY='\033[0;90m'
 NC='\033[0m' # No Color
 
 print_success()
@@ -15,10 +17,8 @@ print_error()
 	local stdout_value="$1"
 	local stderr_value="$2"
 	local return_code="$3"
-	local error_message="$4"
 	
 	echo -e "${RED}✖${NC}"
-	echo -e "    ${RED}${error_message}${NC}"
 	echo -e "    ${RED}Stdout: '$stdout_value'${NC}"
 	echo -e "    ${RED}Stderr: '$stderr_value'${NC}"
 	echo -e "    ${RED}Return code: $return_code${NC}"
@@ -26,7 +26,7 @@ print_error()
 
 test_should_do_nothing()
 {
-	echo -n "Test  1: [./push_swap] (no arguments) ... "
+	echo -ne "Test  1: ${YELLOW}./push_swap${NC}                                       -> no arg         ->    should print nothing and return 0 ${GRAY}...............${NC} "
 	
 	stdout=$(./push_swap 2>/dev/null)
 	stderr=$(./push_swap 2>&1 >/dev/null)
@@ -35,16 +35,18 @@ test_should_do_nothing()
 	if [ -z "$stdout" ] && [ -z "$stderr" ] && [ $ret -eq 0 ]; then
 		print_success
 	else
-		print_error "$stdout" "$stderr" "$ret" "[./push_swap] should print nothing and return 0"
+		print_error "$stdout" "$stderr" "$ret"
 	fi
 }
 
 test_should_throw_error()
 {
-	local test_name="$1"
+	local test_num="$1"
 	local command="$2"
+	local description="$3"
+	local dots="$4"
 	
-	echo -n "$test_name ... "
+	echo -ne "Test ${test_num}: ${YELLOW}${command}${NC} ${description} should print 'Error' to stderr and return > 0 ${GRAY}${dots}${NC} "
 	
 	stdout=$(eval "$command" 2>/dev/null)
 	stderr=$(eval "$command" 2>&1 >/dev/null)
@@ -53,17 +55,18 @@ test_should_throw_error()
 	if echo "$stderr" | grep -q "Error" && [ $ret -ne 0 ]; then
 		print_success
 	else
-		print_error "$stdout" "$stderr" "$ret" "[$command] should print 'Error' to stderr and return > 0"
+		print_error "$stdout" "$stderr" "$ret"
 	fi
 }
 
 test_should_work()
 {
-	local test_name="$1"
+	local test_num="$1"
 	local command="$2"
-	local error_message="$3"
+	local description="$3"
+	local dots="$4"
 	
-	echo -n "$test_name ... "
+	echo -ne "Test ${test_num}: ${YELLOW}${command}${NC} ${description} should print to stdout and return 0 ${GRAY}${dots}${NC} "
 	
 	stdout=$(eval "$command" 2>/dev/null)
 	stderr=$(eval "$command" 2>&1 >/dev/null)
@@ -72,7 +75,7 @@ test_should_work()
 	if [ -n "$stdout" ] && [ $ret -eq 0 ]; then
 		print_success
 	else
-		print_error "$stdout" "$stderr" "$ret" "$error_message"
+		print_error "$stdout" "$stderr" "$ret"
 	fi
 }
 
@@ -82,57 +85,19 @@ echo
 
 test_should_do_nothing
 
-test_should_throw_error \
-	"Test  2: [./push_swap 1 2 3 1] (duplicate)" \
-	"./push_swap 1 2 3 1"
+test_should_throw_error " 2" "./push_swap 1 2 3 1" "                              -> duplicate      ->   " "..."
+test_should_throw_error " 3" "./push_swap 1 \"\" 3 4" "                             -> empty arg      ->   " "..."
+test_should_throw_error " 4" "./push_swap 1 + 3 4" "                              -> invalid '+'    ->   " "..."
+test_should_throw_error " 5" "./push_swap 1 - 3 4" "                              -> invalid '-'    ->   " "..."
+test_should_throw_error " 6" "./push_swap 1 2a3 4" "                              -> invalid '2a3'  ->   " "..."
+test_should_throw_error " 7" "./push_swap 1 2 -2147483649" "                      -> int underflow  ->   " "..."
+test_should_throw_error " 8" "./push_swap 1 2 2147483648" "                       -> int overflow   ->   " "..."
+test_should_throw_error " 9" "./push_swap 1 2 +2147483648" "                      -> int overflow   ->   " "..."
 
-test_should_throw_error \
-	"Test  3: [./push_swap 1 \"\" 3 4] (empty string)" \
-	"./push_swap 1 \"\" 3 4"
-
-test_should_throw_error \
-	"Test  4: [./push_swap 1 + 3 4] (invalid '+')" \
-	"./push_swap 1 + 3 4"
-
-test_should_throw_error \
-	"Test  5: [./push_swap 1 - 3 4] (invalid '-')" \
-	"./push_swap 1 - 3 4"
-
-test_should_throw_error \
-	"Test  6: [./push_swap 1 2a3 4] (invalid '2a3')" \
-	"./push_swap 1 2a3 4"
-
-test_should_throw_error \
-	"Test  7: [./push_swap 1 2 -2147483649] (int underflow)" \
-	"./push_swap 1 2 -2147483649"
-
-test_should_throw_error \
-	"Test  8: [./push_swap 1 2 2147483648] (int overflow)" \
-	"./push_swap 1 2 2147483648"
-
-test_should_throw_error \
-	"Test  9: [./push_swap 1 2 +2147483648] (int overflow with +)" \
-	"./push_swap 1 2 +2147483648"
-
-test_should_work \
-	"Test 10: [./push_swap -2147483648 \"5 1\" +2147483647] (valid arguments)" \
-	"./push_swap -2147483648 \"5 1\" +2147483647" \
-	"[./push_swap -2147483648 \"5 1\" +2147483647] should print something to stdout and return 0"
-
-test_should_work \
-	"Test 11: [./push_swap -2147483648 \" 5 1\" +2147483647] (valid arguments)" \
-	"./push_swap -2147483648 \" 5 1\" +2147483647" \
-	"[./push_swap -2147483648 \" 5 1\" +2147483647] should print something to stdout and return 0"
-
-test_should_work \
-	"Test 10: [./push_swap -2147483648 \"5 1 \" +2147483647] (valid arguments)" \
-	"./push_swap -2147483648 \"5 1 \" +2147483647" \
-	"[./push_swap -2147483648 \"5 1 \" +2147483647] should print something to stdout and return 0"
-
-test_should_work \
-	"Test 10: [./push_swap -2147483648 \"   5   1   \" +2147483647] (valid arguments)" \
-	"./push_swap -2147483648 \"   5   1   \" +2147483647" \
-	"[./push_swap -2147483648 \"   5   1   \" +2147483647] should print something to stdout and return 0"
+test_should_work "10" "./push_swap -2147483648 \"5 1\" +2147483647" "        -> space          ->   " "............."
+test_should_work "11" "./push_swap -2147483648 \" 5 1\" +2147483647" "       -> leading space  ->   " "............."
+test_should_work "12" "./push_swap -2147483648 \"5 1 \" +2147483647" "       -> trailing space ->   " "............."
+test_should_work "13" "./push_swap -2147483648 \"   5   1   \" +2147483647" "-> multi spaces   ->   " "............."
 
 echo
 echo "=== End of tests ==="

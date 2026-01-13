@@ -79,6 +79,8 @@ static bool	check_and_add_arg(t_args *args, char *str)
 	char	**splitted;
 	size_t	i;
 
+	if (!str || ! *str)
+		return (false);
 	splitted = ft_split(str, ' ');
 	if (!splitted)
 		return (false);

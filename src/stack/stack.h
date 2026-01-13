@@ -35,11 +35,15 @@ typedef enum e_move
 	NO_OP
 }	t_move;
 
+/* TODO: tmp debug */
+void	stack_print(t_stack *a, t_stack *b);
+
 /*---------- stack.c ----------*/
 
-t_stack	stack_new(int *values, size_t offset, size_t count, size_t len);
+bool	stack_init(t_stack *stack, int *values, size_t count);
 bool	stack_dup(t_stack *dst, t_stack *src);
 int		stack_get_value(t_stack *stack, size_t index);
+bool	stack_is_sorted(t_stack *stack);
 
 /*---------- moves.c ----------*/
 

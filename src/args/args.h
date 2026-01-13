@@ -5,8 +5,8 @@
 
 typedef struct s_args
 {
-	size_t	count;
 	int		*values;
+	size_t	count;
 }	t_args;
 
 t_args	*parse_args(int argc, char **argv);
