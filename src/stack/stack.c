@@ -9,7 +9,7 @@ bool	stack_init(t_stack *stack, int *values, size_t count)
 		stack->values = malloc(count * sizeof *stack->values);
 		if (!stack->values)
 			return (false);
-		ft_memset(stack->values, -1, stack->cap);
+		ft_memset(stack->values, -1, count * sizeof *stack->values);
 		stack->cap = count;
 		stack->len = 0;
 		stack->offset = 0;

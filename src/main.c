@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+// TODO: tmp DEBUG
+#include <stdio.h>
+
 static void	free_and_exit(t_stack *a, t_stack *b);
 
 int	main(int argc, char **argv)
