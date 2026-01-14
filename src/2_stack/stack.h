@@ -44,7 +44,9 @@ typedef enum e_move
 }	t_move;
 
 /* TODO: tmp debug */
+# include "libft.h"
 void	stack_print(t_stack *a, t_stack *b);
+void	moves_print(t_buff *move_list);
 
 /*---------- stack.c ----------*/
 

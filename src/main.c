@@ -52,10 +52,12 @@ static bool	try_k_sort_and_greedy(t_stack *a, t_stack *b, t_buff *move_list)
 	printf("[BEFORE K_SORT] => moves = %zu\n", move_list->len);
 	if (!k_sort(a, b, move_list))
 		return (false);
+	moves_print(move_list);
 	stack_print(a, b);
 	printf("[BEFORE GREEDY] => moves = %zu\n", move_list->len);
 	if (!greedy(a, b, move_list))
 		return (false);
+	moves_print(move_list);
 	stack_print(a, b);
 	printf("[AFTER GREEDY] => moves = %zu\n", move_list->len);
 	target_index = (size_t)stack_get_target_index(a, -1);
@@ -71,6 +73,7 @@ static bool	try_k_sort_and_greedy(t_stack *a, t_stack *b, t_buff *move_list)
 	}
 	if (!finish(a, move, count, move_list))
 		return (false);
+	moves_print(move_list);
 	stack_print(a, b);
 	printf("[AFTER FINISH] => moves = %zu\n", move_list->len);
 	return (true);

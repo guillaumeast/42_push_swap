@@ -93,3 +93,45 @@ static int	get_value_len(int nb)
 	}
 	return (len);
 }
+
+// TODO: tmp debug
+#include "libft.h"
+void	moves_print(t_buff *move_list)
+{
+	size_t	printed_bytes;
+	t_move	move;
+
+	ft_printf("MOVES:\n");
+	printed_bytes = 0;
+	while (printed_bytes < move_list->len)
+	{
+		move = (t_move)move_list->data[printed_bytes++];
+		if (move == RR)
+			ft_printf("RR\n");
+		else if (move == RRR)
+			ft_printf("RRR\n");
+		else if (move == RA)
+			ft_printf("RA\n");
+		else if (move == RB)
+			ft_printf("RB\n");
+		else if (move == RRA)
+			ft_printf("RRA\n");
+		else if (move == RRB)
+			ft_printf("RRB\n");
+		else if (move == SS)
+			ft_printf("SS\n");
+		else if (move == SA)
+			ft_printf("SA\n");
+		else if (move == SB)
+			ft_printf("SB\n");
+		else if (move == PA)
+			ft_printf("PA\n");
+		else if (move == PB)
+			ft_printf("PB\n");
+		else if (move == NO_OP)
+			ft_printf("PB\n");
+		else
+			ft_printf("???\n");
+	}
+	ft_printf("===> PRINTED = %i | LEN = %i\n", (int)printed_bytes, (int)move_list->len);
+}
