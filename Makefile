@@ -9,12 +9,14 @@ SRCS		:= \
 	$(wildcard src/*.c) \
 	$(wildcard src/1_args/*.c) \
 	$(wildcard src/2_stack/*.c) \
-	$(wildcard src/3_k_sort/*.c)
+	$(wildcard src/3_k_sort/*.c) \
+	$(wildcard src/4_greedy/*.c)
 INCLUDES	:= \
 	-I$(LIBFT_DIR) \
 	-Isrc/1_args \
 	-Isrc/2_stack \
-	-Isrc/3_k_sort
+	-Isrc/3_k_sort \
+	-Isrc/4_greedy
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

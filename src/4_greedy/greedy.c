@@ -1,43 +1,37 @@
+#include <cost.h>
 #include "libft.h"
 #include "stack.h"
 
-typedef struct s_insertion
+typedef struct s_insert
 {
-	int		from_index;
-	int		target_index;
-	size_t	ra;
-	size_t	rra;
-	size_t	rb;
-	size_t	rrb;
-	size_t	rr;
-	size_t	rrr;
-	size_t	total_cost;
-}	t_insertion;
+	int				from_index;
+	int				target_index;
+	t_total_cost	cost;
+}	t_insert;
 
-static t_insertion	get_next_insertion(t_stack *from, t_stack *to);
-static void			compute_cost(t_insertion *i, size_t from_len, size_t to_len);
-static bool			add_moves_all(t_buff *move_list, t_insertion *insertion);
-static bool			add_move(t_buff *move_list, t_move move, size_t count);
+static t_insert	get_next_insert(t_stack *from, t_stack *to);
+static bool		add_all_moves(t_buff *move_list, t_insert *insertion);
+static bool		add_move(t_buff *move_list, t_move move, size_t count);
+static void		exec_moves(t_stack *a, t_stack *b, t_insert *insertion);
 
-bool	greedy_get_moves(t_stack *from, t_stack *to, t_buff *move_list)
+bool	greedy(t_stack *a, t_stack *b, t_buff *move_list)
 {
-	t_insertion	next_insertion;
+	t_insert	next_insertion;
 
-	while (from->len > 0)
+	while (b->len > 0)
 	{
-		next_insertion = get_next_insertion(from, to);
-		if (!add_moves_all(move_list, &next_insertion))
-			return (false);
-		// TODO: simulate moves
+		next_insertion = get_next_insert(b, a);
+		add_all_moves(move_list, &next_insertion);
+		exec_moves(a, b, &next_insertion);
 	}
 	return (true);
 }
 
-static t_insertion	get_next_insertion(t_stack *from, t_stack *to)
+static t_insert	get_next_insert(t_stack *from, t_stack *to)
 {
 	size_t		i;
-	t_insertion	best;
-	t_insertion	current;
+	t_insert	best;
+	t_insert	current;
 	int			current_value;
 
 	ft_bzero(&best, sizeof best);
@@ -49,56 +43,56 @@ static t_insertion	get_next_insertion(t_stack *from, t_stack *to)
 		current.from_index = (int)i;
 		current_value = stack_get_value(from, i);
 		current.target_index = stack_get_target_index(to, current_value);
-		compute_cost(&current, from->len, to->len);
-		if (best.from_index == -1 || current.total_cost < best.total_cost)
+		current.cost = get_best_cost(from, i, to, (size_t)current.target_index);
+		if (best.from_index == -1 || current.cost.total < best.cost.total)
 			best = current;
 		i++;
 	}
+	return (best);
 }
 
-static void	compute_cost(t_insertion *i, size_t from_len, size_t to_len)
+static void	exec_moves(t_stack *a, t_stack *b, t_insert *insertion)
 {
-	if (i->target_index <= (int)to_len / 2)
-		i->ra = (size_t)i->target_index;
-	else
-		i->rra = to_len - (size_t)i->target_index;
-	if (i->from_index <= (int)from_len / 2)
-		i->rb = (size_t)i->from_index;
-	else
-		i->rrb = from_len - (size_t)i->from_index;
-	i->rr = (size_t)ft_min((int)i->ra, (int)i->rb);
-	i->rrr = (size_t)ft_min((int)i->rra, (int)i->rrb);
-	i->ra = i->ra - i->rr;
-	i->rb = i->rb - i->rr;
-	i->rra = i->rra - i->rrr;
-	i->rrb = i->rrb - i->rrr;
-	i->total_cost = i->ra + i->rb + i->rr + i->rra + i->rrb + i->rrr;
+	while (insertion->cost.rr--)
+		stack_rotate(a, b, BOTH, false);
+	while (insertion->cost.ra--)
+		stack_rotate(a, b, A, false);
+	while (insertion->cost.rb--)
+		stack_rotate(a, b, B, false);
+	while (insertion->cost.rrr--)
+		stack_rotate(a, b, BOTH, true);
+	while (insertion->cost.rra--)
+		stack_rotate(a, b, A, true);
+	while (insertion->cost.rrb--)
+		stack_rotate(a, b, B, true);
+	stack_push(b, a, A);
 }
 
-static bool	add_moves_all(t_buff *move_list, t_insertion *insertion)
+static bool	add_all_moves(t_buff *move_list, t_insert *insertion)
 {
-	if (!add_move(move_list, RR, insertion->rr))
+	if (!add_move(move_list, RR, insertion->cost.rr))
 		return (false);
-	if (!add_move(move_list, RRR, insertion->rrr))
+	if (!add_move(move_list, RRR, insertion->cost.rrr))
 		return (false);
-	if (!add_move(move_list, RA, insertion->ra))
+	if (!add_move(move_list, RA, insertion->cost.ra))
 		return (false);
-	if (!add_move(move_list, RB, insertion->rb))
+	if (!add_move(move_list, RB, insertion->cost.rb))
 		return (false);
-	if (!add_move(move_list, RRA, insertion->rra))
+	if (!add_move(move_list, RRA, insertion->cost.rra))
 		return (false);
-	if (!add_move(move_list, RRB, insertion->rrb))
+	if (!add_move(move_list, RRB, insertion->cost.rrb))
 		return (false);
 	if (!add_move(move_list, PA, 1))
 		return (false);
 	return (true);
 }
 
-// TODO: belek à l'overhead du t_buff
 static bool	add_move(t_buff *move_list, t_move move, size_t count)
 {
 	char	enum_as_char;
 
+	if (move == NO_OP)
+		return (true);
 	enum_as_char = (char)move;
 	while (count > 0)
 	{
@@ -108,5 +102,3 @@ static bool	add_move(t_buff *move_list, t_move move, size_t count)
 	}
 	return (true);
 }
-
-// TODO: update buff module to accept void * instead of char * (and update doc)

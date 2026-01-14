@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 17:04:22 by gastesan          #+#    #+#             */
-/*   Updated: 2026/01/11 22:29:55 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/01/14 03:28:09 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@
 // 		j = 0;
 // 		while (args[i][j])
 // 		{
-// 			if (!is_numeric(args[i][j]) || ft_strlen(args[i][j]) > 11)
+// 			if (!is_numeric(args[i][j]) || str_len(args[i][j]) > 11)
 // 				return (false);
 // 			tmp = ft_atol(args[i][j]);
 // 			if (tmp < INT_MIN || tmp > INT_MAX)
