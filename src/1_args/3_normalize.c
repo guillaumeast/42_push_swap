@@ -13,7 +13,7 @@ static void	merge_sort(t_sort_data *data, size_t left, size_t right);
 static void	merge(t_sort_data *data, size_t left, size_t mid, size_t right);
 static int	get_index(int value, const int *array, size_t size);
 
-bool	replace_by_sorted_indexes(int *array, size_t size)
+bool	normalize(int *array, size_t size)
 {
 	int		*tmp;
 	size_t	i;

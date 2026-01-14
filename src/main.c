@@ -22,16 +22,19 @@ int	main(int argc, char **argv)
 
 	if (argc < 2)
 		return (0);
+	printf("Parsing args...\n");
 	args = parse_args(argc, argv);
 	if (!args)
 		return (free_and_print_error(NULL, NULL));
+	printf("Initializing stack A...\n");
 	stack_init(&a, args->values, args->count);
+	printf("Initializing move_list...\n");
 	if (!buff_init(&move_list, args->count * args->count))
 		return (free_and_print_error(&a, &b));
 	free(args);
+	printf("Initializing stack B...\n");
 	if (!stack_init(&b, NULL, a.cap))
 		return (free_and_print_error(&a, &b));
-	stack_print(&a, &b);
 	if (!try_k_sort_and_greedy(&a, &b, &move_list))
 		return (buff_free(&move_list), free_and_print_error(&a, &b));
 	free(a.values);
@@ -45,12 +48,15 @@ static bool	try_k_sort_and_greedy(t_stack *a, t_stack *b, t_buff *move_list)
 	t_move	move;
 	size_t	count;
 
+	stack_print(a, b);
 	printf("[BEFORE K_SORT] => moves = %zu\n", move_list->len);
 	if (!k_sort(a, b, move_list))
 		return (false);
+	stack_print(a, b);
 	printf("[BEFORE GREEDY] => moves = %zu\n", move_list->len);
 	if (!greedy(a, b, move_list))
 		return (false);
+	stack_print(a, b);
 	printf("[AFTER GREEDY] => moves = %zu\n", move_list->len);
 	target_index = (size_t)stack_get_target_index(a, -1);
 	if (target_index <= a->len / 2)
@@ -65,6 +71,7 @@ static bool	try_k_sort_and_greedy(t_stack *a, t_stack *b, t_buff *move_list)
 	}
 	if (!finish(a, move, count, move_list))
 		return (false);
+	stack_print(a, b);
 	printf("[AFTER FINISH] => moves = %zu\n", move_list->len);
 	return (true);
 }
