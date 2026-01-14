@@ -46,9 +46,9 @@ int		stack_get_value(t_stack *stack, size_t index)
 	i.virtual = 0;
 	while (i.virtual < (int)index)
 	{
+		i.real = (i.real + 1) % (int)stack->cap;
 		if (stack->values[i.real] != EMPTY_CELL)
 			i.virtual++;
-		i.real = (i.real + 1) % (int)stack->cap;
 	}
 	return (stack->values[i.real]);
 }

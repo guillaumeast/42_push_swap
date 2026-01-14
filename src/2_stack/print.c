@@ -133,5 +133,4 @@ void	moves_print(t_buff *move_list)
 		else
 			ft_printf("???\n");
 	}
-	ft_printf("===> PRINTED = %i | LEN = %i\n", (int)printed_bytes, (int)move_list->len);
 }

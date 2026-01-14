@@ -1,7 +1,8 @@
 #ifndef ARGS_H
 # define ARGS_H
 
-#include <stddef.h>
+# include <stdbool.h>
+# include <stddef.h>
 
 typedef struct s_args
 {
@@ -9,6 +10,6 @@ typedef struct s_args
 	size_t	count;
 }	t_args;
 
-t_args	*parse_args(int argc, char **argv);
+bool	parse_args(int argc, char **argv, t_args *args);
 
 #endif

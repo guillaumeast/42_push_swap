@@ -8,36 +8,29 @@
 static size_t	get_args_count(int argc, char **argv);
 static bool		check_and_add_arg(t_args *args, char *str);
 
-t_args	*parse_args(int argc, char **argv)
+# include <stdio.h>
+bool	parse_args(int argc, char **argv, t_args *args)
 {
-	t_args	*res;
 	int		i;
 
-	ft_printf("---> Mallocing res...\n");
-	res = malloc(sizeof * res);
-	if (!res)
-		return (NULL);
-	res->values = NULL;
-	res->count = get_args_count(argc, argv);
-	ft_printf("---> res->count = %i\n", (int)res->count);
-	if (res->count == 0)
-		return (res);
-	res->values = malloc(res->count * sizeof *res->values);
-	if (!res->values)
-		return (free(res), NULL);
-	res->count = 0;
+	args->values = NULL;
+	args->count = get_args_count(argc, argv);
+	if (args->count == 0)
+		return (false);
+	args->values = malloc(args->count * sizeof *args->values);
+	if (!args->values)
+		return (false);
+	args->count = 0;
 	i = 1;
 	while (i < argc)
 	{
-		ft_printf("---> Checking arg %i\n", i);
-		if (!check_and_add_arg(res, argv[i]))
-			return (free(res->values), free(res), NULL);
+		if (!check_and_add_arg(args, argv[i]))
+			return (free(args->values), false);
 		i++;
 	}
-	ft_printf("---> Normalizing...\n");
-	if (!normalize(res->values, res->count))
-		return (free(res->values), free(res), NULL);
-	return (res);
+	if (!normalize(args->values, args->count))
+		return (free(args->values), false);
+	return (args);
 }
 
 static size_t	get_args_count(int argc, char **argv)
@@ -62,14 +55,12 @@ static bool	check_and_add_arg(t_args *args, char *str)
 
 	if (!str || !*str)
 		return (false);
-	ft_printf("------> Splitting...\n");
 	splitted = str_split(str, ' ');
 	if (!splitted)
 		return (false);
 	i = 0;
 	while (splitted[i])
 	{
-		ft_printf("------> Checking split %i...\n", (int)i);
 		if (!check_arg(
 			splitted[i], 
 			&args->values[args->count], 
@@ -80,8 +71,6 @@ static bool	check_and_add_arg(t_args *args, char *str)
 		args->count++;
 		i++;
 	}
-	ft_printf("------> Freeing...\n");
 	str_array_free(&splitted);
-	ft_printf("------> Free'd...\n");
 	return (true);
 }

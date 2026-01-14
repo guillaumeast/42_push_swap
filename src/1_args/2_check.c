@@ -26,10 +26,15 @@ static bool	is_int(char *arg)
 	size_t	i;
 
 	i = 0;
-	if (arg[i] == '\0')
+	if (arg[0] == '\0')
 		return (false);
-	if ((arg[i] != '-' || arg[i] != '+') && arg[i++] == '\0')
-		return (false);
+	else if (arg[0] == '-' || arg[0] == '+')
+	{
+		if (arg[1] == '\0')
+			return (false);
+		else
+			i = 1;
+	}
 	while (arg[i] != '\0')
 	{
 		if (arg[i] < '0' || arg[i] > '9')
