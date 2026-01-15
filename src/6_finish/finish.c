@@ -12,11 +12,17 @@ bool finish(t_stack *a, t_buff *move_list)
 		return (false);
 	if (target_index <= a->len / 2)
 	{
+		// TODO: switch commented parts for submit / debug
+		// if (!ra(a, target_index, move_list))
+		// 	return (false);
 		if (!move_add(RA, target_index, move_list))
 			return (false);
 	}
 	else
 	{
+		// TODO: switch commented parts for submit / debug
+		// if (!rra(a, a->len - target_index, move_list))
+		// 	return (false);
 		if (!move_add(RRA, a->len - target_index, move_list))
 			return (false);
 	}

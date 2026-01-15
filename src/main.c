@@ -17,6 +17,8 @@ int	main(int argc, char **argv)
 	t_stack	b;
 	t_buff	move_list;
 
+	if (argc < 2)
+		return (0);
 	if (!args_parse(argc, argv, &args))
 		return (free_and_print_error(NULL, NULL));
 	if (!stack_init(&a, &b, args.values, args.count))
@@ -26,6 +28,7 @@ int	main(int argc, char **argv)
 	if (!try_k_sort_and_greedy(&a, &b, &move_list))
 		return (buff_free(&move_list), free_and_print_error(&a, &b));
 	moves_print(&move_list);
+	// stack_print(&a, &b);
 	free(a.data);
 	free(b.data);
 	return (0);
