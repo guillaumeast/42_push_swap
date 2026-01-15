@@ -101,6 +101,7 @@ test_should_work "13" "./push_swap -2147483648 \"5 1\" +2147483647" "        -> 
 test_should_work "14" "./push_swap -2147483648 \" 5 1\" +2147483647" "       -> leading space  ->   " "............."
 test_should_work "15" "./push_swap -2147483648 \"5 1 \" +2147483647" "       -> trailing space ->   " "............."
 test_should_work "16" "./push_swap -2147483648 \"   5   1   \" +2147483647" "-> multi spaces   ->   " "............."
+test_should_work "16" "./push_swap 0 000000000000000000000000000000001 2" "-> long but int   ->   " "............."
 
 echo
 echo "=== End of parsing tests ==="

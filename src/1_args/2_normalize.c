@@ -20,7 +20,7 @@ uint	*normalize(int *array, size_t size)
 
 	sorted = malloc(size * sizeof * sorted);
 	if (!sorted)
-		return (false);
+		return (NULL);
 	ft_memcpy(sorted, array, size * sizeof * array);
 	if (!sort(sorted, size))
 		return (free(sorted), NULL);
