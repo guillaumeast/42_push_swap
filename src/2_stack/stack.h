@@ -1,6 +1,7 @@
 #ifndef STACK_H
 # define STACK_H
 
+# include "libft.h"
 # include <stdbool.h>
 # include <stddef.h>
 # include <sys/types.h>
@@ -34,13 +35,10 @@ typedef enum e_move
 	SS,
 	PA,
 	PB,
-	NO_OP,
-	ERROR
+	NO_OP
 }	t_move;
 
-/* TODO: tmp debug */
-# include "libft.h"
-void	stack_print(t_stack *a, t_stack *b);
+void	stack_print(t_stack *a, t_stack *b);	// TODO: tmp debug
 void	moves_print(t_buff *move_list);
 
 /*---------- stack.c ----------*/

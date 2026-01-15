@@ -105,7 +105,8 @@ static bool	exec_moves(t_stack *a, t_stack *b, t_insert *insertion)
 		stack_rotate(a, b, A, true);
 	while (insertion->cost.rrb--)
 		stack_rotate(a, b, B, true);
-	if (stack_push(b, a, A) == ERROR)
-		return (false);
+	stack_push(b, a, A);
 	return (true);
 }
+
+// TODO: handle NO_OP
