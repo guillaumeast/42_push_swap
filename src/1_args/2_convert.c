@@ -1,18 +1,16 @@
 #include "libft.h"
 #include <limits.h>
-#include <stdbool.h>
-#include <stddef.h>
 
 static bool	check_arg(char *arg, int *ret, int *args_array, size_t size);
 static bool	is_int(char *arg);
 static bool	is_unique(int nb, int *array, size_t size);
 
-bool	check_and_add_arg(char *arg, int *args, size_t *args_count)
+bool	convert_arg(char *arg, int *args, size_t *args_count)
 {
 	char	**splitted;
 	size_t	i;
 
-	if (!arg || !*arg)
+	if (!*arg)
 		return (false);
 	splitted = str_split(arg, ' ');
 	if (!splitted)

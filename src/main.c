@@ -16,9 +16,7 @@ int	main(int argc, char **argv)
 	t_stack	b;
 	t_buff	move_list;
 
-	if (argc < 2)
-		return (0);
-	if (!parse_args(argc, argv, &args))
+	if (!args_parse(argc, argv, &args))
 		return (free_and_print_error(NULL, NULL));
 	if (!stack_init(&a, &b, args.values, args.count))
 		return (free(args.values), free_and_print_error(NULL, NULL));

@@ -1,5 +1,4 @@
 #include "libft.h"
-#include <stdbool.h>
 #include <stdlib.h>
 
 typedef struct s_sort_data
