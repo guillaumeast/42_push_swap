@@ -60,8 +60,8 @@ uint	stack_get_target_index(t_stack *s, uint value)
 		i++;
 	}
 	if (target_i != -1)
-		return ((uint)(((size_t)target_i + s->offset) % s->len));
-	return ((uint)(((size_t)smallest_i + s->offset) % s->len));
+		return ((uint)(((size_t)target_i - s->offset) % s->len));
+	return ((uint)(((size_t)smallest_i - s->offset) % s->len));
 }
 
 bool	stack_is_sorted(t_stack *stack)

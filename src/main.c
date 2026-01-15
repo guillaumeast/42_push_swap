@@ -57,20 +57,20 @@ int	main(int argc, char **argv)
 
 	if (argc < 2)
 		return (0);
-	printf("\033[32m✔\033[0m argc > 1\n");
+	// printf("\033[32m✔\033[0m argc > 1\n");
 	if (!parse_args(argc, argv, &args))
 		return (free_and_print_error(NULL, NULL));
-	printf("\033[32m✔\033[0m args parsed\n");
+	// printf("\033[32m✔\033[0m args parsed\n");
 	stack_init(&a, &b, args.values, args.count);
-	printf("\033[32m✔\033[0m stacks initialized\n");
-	if (!buff_init(&move_list, args.count * args.count))
+	// printf("\033[32m✔\033[0m stacks initialized\n");
+	if (!buff_init(&move_list, args.count * 20))
 		return (free_and_print_error(&a, &b));
-	printf("\033[32m✔\033[0m move_list initialized\n");
+	// printf("\033[32m✔\033[0m move_list initialized\n");
 	if (!try_k_sort_and_greedy(&a, &b, &move_list))
 		return (buff_free(&move_list), free_and_print_error(&a, &b));
-	printf("\033[32m✔\033[0m algo finished\n");
-	moves_print(&move_list);
-	printf("\033[32m✔\033[0m done\n");
+	// printf("\033[32m✔\033[0m algo finished\n");
+	// moves_print(&move_list);
+	// printf("\033[32m✔\033[0m done\n");
 	free(a.data);
 	free(b.data);
 	return (0);
@@ -78,22 +78,31 @@ int	main(int argc, char **argv)
 
 static bool	try_k_sort_and_greedy(t_stack *a, t_stack *b, t_buff *move_list)
 {
-	stack_print(a, b);
-	printf("[BEFORE K_SORT] => moves = %zu\n", move_list->len);
+	t_buff	greedy_list;
+
+	// stack_print(a, b);
+	// printf("\n👉 [K_SORT]\n");
 	if (!k_sort(a, b, move_list))
 		return (false);
-	moves_print(move_list);
-	stack_print(a, b);
-	printf("[BEFORE GREEDY] => moves = %zu\n", move_list->len);
-	if (!greedy(a, b, move_list))
+	// moves_print(move_list);
+	// printf("(moves = %zu)\n", move_list->len);
+	if (!buff_init(&greedy_list, (a->len + b->len) * 20))
 		return (false);
-	moves_print(move_list);
 	stack_print(a, b);
-	printf("[AFTER GREEDY] => moves = %zu\n", move_list->len);
+	printf("\n👉[GREEDY]\n");
+	if (!greedy(a, b, &greedy_list))
+		return (false);
+	moves_print(&greedy_list);
+	printf("(moves = %zu)\n", greedy_list.len);
+	free(greedy_list.data);
+	stack_print(a, b);
+	// printf("[AFTER GREEDY]\n");
 	if (!finish(a, move_list))
 		return (false);
-	stack_print(a, b);
-	printf("[AFTER FINISH] => moves = %zu\n", move_list->len);
+	// moves_print(move_list);
+	// printf("(moves = %zu)\n", move_list->len);
+	// stack_print(a, b);
+	// printf("[AFTER FINISH]\n");
 	return (true);
 }
 
@@ -117,7 +126,7 @@ static bool finish(t_stack *a, t_buff *move_list)
 		move_as_char = RRA;
 		move_count = a->len - i;
 	}
-	while (move_count > 0)
+	while (move_count-- > 0)
 	{
 		stack_rotate(a, NULL, A, move_as_char == RRA);
 		if (!buff_append(move_list, &move_as_char, 1))

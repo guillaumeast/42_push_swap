@@ -4,8 +4,8 @@
 
 typedef struct s_insert
 {
-	int				from_index;
-	int				target_index;
+	size_t			from_index;
+	size_t			target_index;
 	t_total_cost	cost;
 }	t_insert;
 
@@ -14,38 +14,46 @@ static bool		add_all_moves(t_buff *move_list, t_insert *insertion);
 static bool		add_move(t_buff *move_list, t_move move, size_t count);
 static bool		exec_moves(t_stack *a, t_stack *b, t_insert *insertion);
 
+# include <stdio.h>
 bool	greedy(t_stack *a, t_stack *b, t_buff *move_list)
 {
 	t_insert	next_insertion;
 
-	while (b->size > 0)
+	while (b->len > 0)
 	{
 		next_insertion = get_next_insert(b, a);
 		add_all_moves(move_list, &next_insertion);
 		exec_moves(a, b, &next_insertion);
+		stack_print(a, b);
+		printf("\n");
 	}
 	return (true);
 }
 
+# include <stdio.h>
 static t_insert	get_next_insert(t_stack *from, t_stack *to)
 {
 	size_t		i;
+	bool		best_is_set;
 	t_insert	best;
 	t_insert	current;
-	int			current_value;
+	uint		current_value;
 
 	ft_bzero(&best, sizeof best);
-	best.from_index = -1;
+	best_is_set = false;
 	i = 0;
-	while (i < from->size)
+	while (i < from->len)
 	{
 		ft_bzero(&current, sizeof current);
-		current.from_index = (int)i;
+		current.from_index = i;
 		current_value = stack_get_value(from, i);
 		current.target_index = stack_get_target_index(to, current_value);
-		current.cost = get_best_cost(from, i, to, (size_t)current.target_index);
-		if (best.from_index == -1 || current.cost.total < best.cost.total)
+		current.cost = get_best_cost(to, current.target_index, from, i);
+		if (!best_is_set || current.cost.total < best.cost.total)
+		{
 			best = current;
+			best_is_set = true;
+		}
 		i++;
 	}
 	return (best);

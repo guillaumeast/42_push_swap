@@ -67,7 +67,7 @@ t_move	stack_push(t_stack *from, t_stack *to, t_target target)
 		return (NO_OP);
 	src_ptr = to->data + to->offset;
 	dst_ptr = src_ptr + 1;
-	len_to_move = to->len - to->offset;
+	len_to_move = (to->len - to->offset) * sizeof * (to->data);
 	ft_memmove(dst_ptr, src_ptr, len_to_move);
 	to->data[to->offset] = from->data[from->offset];
 	to->len++;
@@ -75,7 +75,7 @@ t_move	stack_push(t_stack *from, t_stack *to, t_target target)
 	{
 		dst_ptr = from->data + from->offset;
 		src_ptr = dst_ptr + 1;
-		len_to_move = from->len - from->offset - 1;
+		len_to_move = (from->len - from->offset - 1) * sizeof * (from->data);
 		ft_memmove(dst_ptr, src_ptr, len_to_move);
 	}
 	else
