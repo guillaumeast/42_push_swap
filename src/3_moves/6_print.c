@@ -1,5 +1,5 @@
 #include "libft.h"
-#include "moves_priv.h"
+#include "moves.h"
 
 static void	print_move(t_move move);
 

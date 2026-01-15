@@ -1,5 +1,5 @@
 #include "stack_ops.h"
-#include "moves_priv.h"
+#include "moves.h"
 
 bool	rr(t_stack *a, t_stack *b, size_t count, t_buff *list)
 {
