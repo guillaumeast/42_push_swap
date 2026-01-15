@@ -2,89 +2,66 @@
 #include "stack.h"
 #include <stdlib.h>
 
-static void	set_index(t_stack_index *dst, t_stack_index *src);
-
-bool	stack_init(t_stack *stack, int *values, size_t count)
+bool	stack_init(t_stack *a, t_stack *b, int *values, size_t count)
 {
-	if (!values)
-	{
-		stack->values = malloc(count * sizeof *stack->values);
-		if (!stack->values)
-			return (false);
-		ft_memset(stack->values, EMPTY_CELL, count * sizeof *stack->values);
-		stack->cap = count;
-		stack->len = 0;
-		stack->offset = 0;
-	}
-	else
-	{
-		stack->values = values;
-		stack->cap = count;
-		stack->len = count;
-		stack->offset = 0;
-	}
+	a->data = values;
+	a->offset = 0;
+	a->len = count;
+	a->cap = count;
+	b->data = malloc(count * sizeof * b->data);
+	if (!b->data)
+		return (false);
+	b->offset = 0;
+	b->len = 0;
+	b->cap = 0;
 	return (true);
 }
 
 bool	stack_dup(t_stack *dst, t_stack *src)
 {
-	dst->values = malloc(src->cap * sizeof * dst->values);
-	if (!dst->values)
+	dst->data = malloc(src->cap * sizeof * dst->data);
+	if (!dst->data)
 		return (false);
-	ft_memcpy(dst->values, src->values, src->cap * sizeof * src->values);
+	ft_memcpy(dst->data, src->data, src->len * sizeof * src->data);
 	dst->offset = src->offset;
-	dst->cap = src->cap;
 	dst->len = src->len;
+	dst->cap = src->cap;
 	return (true);
 }
 
-int		stack_get_value(t_stack *stack, size_t index)
+int	stack_get_value(t_stack *stack, size_t index)
 {
-	t_stack_index	i;
-
-	i.real = (int)stack->offset;
-	i.virtual = 0;
-	while (i.virtual < (int)index)
-	{
-		i.real = (i.real + 1) % (int)stack->cap;
-		if (stack->values[i.real] != EMPTY_CELL)
-			i.virtual++;
-	}
-	return (stack->values[i.real]);
+	return (stack->data[(stack->offset + index) % stack->len]);
 }
 
-// TODO: refacto SANS SINGERIE 🦧
-int		stack_get_target_index(t_stack *s, int value)
+int	stack_get_target_index(t_stack *s, int value)
 {
-	t_stack_index	i;
-	t_stack_index	target;
-	t_stack_index	smallest;
+	size_t	i;
+	int		target_i;
+	int		target_v;
+	int		smallest_i;
+	int		smallest_v;
 
-	i.real = (int)s->offset;
-	1 && (i.virtual = 0, target.real = -1, smallest.real = -1);
-	while (i.virtual < (int)s->len)
+	i = 0;
+	target_i = -1;
+	smallest_i = -1;
+	while (i < s->size)
 	{
-		if (s->values[i.real] != EMPTY_CELL)
+		if (smallest_i == -1 || s->data[i] <= smallest_v)
 		{
-			if (smallest.real == -1 
-				|| s->values[i.real] <= s->values[smallest.real])
-				set_index(&smallest, &i);
-			if (s->values[i.real] > value && (target.real == -1 
-				|| s->values[i.real] <= s->values[target.real]))
-				set_index(&target, &i);
-			i.virtual++;
+			smallest_i = (int)i;
+			smallest_v = s->data[i];
 		}
-		i.real = (i.real + 1) % (int)s->cap;
+		if (s->data[i] > value && (target_i == -1 || s->data[i] <= target_v))
+		{
+			target_i = (int)i;
+			target_v = s->data[i];
+		}
+		i++;
 	}
-	if (target.real != -1)
-		return (target.virtual);
-	return (smallest.virtual);
-}
-
-static void	set_index(t_stack_index *dst, t_stack_index *src)
-{
-	dst->real = src->real;
-	dst->virtual = src->virtual;
+	if (target_i != -1)
+		return ((int)(((size_t)target_i + s->offset) % s->size));
+	return ((int)(((size_t)smallest_i + s->offset) % s->size));
 }
 
 bool	stack_is_sorted(t_stack *stack)
@@ -93,22 +70,16 @@ bool	stack_is_sorted(t_stack *stack)
 	size_t	breaks;
 	int		last_value;
 
-	if (stack->len <= 2)
+	if (stack->size <= 2)
 		return (true);
 	breaks = 0;
 	i = 0;
-	while (stack->values[i] == EMPTY_CELL)
-		i++;
-	last_value = stack->values[i];
-	while (++i < stack->cap)
+	last_value = stack->data[i];
+	while (++i < stack->size && breaks < 2)
 	{
-		if (stack->values[i] == EMPTY_CELL)
-			continue ;
-		else if (stack->values[i] < last_value)
+		if (stack->data[i] < last_value)
 			breaks++;
-		if (breaks > 1)
-			return (false);
-		last_value = stack->values[i];
+		last_value = stack->data[i];
 	}
-	return (true);
+	return (breaks < 2);
 }

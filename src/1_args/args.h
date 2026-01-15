@@ -3,10 +3,11 @@
 
 # include <stdbool.h>
 # include <stddef.h>
+# include <sys/types.h>
 
 typedef struct s_args
 {
-	int		*values;
+	uint	*values;
 	size_t	count;
 }	t_args;
 

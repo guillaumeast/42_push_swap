@@ -1,6 +1,7 @@
 #include "stack.h"
 #include <stdio.h>
 
+static void	print_line(t_stack *a, t_stack *b, size_t i, size_t idx_a, size_t idx_b, int len);
 static void	print_sep(int max_value_len);
 static int	get_max_len(t_stack *a, t_stack *b);
 static int	get_value_len(int nb);
@@ -10,27 +11,46 @@ void	stack_print(t_stack *a, t_stack *b)
 	size_t	i;
 	size_t	idx_a;
 	size_t	idx_b;
+	size_t	max_size;
 	int		max_value_len;
 
 	max_value_len = get_max_len(a, b);
+	max_size = a->size;
+	if (b->size > max_size)
+		max_size = b->size;
 	print_sep(max_value_len);
 	fprintf(stderr, "| %*s | %*s |\n", max_value_len, "A", max_value_len, "B");
 	print_sep(max_value_len);
 	i = 0;
 	idx_a = a->offset;
 	idx_b = b->offset;
-	while (i < a->cap)
+	while (i < max_size)
 	{
-		fprintf(stderr, "| %*i | %*i |\n", max_value_len, a->values[idx_a],
-			max_value_len, b->values[idx_b]);
-		idx_a = (idx_a + 1) % a->cap;
-		idx_b = (idx_b + 1) % b->cap;
+		print_line(a, b, i, idx_a, idx_b, max_value_len);
+		if (a->size > 0)
+			idx_a = (idx_a + 1) % a->size;
+		if (b->size > 0)
+			idx_b = (idx_b + 1) % b->size;
 		i++;
 	}
 	print_sep(max_value_len);
-	fprintf(stderr, "| %*zu | %*zu |\n", max_value_len, a->len,
-		max_value_len, b->len);
+	fprintf(stderr, "| %*zu | %*zu |\n", max_value_len, a->size,
+		max_value_len, b->size);
 	print_sep(max_value_len);
+}
+
+static void	print_line(t_stack *a, t_stack *b, size_t i, size_t idx_a, size_t idx_b, int len)
+{
+	char	a_value[32];
+	char	b_value[32];
+
+	a_value[0] = '\0';
+	b_value[0] = '\0';
+	if (i < a->size)
+		snprintf(a_value, sizeof(a_value), "%i", a->data[idx_a]);
+	if (i < b->size)
+		snprintf(b_value, sizeof(b_value), "%i", b->data[idx_b]);
+	fprintf(stderr, "| %*s | %*s |\n", len, a_value, len, b_value);
 }
 
 static void	print_sep(int max_value_len)
@@ -56,17 +76,17 @@ static int	get_max_len(t_stack *a, t_stack *b)
 
 	i = 0;
 	max_len = 0;
-	while (i < a->cap)
+	while (i < a->size)
 	{
-		len = get_value_len(a->values[i]);
+		len = get_value_len(a->data[i]);
 		if (len > max_len)
 			max_len = len;
 		i++;
 	}
 	i = 0;
-	while (i < b->cap)
+	while (i < b->size)
 	{
-		len = get_value_len(b->values[i]);
+		len = get_value_len(b->data[i]);
 		if (len > max_len)
 			max_len = len;
 		i++;

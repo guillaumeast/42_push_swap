@@ -1,16 +1,21 @@
 #include "libft.h"
 #include "stack.h"
 
+# include <stdio.h>
 bool	k_sort(t_stack *a, t_stack *b, t_buff *move_list)
 {
+	size_t	count;
 	char	move;
 
-	move = (char)PB;
-	while (a->len > 2)
+	count = 0;
+	while (a->size > 2)
 	{
-		stack_push(a, b, B);
-		if (!buff_append(move_list, &move, 1))
+		count++;
+		printf("Push n°%zu\n", count);
+		move = (char)stack_push(a, b, B);
+		if (move == ERROR || !buff_append(move_list, &move, 1))
 			return (false);
+		stack_print(a, b);
 	}
 	return (true);
 }

@@ -57,25 +57,25 @@ int	main(int argc, char **argv)
 
 	if (argc < 2)
 		return (0);
-	// printf("\033[32m✔\033[0m argc > 1\n");
+	printf("\033[32m✔\033[0m argc > 1\n");
 	if (!parse_args(argc, argv, &args))
 		return (free_and_print_error(NULL, NULL));
-	// printf("\033[32m✔\033[0m args parsed\n");
+	printf("\033[32m✔\033[0m args parsed\n");
 	stack_init(&a, args.values, args.count);
-	// printf("\033[32m✔\033[0m stack A initialized\n");
+	printf("\033[32m✔\033[0m stack A initialized\n");
 	if (!buff_init(&move_list, args.count * args.count))
 		return (free_and_print_error(&a, &b));
-	// printf("\033[32m✔\033[0m move_list initialized\n");
-	if (!stack_init(&b, NULL, a.cap))
+	printf("\033[32m✔\033[0m move_list initialized\n");
+	if (!stack_init(&b, NULL, 0))
 		return (free_and_print_error(&a, &b));
-	// printf("\033[32m✔\033[0m stack B initialized\n");
+	printf("\033[32m✔\033[0m stack B initialized\n");
 	if (!try_k_sort_and_greedy(&a, &b, &move_list))
 		return (buff_free(&move_list), free_and_print_error(&a, &b));
-	// printf("\033[32m✔\033[0m algo finished\n");
-	// moves_print(&move_list);
+	printf("\033[32m✔\033[0m algo finished\n");
+	moves_print(&move_list);
 	printf("done\n");
-	free(a.values);
-	free(b.values);
+	free(a.data);
+	free(b.data);
 	return (0);
 }
 
@@ -86,19 +86,19 @@ static bool	try_k_sort_and_greedy(t_stack *a, t_stack *b, t_buff *move_list)
 	size_t	count;
 
 	// stack_print(a, b);
-	// printf("[BEFORE K_SORT] => moves = %zu\n", move_list->len);
+	printf("[BEFORE K_SORT] => moves = %zu\n", move_list->len);
 	if (!k_sort(a, b, move_list))
 		return (false);
 	// moves_print(move_list);
 	// stack_print(a, b);
-	// printf("[BEFORE GREEDY] => moves = %zu\n", move_list->len);
+	printf("[BEFORE GREEDY] => moves = %zu\n", move_list->len);
 	if (!greedy(a, b, move_list))
 		return (false);
 	// moves_print(move_list);
 	// stack_print(a, b);
-	// printf("[AFTER GREEDY] => moves = %zu\n", move_list->len);
+	printf("[AFTER GREEDY] => moves = %zu\n", move_list->len);
 	target_index = (size_t)stack_get_target_index(a, -1);
-	if (target_index <= a->len / 2)
+	if (target_index <= a->size / 2)
 	{
 		move = RA;
 		count = target_index;
@@ -106,12 +106,12 @@ static bool	try_k_sort_and_greedy(t_stack *a, t_stack *b, t_buff *move_list)
 	else
 	{
 		move = RRA;
-		count = a->len - target_index;
+		count = a->size - target_index;
 	}
 	if (!finish(a, move, count, move_list))
 		return (false);
 	// stack_print(a, b);
-	// printf("[AFTER FINISH] => moves = %zu\n", move_list->len);
+	printf("[AFTER FINISH] => moves = %zu\n", move_list->len);
 	return (true);
 }
 
@@ -138,10 +138,10 @@ static bool finish(t_stack *a, t_move move, size_t count, t_buff *move_list)
 
 static int	free_and_print_error(t_stack *a, t_stack *b)
 {
-	if (a && a->values)
-		free(a->values);
-	if (b && b->values)
-		free(b->values);
+	if (a && a->data)
+		free(a->data);
+	if (b && b->data)
+		free(b->data);
 	write(2, "Error\n", 6);
 	return (EXIT_FAILURE);
 }

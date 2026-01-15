@@ -3,22 +3,16 @@
 
 # include <stdbool.h>
 # include <stddef.h>
+# include <sys/types.h>
 
-# define EMPTY_CELL -1
 
 typedef struct s_stack
 {
-	int		*values;
+	uint	*data;
 	size_t	offset;
-	size_t	cap;
 	size_t	len;
+	size_t	cap;
 }	t_stack;
-
-typedef struct s_stack_index
-{
-	int	real;
-	int	virtual;
-}	t_stack_index;
 
 typedef enum e_target
 {
@@ -40,7 +34,8 @@ typedef enum e_move
 	SS,
 	PA,
 	PB,
-	NO_OP
+	NO_OP,
+	ERROR
 }	t_move;
 
 /* TODO: tmp debug */
@@ -50,7 +45,7 @@ void	moves_print(t_buff *move_list);
 
 /*---------- stack.c ----------*/
 
-bool	stack_init(t_stack *stack, int *values, size_t count);
+bool	stack_init(t_stack *a, t_stack *b, int *values, size_t count);
 bool	stack_dup(t_stack *dst, t_stack *src);
 int		stack_get_value(t_stack *stack, size_t index);
 int		stack_get_target_index(t_stack *s, int value);

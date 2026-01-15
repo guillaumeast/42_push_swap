@@ -23,8 +23,8 @@ t_total_cost	get_best_cost(t_stack *a, size_t i_a, t_stack *b, size_t i_b)
 	t_total_cost	best;
 	t_total_cost	current;
 
-	get_cost(a->len, i_a, &a_cost);
-	get_cost(b->len, i_b, &b_cost);
+	get_cost(a->size, i_a, &a_cost);
+	get_cost(b->size, i_b, &b_cost);
 	cost_add(&a_cost.opti, &b_cost.opti, &best);
 	cost_add(&a_cost.opti, &b_cost.bad, &current);
 	if (current.total < best.total)

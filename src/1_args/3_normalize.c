@@ -8,39 +8,42 @@ typedef struct s_sort_data
 	int		*tmp;
 }	t_sort_data;
 
-static bool	sort(int **array, size_t size);
+static bool	sort(int *array, size_t size);
 static void	merge_sort(t_sort_data *data, size_t left, size_t right);
 static void	merge(t_sort_data *data, size_t left, size_t mid, size_t right);
-static int	get_index(int value, const int *array, size_t size);
+static bool	get_index(int value, const int *array, size_t size, uint *ret);
 
-bool	normalize(int *array, size_t size)
+uint	*normalize(int *array, size_t size)
 {
-	int		*tmp;
+	int		*sorted;
+	uint	*res;
 	size_t	i;
 
-	tmp = malloc(size * sizeof * tmp);
-	if (!tmp)
+	sorted = malloc(size * sizeof * sorted);
+	if (!sorted)
 		return (false);
-	ft_memcpy(tmp, array, size * sizeof * array);
-	if (!sort(&tmp, size))
-		return (false);
+	ft_memcpy(sorted, array, size * sizeof * array);
+	if (!sort(sorted, size))
+		return (free(sorted), NULL);
+	res = malloc(size * sizeof * res);
+	if (!res)
+		return (free(sorted), NULL);
 	i = 0;
 	while (i < size)
 	{
-		array[i] = get_index(array[i], tmp, size);
-		if (array[i] == -1)
-			return (free(tmp), false);
+		if (!get_index(array[i], sorted, size, &(res[i])))
+			return (free(sorted), free(res), NULL);
 		i++;
 	}
-	free(tmp);
-	return (true);
+	free(sorted);
+	return (res);
 }
 
-static bool	sort(int **array, size_t size)
+static bool	sort(int *array, size_t size)
 {
 	t_sort_data	data;
 
-	data.array = *array;
+	data.array = array;
 	data.tmp = malloc(size * sizeof * data.tmp);
 	if (!data.tmp)
 		return (false);
@@ -89,23 +92,26 @@ static void	merge(t_sort_data *data, size_t left, size_t mid, size_t right)
 		data->array[left++] = data->tmp[tmp_i++];
 }
 
-static int	get_index(int value, const int *array, size_t size)
+static bool	get_index(int value, const int *array, size_t size, uint *ret)
 {
-	size_t	low;
-	size_t	mid;
-	size_t	high;
+	uint	low;
+	uint	mid;
+	uint	high;
 
 	low = 0;
-	high = size - 1;
+	high = (uint)size - 1;
 	while (low <= high)
 	{
 		mid = low + (high - low) / 2;
 		if (array[mid] == value)
-			return ((int)mid);
+		{
+			*ret = mid;
+			return (true);
+		}
 		else if (array[mid] < value)
 			low = mid + 1;
 		else
 			high = mid - 1;
 	}
-	return (-1);
+	return (false);
 }

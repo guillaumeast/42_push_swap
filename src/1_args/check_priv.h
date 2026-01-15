@@ -1,9 +1,9 @@
 #ifndef CHECK_PRIV_H
 # define CHECK_PRIV_H
 
-#include <stdbool.h>
-#include <stddef.h>
+# include <stdbool.h>
+# include <stddef.h>
 
-bool	check_arg(char *arg, int *ret, int *args_array, size_t size);
+bool	check_and_add_arg(char *arg, int *args, size_t *args_count);
 
 #endif

@@ -12,13 +12,13 @@ typedef struct s_insert
 static t_insert	get_next_insert(t_stack *from, t_stack *to);
 static bool		add_all_moves(t_buff *move_list, t_insert *insertion);
 static bool		add_move(t_buff *move_list, t_move move, size_t count);
-static void		exec_moves(t_stack *a, t_stack *b, t_insert *insertion);
+static bool		exec_moves(t_stack *a, t_stack *b, t_insert *insertion);
 
 bool	greedy(t_stack *a, t_stack *b, t_buff *move_list)
 {
 	t_insert	next_insertion;
 
-	while (b->len > 0)
+	while (b->size > 0)
 	{
 		next_insertion = get_next_insert(b, a);
 		add_all_moves(move_list, &next_insertion);
@@ -37,7 +37,7 @@ static t_insert	get_next_insert(t_stack *from, t_stack *to)
 	ft_bzero(&best, sizeof best);
 	best.from_index = -1;
 	i = 0;
-	while (i < from->len)
+	while (i < from->size)
 	{
 		ft_bzero(&current, sizeof current);
 		current.from_index = (int)i;
@@ -51,7 +51,7 @@ static t_insert	get_next_insert(t_stack *from, t_stack *to)
 	return (best);
 }
 
-static void	exec_moves(t_stack *a, t_stack *b, t_insert *insertion)
+static bool	exec_moves(t_stack *a, t_stack *b, t_insert *insertion)
 {
 	while (insertion->cost.rr--)
 		stack_rotate(a, b, BOTH, false);
@@ -65,7 +65,9 @@ static void	exec_moves(t_stack *a, t_stack *b, t_insert *insertion)
 		stack_rotate(a, b, A, true);
 	while (insertion->cost.rrb--)
 		stack_rotate(a, b, B, true);
-	stack_push(b, a, A);
+	if (stack_push(b, a, A) == ERROR)
+		return (false);
+	return (true);
 }
 
 static bool	add_all_moves(t_buff *move_list, t_insert *insertion)

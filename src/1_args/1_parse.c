@@ -6,30 +6,31 @@
 #include <stdlib.h>
 
 static size_t	get_args_count(int argc, char **argv);
-static bool		check_and_add_arg(t_args *args, char *str);
 
-# include <stdio.h>
 bool	parse_args(int argc, char **argv, t_args *args)
 {
-	int		i;
+	int	i;
+	int	*raw_array;
 
 	args->values = NULL;
 	args->count = get_args_count(argc, argv);
 	if (args->count == 0)
 		return (false);
-	args->values = malloc(args->count * sizeof *args->values);
-	if (!args->values)
+	raw_array = malloc(args->count * sizeof *raw_array);
+	if (!raw_array)
 		return (false);
 	args->count = 0;
 	i = 1;
 	while (i < argc)
 	{
-		if (!check_and_add_arg(args, argv[i]))
-			return (free(args->values), false);
+		if (!check_and_add_arg(argv[i], raw_array, &args->count))
+			return (free(raw_array), false);
 		i++;
 	}
-	if (!normalize(args->values, args->count))
-		return (free(args->values), false);
+	args->values = normalize(raw_array, args->count);
+	free(raw_array);
+	if (!args->values)
+		return (false);
 	return (args);
 }
 
@@ -46,31 +47,4 @@ static size_t	get_args_count(int argc, char **argv)
 		i++;
 	}
 	return (count);
-}
-
-static bool	check_and_add_arg(t_args *args, char *str)
-{
-	char	**splitted;
-	size_t	i;
-
-	if (!str || !*str)
-		return (false);
-	splitted = str_split(str, ' ');
-	if (!splitted)
-		return (false);
-	i = 0;
-	while (splitted[i])
-	{
-		if (!check_arg(
-			splitted[i], 
-			&args->values[args->count], 
-			args->values, 
-			args->count
-		))
-			return (str_array_free(&splitted), false);
-		args->count++;
-		i++;
-	}
-	str_array_free(&splitted);
-	return (true);
 }
