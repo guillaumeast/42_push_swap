@@ -14,7 +14,6 @@ static bool		add_all_moves(t_buff *move_list, t_insert *insertion);
 static bool		add_move(t_buff *move_list, t_move move, size_t count);
 static bool		exec_moves(t_stack *a, t_stack *b, t_insert *insertion);
 
-// # include <stdio.h>
 bool	greedy(t_stack *a, t_stack *b, t_buff *move_list)
 {
 	t_insert	next_insertion;
@@ -24,8 +23,6 @@ bool	greedy(t_stack *a, t_stack *b, t_buff *move_list)
 		next_insertion = get_next_insert(b, a);
 		add_all_moves(move_list, &next_insertion);
 		exec_moves(a, b, &next_insertion);
-		// stack_print(a, b);
-		// printf("\n");
 	}
 	return (true);
 }
@@ -39,8 +36,7 @@ static t_insert	get_next_insert(t_stack *from, t_stack *to)
 	uint		current_value;
 
 	ft_bzero(&best, sizeof best);
-	best_is_set = false;
-	i = 0;
+	1 && (best_is_set = false, i = 0);
 	while (i < from->len)
 	{
 		ft_bzero(&current, sizeof current);
@@ -54,27 +50,10 @@ static t_insert	get_next_insert(t_stack *from, t_stack *to)
 			best_is_set = true;
 		}
 		i++;
+		if (best.cost.total == 0)
+			break ;
 	}
 	return (best);
-}
-
-static bool	exec_moves(t_stack *a, t_stack *b, t_insert *insertion)
-{
-	while (insertion->cost.rr--)
-		stack_rotate(a, b, BOTH, false);
-	while (insertion->cost.ra--)
-		stack_rotate(a, b, A, false);
-	while (insertion->cost.rb--)
-		stack_rotate(a, b, B, false);
-	while (insertion->cost.rrr--)
-		stack_rotate(a, b, BOTH, true);
-	while (insertion->cost.rra--)
-		stack_rotate(a, b, A, true);
-	while (insertion->cost.rrb--)
-		stack_rotate(a, b, B, true);
-	if (stack_push(b, a, A) == ERROR)
-		return (false);
-	return (true);
 }
 
 static bool	add_all_moves(t_buff *move_list, t_insert *insertion)
@@ -109,5 +88,24 @@ static bool	add_move(t_buff *move_list, t_move move, size_t count)
 			return (false);
 		count--;
 	}
+	return (true);
+}
+
+static bool	exec_moves(t_stack *a, t_stack *b, t_insert *insertion)
+{
+	while (insertion->cost.rr--)
+		stack_rotate(a, b, BOTH, false);
+	while (insertion->cost.ra--)
+		stack_rotate(a, b, A, false);
+	while (insertion->cost.rb--)
+		stack_rotate(a, b, B, false);
+	while (insertion->cost.rrr--)
+		stack_rotate(a, b, BOTH, true);
+	while (insertion->cost.rra--)
+		stack_rotate(a, b, A, true);
+	while (insertion->cost.rrb--)
+		stack_rotate(a, b, B, true);
+	if (stack_push(b, a, A) == ERROR)
+		return (false);
 	return (true);
 }

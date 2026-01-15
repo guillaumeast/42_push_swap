@@ -27,7 +27,8 @@ int	main(int argc, char **argv)
 	if (!parse_args(argc, argv, &args))
 		return (free_and_print_error(NULL, NULL));
 	// printf("\033[32m✔\033[0m args parsed\n");
-	stack_init(&a, &b, args.values, args.count);
+	if (!stack_init(&a, &b, args.values, args.count))
+		return (free(args.values), free_and_print_error(NULL, NULL));
 	// printf("\033[32m✔\033[0m stacks initialized\n");
 	if (!buff_init(&move_list, args.count * 20))
 		return (free_and_print_error(&a, &b));
@@ -35,8 +36,8 @@ int	main(int argc, char **argv)
 	if (!try_k_sort_and_greedy(&a, &b, &move_list))
 		return (buff_free(&move_list), free_and_print_error(&a, &b));
 	// printf("\033[32m✔\033[0m algo finished\n");
-	// moves_print(&move_list);
-	stack_print(&a, &b);
+	moves_print(&move_list);
+	// stack_print(&a, &b);
 	// printf("\033[32m✔\033[0m done\n");
 	free(a.data);
 	free(b.data);

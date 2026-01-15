@@ -6,6 +6,58 @@ static void	swap(t_stack *stack);
 bool		push_from(t_stack *stack, uint *ret);
 bool		push_to(t_stack *stack, uint value);
 
+// t_move	move_do(t_stack *a, t_stack *b, t_move move);
+// bool	move_save(t_buff *list, t_move move);
+
+// bool	move_do_and_save(t_stack *a, t_stack *b, t_move move, size_t count, t_buff *list)
+// {
+// 	while (count > 0)
+// 	{
+// 		move = move_do(a, b, move);
+// 		move_save(list, move);
+// 		count--;
+// 	}
+// 	return (true);
+// }
+
+// t_move	move_do(t_stack *a, t_stack *b, t_move move)
+// {
+// 	if (move == RR)
+// 		return (stack_rotate(a, b, BOTH, false));
+// 	else if (move == RA)
+// 		return (stack_rotate(a, b, A, false));
+// 	else if (move == RB)
+// 		return (stack_rotate(a, b, B, false));
+// 	else if (move == RRR)
+// 		return (stack_rotate(a, b, BOTH, true));
+// 	else if (move == RRA)
+// 		return (stack_rotate(a, b, A, true));
+// 	else if (move == RRB)
+// 		return (stack_rotate(a, b, B, true));
+// 	else if (move == SS)
+// 		return (stack_swap(a, b, BOTH));
+// 	else if (move == SA)
+// 		return (stack_swap(a, b, A));
+// 	else if (move == SB)
+// 		return (stack_swap(a, b, B));
+// 	else if (move == PA)
+// 		return (stack_push(b, a, A));
+// 	else if (move == PB)
+// 		return (stack_push(a, b, B));
+// 	else
+// 		return (NO_OP);
+// }
+
+// bool	move_save(t_buff *list, t_move move)
+// {
+// 	char	enum_as_char;
+
+// 	if (move == NO_OP)
+// 		return (true);
+// 	enum_as_char = (char)move;
+// 	return (!buff_append(list, &enum_as_char, 1));
+// }
+
 t_move	stack_rotate(t_stack *a, t_stack *b, t_target target, bool reverse)
 {
 	if (target == A && a->len > 1 && reverse)
@@ -28,7 +80,7 @@ static void	rotate(t_stack *stack, bool reverse)
 	if (stack->len < 2)
 		return ;
 	if (reverse)
-		stack->offset = (stack->offset - 1) % stack->len;
+		stack->offset = modulo((long)stack->offset - 1, stack->len);
 	else
 		stack->offset = (stack->offset + 1) % stack->len;
 }
