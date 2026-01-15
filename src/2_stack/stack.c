@@ -2,7 +2,7 @@
 #include "stack.h"
 #include <stdlib.h>
 
-bool	stack_init(t_stack *a, t_stack *b, int *values, size_t count)
+bool	stack_init(t_stack *a, t_stack *b, uint *values, size_t count)
 {
 	a->data = values;
 	a->offset = 0;
@@ -29,23 +29,23 @@ bool	stack_dup(t_stack *dst, t_stack *src)
 	return (true);
 }
 
-int	stack_get_value(t_stack *stack, size_t index)
+uint	stack_get_value(t_stack *stack, size_t index)
 {
 	return (stack->data[(stack->offset + index) % stack->len]);
 }
 
-int	stack_get_target_index(t_stack *s, int value)
+uint	stack_get_target_index(t_stack *s, uint value)
 {
 	size_t	i;
 	int		target_i;
-	int		target_v;
+	uint	target_v;
 	int		smallest_i;
-	int		smallest_v;
+	uint	smallest_v;
 
 	i = 0;
 	target_i = -1;
 	smallest_i = -1;
-	while (i < s->size)
+	while (i < s->len)
 	{
 		if (smallest_i == -1 || s->data[i] <= smallest_v)
 		{
@@ -60,22 +60,22 @@ int	stack_get_target_index(t_stack *s, int value)
 		i++;
 	}
 	if (target_i != -1)
-		return ((int)(((size_t)target_i + s->offset) % s->size));
-	return ((int)(((size_t)smallest_i + s->offset) % s->size));
+		return ((uint)(((size_t)target_i + s->offset) % s->len));
+	return ((uint)(((size_t)smallest_i + s->offset) % s->len));
 }
 
 bool	stack_is_sorted(t_stack *stack)
 {
 	size_t	i;
 	size_t	breaks;
-	int		last_value;
+	uint	last_value;
 
-	if (stack->size <= 2)
+	if (stack->len <= 2)
 		return (true);
 	breaks = 0;
 	i = 0;
 	last_value = stack->data[i];
-	while (++i < stack->size && breaks < 2)
+	while (++i < stack->len && breaks < 2)
 	{
 		if (stack->data[i] < last_value)
 			breaks++;

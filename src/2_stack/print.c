@@ -4,7 +4,7 @@
 static void	print_line(t_stack *a, t_stack *b, size_t i, size_t idx_a, size_t idx_b, int len);
 static void	print_sep(int max_value_len);
 static int	get_max_len(t_stack *a, t_stack *b);
-static int	get_value_len(int nb);
+static int	get_value_len(uint nb);
 
 void	stack_print(t_stack *a, t_stack *b)
 {
@@ -15,9 +15,9 @@ void	stack_print(t_stack *a, t_stack *b)
 	int		max_value_len;
 
 	max_value_len = get_max_len(a, b);
-	max_size = a->size;
-	if (b->size > max_size)
-		max_size = b->size;
+	max_size = a->len;
+	if (b->len > max_size)
+		max_size = b->len;
 	print_sep(max_value_len);
 	fprintf(stderr, "| %*s | %*s |\n", max_value_len, "A", max_value_len, "B");
 	print_sep(max_value_len);
@@ -27,15 +27,15 @@ void	stack_print(t_stack *a, t_stack *b)
 	while (i < max_size)
 	{
 		print_line(a, b, i, idx_a, idx_b, max_value_len);
-		if (a->size > 0)
-			idx_a = (idx_a + 1) % a->size;
-		if (b->size > 0)
-			idx_b = (idx_b + 1) % b->size;
+		if (a->len > 0)
+			idx_a = (idx_a + 1) % a->len;
+		if (b->len > 0)
+			idx_b = (idx_b + 1) % b->len;
 		i++;
 	}
 	print_sep(max_value_len);
-	fprintf(stderr, "| %*zu | %*zu |\n", max_value_len, a->size,
-		max_value_len, b->size);
+	fprintf(stderr, "| %*zu | %*zu |\n", max_value_len, a->len,
+		max_value_len, b->len);
 	print_sep(max_value_len);
 }
 
@@ -46,9 +46,9 @@ static void	print_line(t_stack *a, t_stack *b, size_t i, size_t idx_a, size_t id
 
 	a_value[0] = '\0';
 	b_value[0] = '\0';
-	if (i < a->size)
+	if (i < a->len)
 		snprintf(a_value, sizeof(a_value), "%i", a->data[idx_a]);
-	if (i < b->size)
+	if (i < b->len)
 		snprintf(b_value, sizeof(b_value), "%i", b->data[idx_b]);
 	fprintf(stderr, "| %*s | %*s |\n", len, a_value, len, b_value);
 }
@@ -76,7 +76,7 @@ static int	get_max_len(t_stack *a, t_stack *b)
 
 	i = 0;
 	max_len = 0;
-	while (i < a->size)
+	while (i < a->len)
 	{
 		len = get_value_len(a->data[i]);
 		if (len > max_len)
@@ -84,7 +84,7 @@ static int	get_max_len(t_stack *a, t_stack *b)
 		i++;
 	}
 	i = 0;
-	while (i < b->size)
+	while (i < b->len)
 	{
 		len = get_value_len(b->data[i]);
 		if (len > max_len)
@@ -94,9 +94,9 @@ static int	get_max_len(t_stack *a, t_stack *b)
 	return (max_len);
 }
 
-static int	get_value_len(int nb)
+static int	get_value_len(uint nb)
 {
-	int	value;
+	uint	value;
 	int	len;
 
 	value = nb;
