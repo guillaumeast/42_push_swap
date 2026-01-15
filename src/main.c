@@ -1,5 +1,6 @@
 #include "args.h"
 #include "stack.h"
+#include "moves.h"
 #include "k_sort.h"
 #include "greedy.h"
 #include "finish.h"
