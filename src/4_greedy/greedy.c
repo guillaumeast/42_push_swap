@@ -14,7 +14,7 @@ static bool		add_all_moves(t_buff *move_list, t_insert *insertion);
 static bool		add_move(t_buff *move_list, t_move move, size_t count);
 static bool		exec_moves(t_stack *a, t_stack *b, t_insert *insertion);
 
-# include <stdio.h>
+// # include <stdio.h>
 bool	greedy(t_stack *a, t_stack *b, t_buff *move_list)
 {
 	t_insert	next_insertion;
@@ -24,13 +24,12 @@ bool	greedy(t_stack *a, t_stack *b, t_buff *move_list)
 		next_insertion = get_next_insert(b, a);
 		add_all_moves(move_list, &next_insertion);
 		exec_moves(a, b, &next_insertion);
-		stack_print(a, b);
-		printf("\n");
+		// stack_print(a, b);
+		// printf("\n");
 	}
 	return (true);
 }
 
-# include <stdio.h>
 static t_insert	get_next_insert(t_stack *from, t_stack *to)
 {
 	size_t		i;

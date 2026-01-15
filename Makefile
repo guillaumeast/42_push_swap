@@ -10,13 +10,15 @@ SRCS		:= \
 	$(wildcard src/1_args/*.c) \
 	$(wildcard src/2_stack/*.c) \
 	$(wildcard src/3_k_sort/*.c) \
-	$(wildcard src/4_greedy/*.c)
+	$(wildcard src/4_greedy/*.c) \
+	$(wildcard src/5_finish/*.c)
 INCLUDES	:= \
 	-I$(LIBFT_DIR) \
 	-Isrc/1_args \
 	-Isrc/2_stack \
 	-Isrc/3_k_sort \
-	-Isrc/4_greedy
+	-Isrc/4_greedy \
+	-Isrc/5_finish
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
@@ -29,6 +31,7 @@ BONUS_SRCS	:= \
 	src/debug_print.c
 BONUS_OBJS	:= $(BONUS_SRCS:%.c=$(OBJ_DIR)/%.o)
 
+PARS_TESTER	:= ./tests/test_parsing.sh
 TESTER_DIR	:= tester_SimonCROS
 TESTER_NAME	:= complexity
 TESTER_BIN	:= $(TESTER_DIR)/$(TESTER_NAME)
@@ -56,6 +59,7 @@ bonus: $(BONUS_OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(BONUS_OBJS) $(LIBFT) -o $(BONUS_NAME)
 
 test: re
+	@$(PARS_TESTER)
 	@$(MAKE) -C $(TESTER_DIR) fr
 	@echo "\n----------"
 	@./$(TESTER_BIN) $(TEST1_ARGC) $(TEST_ITER) $(TEST1_MAX) || true

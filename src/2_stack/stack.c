@@ -34,34 +34,32 @@ uint	stack_get_value(t_stack *stack, size_t index)
 	return (stack->data[(stack->offset + index) % stack->len]);
 }
 
-uint	stack_get_target_index(t_stack *s, uint value)
+size_t	stack_get_target_index(t_stack *s, uint value)
 {
 	size_t	i;
-	int		target_i;
+	long	target_i;
 	uint	target_v;
-	int		smallest_i;
+	long	smallest_i;
 	uint	smallest_v;
 
-	i = 0;
-	target_i = -1;
-	smallest_i = -1;
+	1 && (i = 0, target_i = -1, smallest_i = -1);
 	while (i < s->len)
 	{
 		if (smallest_i == -1 || s->data[i] <= smallest_v)
 		{
-			smallest_i = (int)i;
+			smallest_i = (long)i;
 			smallest_v = s->data[i];
 		}
 		if (s->data[i] > value && (target_i == -1 || s->data[i] <= target_v))
 		{
-			target_i = (int)i;
+			target_i = (long)i;
 			target_v = s->data[i];
 		}
 		i++;
 	}
 	if (target_i != -1)
-		return ((uint)(((size_t)target_i - s->offset) % s->len));
-	return ((uint)(((size_t)smallest_i - s->offset) % s->len));
+		return (modulo(target_i - (long)s->offset, s->len));
+	return (modulo(smallest_i - (long)s->offset, s->len));
 }
 
 bool	stack_is_sorted(t_stack *stack)

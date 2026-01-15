@@ -48,7 +48,7 @@ void	moves_print(t_buff *move_list);
 bool	stack_init(t_stack *a, t_stack *b, uint *values, size_t count);
 bool	stack_dup(t_stack *dst, t_stack *src);
 uint	stack_get_value(t_stack *stack, size_t index);
-uint	stack_get_target_index(t_stack *s, uint value);
+size_t	stack_get_target_index(t_stack *s, uint value);
 bool	stack_is_sorted(t_stack *stack);
 
 /*---------- moves.c ----------*/

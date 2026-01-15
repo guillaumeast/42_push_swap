@@ -103,4 +103,4 @@ test_should_work "15" "./push_swap -2147483648 \"5 1 \" +2147483647" "       -> 
 test_should_work "16" "./push_swap -2147483648 \"   5   1   \" +2147483647" "-> multi spaces   ->   " "............."
 
 echo
-echo "=== End of tests ==="
+echo "=== End of parsing tests ==="
