@@ -2,7 +2,10 @@
 
 bool	k_sort(t_stack *a, t_stack *b, t_buff *move_list)
 {
-	return (pb(a, b, a->len - 2, move_list));
+	(void)a;
+	(void)b;
+	(void)move_list;
+	return (false);
 }
 
 // void	k_sort(t_stack *a, t_stack *b)

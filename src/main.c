@@ -1,13 +1,14 @@
 #include "args.h"
 #include "stack.h"
 #include "moves.h"
+#include "push.h"
 #include "k_sort.h"
 #include "greedy.h"
 #include "finish.h"
 #include <stdlib.h>
 #include <unistd.h>
 
-static bool	try_k_sort_and_greedy(t_stack *a, t_stack *b, t_buff *move_list);
+static bool	find_best_algo(t_stack *a, t_stack *b, t_buff *move_list);
 static int	free_and_print_error(t_stack *a, t_stack *b);
 
 int	main(int argc, char **argv)
@@ -25,7 +26,7 @@ int	main(int argc, char **argv)
 		return (free(args.values), free_and_print_error(NULL, NULL));
 	if (!buff_init(&move_list, args.count * 20))
 		return (free_and_print_error(&a, &b));
-	if (!try_k_sort_and_greedy(&a, &b, &move_list))
+	if (!find_best_algo(&a, &b, &move_list))
 		return (buff_free(&move_list), free_and_print_error(&a, &b));
 	moves_print(&move_list);
 	// stack_print(&a, &b);
@@ -34,9 +35,13 @@ int	main(int argc, char **argv)
 	return (0);
 }
 
-static bool	try_k_sort_and_greedy(t_stack *a, t_stack *b, t_buff *move_list)
+static bool	find_best_algo(t_stack *a, t_stack *b, t_buff *move_list)
 {
-	if (!k_sort(a, b, move_list))
+	t_push_opti	opti;
+
+	opti.swap = true;
+	opti.median = false;
+	if (!push_to_b(a, b, &opti, move_list))
 		return (false);
 	if (!greedy(a, b, move_list))
 		return (false);

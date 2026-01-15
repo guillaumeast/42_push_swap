@@ -1,26 +1,23 @@
 NAME		:= push_swap
 CC			:= cc
-CFLAGS		= -Wall -Wextra -Werror -g3
+CFLAGS		= -Wall -Wextra -Werror -O2 -g3
 
 LIBFT_DIR	:= libft
 LIBFT		:= $(LIBFT_DIR)/libft.a
 
 SRCS		:= \
 	$(wildcard src/*.c) \
-	$(wildcard src/1_args/*.c) \
-	$(wildcard src/2_stack/*.c) \
-	$(wildcard src/3_moves/*.c) \
-	$(wildcard src/4_k_sort/*.c) \
-	$(wildcard src/5_greedy/*.c) \
-	$(wildcard src/6_finish/*.c)
+	$(wildcard src/*/*.c) \
+	$(wildcard src/*/*/*.c)
 INCLUDES	:= \
 	-I$(LIBFT_DIR) \
 	-Isrc/1_args \
 	-Isrc/2_stack \
 	-Isrc/3_moves \
-	-Isrc/4_k_sort \
-	-Isrc/5_greedy \
-	-Isrc/6_finish
+	-Isrc/4_algos/1_push_to_b \
+	-Isrc/4_algos/2_k_sort \
+	-Isrc/4_algos/3_greedy \
+	-Isrc/4_algos/finish
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
@@ -42,6 +39,7 @@ TEST1_ARGC	:= 100
 TEST1_MAX	:= 700
 TEST2_ARGC	:= 500
 TEST2_MAX	:= 5500
+TEST_OPT	:= -s 3321135322
 
 VIS_BIN		:= push_swap_visualizer/build/bin/visualizer
 
@@ -64,9 +62,9 @@ test: re
 	@$(PARS_TESTER)
 	@$(MAKE) -C $(TESTER_DIR) fr
 	@echo "\n----------"
-	@./$(TESTER_BIN) $(TEST1_ARGC) $(TEST_ITER) $(TEST1_MAX) || true
+	@./$(TESTER_BIN) $(TEST_OPT) $(TEST1_ARGC) $(TEST_ITER) $(TEST1_MAX) || true
 	@echo "\n----------"
-	@./$(TESTER_BIN) $(TEST2_ARGC) $(TEST_ITER) $(TEST2_MAX)
+	@./$(TESTER_BIN) $(TEST_OPT) $(TEST2_ARGC) $(TEST_ITER) $(TEST2_MAX)
 
 vis: re
 	@$(VIS_BIN)
