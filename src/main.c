@@ -44,7 +44,7 @@ static t_buff	*best_moves(t_stack *a, t_stack *b)
 	config_1.step_1 = NAIVE;
 	config_1.step_2 = GREEDY;
 	if (!config_run(&config_1) || config_1.error)
-		return (config_free(&config_1), config_free(&config_2), NULL);
+		return (config_free(&config_1), NULL);
 	if (!config_init(a, b, &config_2))
 		return (config_free(&config_1), NULL);
 	config_2.step_1 = NAIVE;
@@ -73,6 +73,7 @@ static t_buff	*best_moves(t_stack *a, t_stack *b)
 	}
 }
 // TODO: don't put t_buff inside config struct (it will be easier to free)
+// TODO: algos interface should be (t_stack *a, t_stack *b, t_opti *opti, t_buff *moves)
 
 static int	free_and_print_error(t_stack *a, t_stack *b)
 {
