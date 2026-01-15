@@ -3,16 +3,16 @@
 
 static bool		should_swap(t_stack *stack);
 
-bool	push_to_b(t_stack *a, t_stack *b, t_config *config, t_buff *list)
+bool	push_to_b(t_config *config)
 {
 	if (!config)
-		return (pb(a, b, a->len - 2, list));
-	while (a->len > 2)
+		return (pb(&config->a, &config->b, config->a.len - 2, &config->moves));
+	while (config->a.len > 2)
 	{
-		if (!pb(a, b, 1, list))
+		if (!pb(&config->a, &config->b, 1, &config->moves))
 			return (false);
-		if (config->swap && should_swap(b))
-			if (!sb(b, list))
+		if (config->swap && should_swap(&config->b))
+			if (!sb(&config->b, &config->moves))
 				return (false);
 	}
 	return (true);

@@ -1,9 +1,8 @@
 #ifndef GREEDY_H
 # define GREEDY_H
 
-# include "libft.h"
-# include "stack.h"
+# include "config.h"
 
-bool	greedy(t_stack *a, t_stack *b, t_buff *move_list);
+bool	greedy(t_config *config);
 
 #endif

@@ -81,3 +81,9 @@ bool	stack_is_sorted(t_stack *stack)
 	}
 	return (breaks < 2);
 }
+
+void	stack_free(t_stack *stack)
+{
+	if (stack->data)
+		free(stack->data);
+}

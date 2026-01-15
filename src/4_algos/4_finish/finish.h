@@ -1,9 +1,8 @@
 #ifndef FINISH_H
 # define FINISH_H
 
-# include "libft.h"
-# include "stack.h"
+# include "config.h"
 
-bool finish(t_stack *a, t_buff *move_list);
+bool finish(t_config *config);
 
 #endif

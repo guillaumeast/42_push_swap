@@ -5,26 +5,26 @@
 
 static t_insert	get_next_insert(t_stack *from, t_stack *to);
 
-bool	greedy(t_stack *a, t_stack *b, t_buff *move_list)
+bool	greedy(t_config *config)
 {
 	t_insert	next_insertion;
 
-	while (b->len > 0)
+	while (config->b.len > 0)
 	{
-		next_insertion = get_next_insert(b, a);
-		if (!rr(a, b, next_insertion.cost.rr, move_list))
+		next_insertion = get_next_insert(&config->b, &config->a);
+		if (!rr(&config->a, &config->b, next_insertion.cost.rr, &config->moves))
 			return (false);
-		if (!ra(a, next_insertion.cost.ra, move_list))
+		if (!ra(&config->a, next_insertion.cost.ra, &config->moves))
 			return (false);
-		if (!rb(b, next_insertion.cost.rb, move_list))
+		if (!rb(&config->b, next_insertion.cost.rb, &config->moves))
 			return (false);
-		if (!rrr(a, b, next_insertion.cost.rrr, move_list))
+		if (!rrr(&config->a, &config->b, next_insertion.cost.rrr, &config->moves))
 			return (false);
-		if (!rra(a, next_insertion.cost.rra, move_list))
+		if (!rra(&config->a, next_insertion.cost.rra, &config->moves))
 			return (false);
-		if (!rrb(b, next_insertion.cost.rrb, move_list))
+		if (!rrb(&config->b, next_insertion.cost.rrb, &config->moves))
 			return (false);
-		if (!pa(a, b, 1, move_list))
+		if (!pa(&config->a, &config->b, 1, &config->moves))
 			return (false);
 	}
 	return (true);

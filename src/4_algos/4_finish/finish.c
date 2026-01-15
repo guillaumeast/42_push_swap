@@ -1,29 +1,29 @@
 #include "libft.h"
-#include "stack.h"
+#include "config.h"
 #include "moves.h"
 
 static bool	get_target_index(t_stack *stack, size_t *ret);
 
-bool finish(t_stack *a, t_buff *move_list)
+bool finish(t_config *config)
 {
 	size_t	target_index;
 
-	if (!get_target_index(a, &target_index))
+	if (!get_target_index(&config->a, &target_index))
 		return (false);
-	if (target_index <= a->len / 2)
+	if (target_index <= config->a.len / 2)
 	{
 		// TODO: switch commented parts for submit / debug
-		// if (!ra(a, target_index, move_list))
+		// if (!ra(&config->a, target_index, &config->moves))
 		// 	return (false);
-		if (!move_add(RA, target_index, move_list))
+		if (!move_add(RA, target_index, &config->moves))
 			return (false);
 	}
 	else
 	{
 		// TODO: switch commented parts for submit / debug
-		// if (!rra(a, a->len - target_index, move_list))
+		// if (!rra(&config->a, config->a.len - target_index, &config->moves))
 		// 	return (false);
-		if (!move_add(RRA, a->len - target_index, move_list))
+		if (!move_add(RRA, config->a.len - target_index, &config->moves))
 			return (false);
 	}
 	return (true);
