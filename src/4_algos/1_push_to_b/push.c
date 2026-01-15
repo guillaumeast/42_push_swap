@@ -3,15 +3,15 @@
 
 static bool		should_swap(t_stack *stack);
 
-bool	push_to_b(t_stack *a, t_stack *b, t_push_opti *opti, t_buff *list)
+bool	push_to_b(t_stack *a, t_stack *b, t_config *config, t_buff *list)
 {
-	if (!opti)
+	if (!config)
 		return (pb(a, b, a->len - 2, list));
 	while (a->len > 2)
 	{
 		if (!pb(a, b, 1, list))
 			return (false);
-		if (opti->swap && should_swap(b))
+		if (config->swap && should_swap(b))
 			if (!sb(b, list))
 				return (false);
 	}
