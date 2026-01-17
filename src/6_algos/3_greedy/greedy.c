@@ -9,22 +9,23 @@ bool	greedy(t_state *state, t_config *config)
 {
 	t_insert	next_insertion;
 
-	while (config->b.len > 0)
+	(void)config;
+	while (state->b.len > 0)
 	{
-		next_insertion = get_next_insert(&config->b, &config->a);
-		if (!rr(&config->a, &config->b, next_insertion.cost.rr, &config->moves))
+		next_insertion = get_next_insert(&state->b, &state->a);
+		if (!rr(&state->a, &state->b, next_insertion.cost.rr, &state->moves))
 			return (false);
-		if (!ra(&config->a, next_insertion.cost.ra, &config->moves))
+		if (!ra(&state->a, next_insertion.cost.ra, &state->moves))
 			return (false);
-		if (!rb(&config->b, next_insertion.cost.rb, &config->moves))
+		if (!rb(&state->b, next_insertion.cost.rb, &state->moves))
 			return (false);
-		if (!rrr(&config->a, &config->b, next_insertion.cost.rrr, &config->moves))
+		if (!rrr(&state->a, &state->b, next_insertion.cost.rrr, &state->moves))
 			return (false);
-		if (!rra(&config->a, next_insertion.cost.rra, &config->moves))
+		if (!rra(&state->a, next_insertion.cost.rra, &state->moves))
 			return (false);
-		if (!rrb(&config->b, next_insertion.cost.rrb, &config->moves))
+		if (!rrb(&state->b, next_insertion.cost.rrb, &state->moves))
 			return (false);
-		if (!pa(&config->a, &config->b, 1, &config->moves))
+		if (!pa(&state->a, &state->b, 1, &state->moves))
 			return (false);
 	}
 	return (true);

@@ -9,25 +9,12 @@ bool finish(t_state *state, t_config *config)
 {
 	size_t	target_index;
 
-	if (!get_target_index(&config->a, &target_index))
+	(void)config;
+	if (!get_target_index(&state->a, &target_index))
 		return (false);
-	if (target_index <= config->a.len / 2)
-	{
-		// TODO: switch commented parts for submit / debug
-		// if (!ra(&config->a, target_index, &config->moves))
-		// 	return (false);
-		if (!move_add(RA, target_index, &config->moves))
-			return (false);
-	}
-	else
-	{
-		// TODO: switch commented parts for submit / debug
-		// if (!rra(&config->a, config->a.len - target_index, &config->moves))
-		// 	return (false);
-		if (!move_add(RRA, config->a.len - target_index, &config->moves))
-			return (false);
-	}
-	return (true);
+	if (target_index <= state->a.len / 2)
+		return (ra(&state->a, target_index, &state->moves));
+	return (rra(&state->a, state->a.len - target_index, &state->moves));
 }
 
 static bool	get_target_index(t_stack *stack, size_t *ret)

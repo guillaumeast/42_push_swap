@@ -3,16 +3,16 @@
 
 static bool		should_swap(t_stack *stack);
 
-bool	naive(t_config *config)
+bool	naive(t_state *state, t_config *config)
 {
-	if (!config)
-		return (pb(&config->a, &config->b, config->a.len - 2, &config->moves));
-	while (config->a.len > 2)
+	if (!config->swap)
+		return (pb(&state->a, &state->b, state->a.len - 2, &state->moves));
+	while (state->a.len > 2)
 	{
-		if (!pb(&config->a, &config->b, 1, &config->moves))
+		if (!pb(&state->a, &state->b, 1, &state->moves))
 			return (false);
-		if (config->swap && should_swap(&config->b))
-			if (!sb(&config->b, &config->moves))
+		if (should_swap(&state->b))
+			if (!sb(&state->b, &state->moves))
 				return (false);
 	}
 	return (true);
