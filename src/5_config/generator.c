@@ -64,12 +64,12 @@ static size_t	add_couples(t_input *input, uint *configs)
 }
 
 /*
-* combined_optis							=> the combined optis (00000001, then 00000010, then 00000011, ..., 11111111)
-* couples_index								=> the index of the base config from which optis will be added
-* target_index								=> the index in which the new config will be inserted
-* combined_optis & (1 << opti_index)		=> checks if the current opti is enabled in the combined opti set
+* combined_optis						=> the combined optis (00000001, then 00000010, then 00000011, ..., 11111111)
+* couples_index							=> the index of the base config from which optis will be added
+* target_index							=> the index in which the new config will be inserted
+* combined_optis & (1 << opti_index)	=> checks if the current opti is enabled in the combined opti set
 * config |= input->optis[opti_index]	=> add the compatible opti to base config
-* if (opti_index == input->optis_count)		=> checks if all optis have been validated (if yes, insert the new config into configs array)
+* if (opti_index == input->optis_count)	=> checks if all optis have been validated (if yes, insert the new config into configs array)
 */
 # include "libft.h"
 # include <stdio.h>
@@ -115,20 +115,16 @@ static size_t	add_optis(t_input *input, uint *configs)
 */
 static bool	opti_is_valid(uint opti_compatibilities, uint config)
 {
-	uint	algo_1;
-	uint	algo_2;
+	uint	algos_mask;
+	uint	algos;
 	uint	opti_list;
 	uint	compatibilities;
 
-	algo_1 = (config & ALGO_1_MASK);
-	compatibilities = (opti_compatibilities & ALGO_1_MASK);
-	if ((algo_1 & compatibilities) == 0)
-	{
-		algo_2 = (config & ALGO_2_MASK);
-		compatibilities = (opti_compatibilities & ALGO_2_MASK);
-		if ((algo_2 & compatibilities) == 0)
-			return (false);
-	}
+	algos_mask = (ALGO_1_MASK | ALGO_2_MASK);
+	algos = (config & algos_mask);
+	compatibilities = (opti_compatibilities & algos_mask);
+	if ((algos & compatibilities) == 0)
+		return (false);
 	opti_list = (config & OPTI_MASK);
 	compatibilities = (opti_compatibilities & OPTI_MASK);
 	return ((opti_list & compatibilities) == opti_list);
