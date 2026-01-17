@@ -1,6 +1,7 @@
 #ifndef CONFIG_H
 # define CONFIG_H
 
+# include "state.h"
 # include <stdbool.h>
 # include <sys/types.h>
 
@@ -45,24 +46,16 @@
 *	8 lowest bits	= ALGO_1
 *	8 mid bits		= ALGO_2
 *	8 highest bits	= OPTI_LIST
-*
-*		USAGE EXAMPLE
-*	add an ALGO_1 to config:	config + CHUNK
-*	add an ALGO_2 to config:	config + GREEDY
-*	add an OPTI to config:		config + ((SWAP >> 8) & OPTI_MASK)
-*	add another OPTI to config:	config + ((OPTI_2 >> 8) & OPTI_MASK)
-*	=> 00000000 00000011 00000001 00000100 => [ALGO_1 = CHUNK] + [ALGO_2 = GREEDY] + [OPTIs = SWAP + OPTI_2]
-*	usage for algo_1:	config.algo_1	= (raw_config & ALGO_1_MASK)
-*	usage for algo_2:	config.algo_2	= (raw_config & ALGO_2_MASK)
-*	usage for options:	config.swap		= ((raw_config & OPTI_MASK) & SWAP) != 0
-*	usage for options:	config.opti_2	= ((raw_config & OPTI_MASK) & OPTI_2) != 0
 */
 
 typedef struct s_config
 {
-	uint	algo_1;
-	uint	algo_2;
-	bool	swap;
+	const char	*algo_1_name;
+	bool 		(*algo_1)(t_state *state, struct s_config *config);
+	const char	*algo_2_name;
+	bool 		(*algo_2)(t_state *state, struct s_config *config);
+	const char	*opti_names;
+	bool		swap;
 }	t_config;
 
 // Returns a NULL terminated list of t_config (owned by the caller, use config_list_free() to free it)
@@ -72,6 +65,6 @@ void		config_list_free(t_config ***config_list);
 
 // TODO: tmp debug
 void	config_print_all(t_config **configs);
-void	config_print(t_config *config);
+void	config_print(t_config *config, size_t index, bool print_index);
 
 #endif
