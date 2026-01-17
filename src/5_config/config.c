@@ -1,62 +1,49 @@
-#include "libft.h"
 #include "config.h"
+#include "config_priv.h"
 #include <stdlib.h>
 
-/* ----- from generator.c ----- */
-uint		*generate_configs(size_t *count_ret);
-
-static t_config	*generate_new_config(t_config *last_config);
-static	t_config **normalize_config(t_config **raw_list);
+static t_config	*config_convert(uint raw_config);
 
 t_config	**config_get_list(void)
 {
+	uint		*raw_list;
+	size_t		raw_list_size;
+	t_config	**final_list;
 	size_t		i;
-	t_config	*last_config;
-	t_config	**raw_list;
 
-	raw_list = malloc(CONFIG_COUNT * sizeof * raw_list);
+	raw_list = generate_configs(&raw_list_size);
 	if (!raw_list)
 		return (NULL);
-	raw_list[0] = malloc(sizeof ** raw_list);
-	if (!raw_list[0])
+	final_list = malloc(raw_list_size * sizeof * final_list);
+	if (!final_list)
 		return (free(raw_list), NULL);
-	raw_list[0]->algo_1 = 1;
-	raw_list[0]->algo_2 = 1;
-	raw_list[0]->optis = 0;
-	i = 1;
-	while (i < CONFIG_COUNT)
+	i = 0;
+	while (i < raw_list_size)
 	{
-		last_config = raw_list[i - 1];
-		raw_list[i] = generate_new_config(last_config);
-		if (!raw_list[i])
-			return (config_list_free(&raw_list), NULL);
+		final_list[i] = config_convert(raw_list[i]);
+		if (!final_list[i])
+			return (free(raw_list), config_list_free(&final_list), NULL);
+		config_print(final_list[i]);	// TODO: tmp debug
 		i++;
 	}
-	return (normalize_config(raw_list));
+	final_list[i] = NULL;
+	free(raw_list);
+	return (final_list);
 }
 
-static t_config	*generate_new_config(t_config *last_config)
+static t_config	*config_convert(uint raw_config)
 {
-	t_config	*new_config;
+	t_config	*res;
+	uint		optis;
 
-	new_config = malloc(sizeof * new_config);
-	if (!new_config)
+	res = malloc(sizeof * res);
+	if (!res)
 		return (NULL);
-	if (last_config->algo_1 != ALGO_1_COUNT - 1)
-		new_config->algo_1 = last_config->algo_1 * 2;
-	else
-		new_config->algo_1 = last_config->algo_1;
-	if (last_config->algo_2 != ALGO_2_COUNT - 1)
-		new_config->algo_2 = last_config->algo_2 * 2;
-	else
-		new_config->algo_2 = last_config->algo_2;
-	new_config->optis = last_config->optis + 1;	// Cycle it for each algo !!
-	return (new_config);
-}
-
-static	t_config **normalize_config(t_config **raw_list)
-{
-
+	res->algo_1 = (raw_config & ALGO_1_MASK);
+	res->algo_2 = (raw_config & ALGO_2_MASK);
+	optis = (raw_config & OPTI_MASK);
+	res->swap = (optis & SWAP) != 0;
+	return (res);
 }
 
 void	config_list_free(t_config ***config_list)
@@ -73,19 +60,25 @@ void	config_list_free(t_config ***config_list)
 	*config_list = NULL;
 }
 
-// TODO
-bool	config_run(t_config *config)
+// TODO: tmp debug
+# include <stdio.h>
+# include "config_priv.h"
+void	config_print(t_config *config)
 {
-	if (config->step_1 == NAIVE)
-		if (!push_to_b(config))
-			return (false);
-	if (config->step_2 == GREEDY)
-		if (!greedy(config))
-			return (false);
-	if (!stack_is_sorted(&config->a))
-	{
-		config->error = true;
-		return (true);
-	}
-	return (finish(config));
+	printf("------ CONFIG ------ \n");
+	if (config->algo_1 == NAIVE)
+		printf("-> algo_1 = NAIVE\n");
+	else if (config->algo_1 == LIS)
+		printf("-> algo_1 = LIS\n");
+	else if (config->algo_1 == CHUNK)
+		printf("-> algo_1 = CHUNK\n");
+	else if (config->algo_1 == K_SORT)
+		printf("-> algo_1 = K_SORT\n");
+	if (config->algo_2 == GREEDY)
+		printf("-> algo_2 = GREEDY\n");
+	if (config->swap)
+		printf("-> swap   = true\n");
+	else
+		printf("-> swap   = false\n");
+	printf("-------------------- \n");
 }

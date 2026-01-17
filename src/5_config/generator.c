@@ -6,6 +6,8 @@ static size_t	add_optis(t_input *input, uint *configs);
 static bool		opti_is_valid(uint opti_compatibilities, uint config);
 
 // TODO: tmp debug
+# include "libft.h"
+# include <stdio.h>
 void	print_binary(const char *prefix, uint value, const char *suffix);
 
 uint	*generate_configs(size_t *count_ret)
@@ -71,8 +73,6 @@ static size_t	add_couples(t_input *input, uint *configs)
 * config |= input->optis[opti_index]	=> add the compatible opti to base config
 * if (opti_index == input->optis_count)	=> checks if all optis have been validated (if yes, insert the new config into configs array)
 */
-# include "libft.h"
-# include <stdio.h>
 static size_t	add_optis(t_input *input, uint *configs)
 {
 	uint	combined_optis;
