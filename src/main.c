@@ -35,8 +35,7 @@ int	main(int argc, char **argv)
 	buff_init(&best_moves, 0);
 	if (!run_configs(&initial_state, configs, &best_moves))
 		return (free_and_print_error(&initial_state, configs));
-	// moves_print(&best_moves);
-	// stack_print(&a, &b);
+	moves_print(&best_moves);
 	fprintf(stdout, " ");	// For parsing tester
 	state_free(&initial_state);
 	config_list_free(&configs);
@@ -51,12 +50,10 @@ static bool	run_configs(t_state *inital_state, t_config **configs, t_buff *best_
 	t_config	*best_config;
 	t_state		state;
 
-	// TODO: add (bool (*algo)(t_state *state, t_config *config) ptr to config struct)
 	i = 0;
 	config = configs[0];
 	while (config)
 	{
-		// TODO: free state when failed
 		fprintf(stderr, "ℹ️  ===> Config = \033[34m");
 		config_print(config, i, false);
 		fprintf(stderr, "\033[0m");
@@ -67,9 +64,12 @@ static bool	run_configs(t_state *inital_state, t_config **configs, t_buff *best_
 		if (!config->algo_2(&state, config))
 			return (abort_config(&state, best_moves, "algo_2 failed"));
 		if (!stack_is_sorted(&state.a) || state.b.len > 0)
-			return (abort_config(&state, best_moves, "A is not sorted and/or B is not empty"));
+			return (abort_config(&state, best_moves, "A is not sorted or B is not empty"));
 		if (!finish(&state, config))
 			return (abort_config(&state, best_moves, "Finish algo failed"));
+		if (stack_get_value(&state.a, 0) != 0)
+			return (abort_config(&state, best_moves, "A[0] != 0"));
+		// stack_print(&state.a, &state.b);
 		if (best_moves->cap == 0 || state.moves.len < best_moves->len)
 		{
 			if (best_moves->cap == 0)

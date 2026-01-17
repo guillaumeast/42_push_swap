@@ -33,7 +33,8 @@ BONUS_SRCS	:= \
 	src/debug_print.c
 BONUS_OBJS	:= $(BONUS_SRCS:%.c=$(OBJ_DIR)/%.o)
 
-PARS_TESTER	:= ./tests/test_parsing.sh
+MY_TESTER	:= ./tests/test.sh
+
 TESTER_DIR	:= tester_SimonCROS
 TESTER_NAME	:= complexity
 TESTER_BIN	:= $(TESTER_DIR)/$(TESTER_NAME)
@@ -62,7 +63,7 @@ bonus: $(BONUS_OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(BONUS_OBJS) $(LIBFT) -o $(BONUS_NAME)
 
 test: re
-	@$(PARS_TESTER)
+	@$(MY_TESTER)
 	@$(MAKE) -C $(TESTER_DIR) fr
 	@echo "\n----------"
 	@./$(TESTER_BIN) $(TEST_OPT) $(TEST1_ARGC) $(TEST_ITER) $(TEST1_MAX) || true
