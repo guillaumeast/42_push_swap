@@ -1,19 +1,26 @@
+#include "libft.h"
 #include "args.h"
-#include "stack.h"
 #include "moves.h"
 #include "state.h"
+#include "naive.h"
+#include "greedy.h"
+#include "finish.h"
 #include "config.h"
 #include <stdlib.h>
 #include <unistd.h>
 
-static t_buff	*best_moves(t_state *in, t_state *out);
-static int		free_and_print_error(t_state *state1, t_state *state2);
+#include <stdio.h>	// TODO: tmp debug
+
+static bool	run_configs(t_state *inital_state, t_config **configs, t_buff *best_moves);
+static bool	abort_config(t_state *state, t_buff *moves, const char *error);
+static int	free_and_print_error(t_state *state, t_config **configs);
 
 int	main(int argc, char **argv)
 {
-	t_args	args;
-	t_state	initial_state;
-	t_state	final_state;
+	t_args		args;
+	t_state		initial_state;
+	t_config	**configs;
+	t_buff		best_moves;
 
 	if (argc < 2)
 		return (0);
@@ -21,71 +28,74 @@ int	main(int argc, char **argv)
 		return (free_and_print_error(NULL, NULL));
 	if (!state_init(&initial_state, args.values, args.count))
 		return (free(args.values), free_and_print_error(NULL, NULL));
-	if (!state_init(&final_state, args.values, args.count))
+	configs = config_get_list();
+	if (!configs)
 		return (free_and_print_error(&initial_state, NULL));
-	if (!best_moves(&initial_state, &final_state))
-		return (free_and_print_error(&initial_state, &final_state));
-	moves_print(&final_state.moves);
+	config_print_all(configs);
+	buff_init(&best_moves, 0);
+	if (!run_configs(&initial_state, configs, &best_moves))
+		return (free_and_print_error(&initial_state, configs));
+	// moves_print(&best_moves);
 	// stack_print(&a, &b);
-	state_free(&final_state);
+	state_free(&initial_state);
+	config_list_free(&configs);
+	buff_free(&best_moves);
 	return (0);
 }
 
-/* TODO: refactor to handle state struct:
-*		while cycle (i < CONFIG_COUNT)
-*			state_dup(in)
-*			state_init(tmp)
-*			config_init(i)
-*			config_run(config)
-*			if (best_set == false) => best = tmp
-*			else if (tmp.moves.len < best.moves.len) => {state_free(best), best = tmp}
-*			else => state_free(tmp)
-*		return (best)
-*/
-static bool best_moves(t_state *in, t_state *out)
+static bool	run_configs(t_state *inital_state, t_config **configs, t_buff *best_moves)
 {
-	t_config	config_1;
-	t_config	config_2;
-	t_buff		*res;
+	size_t		i;
+	t_config	*config;
+	t_state		state;
 
-	if (!config_init(a, b, &config_1))
-		return (NULL);
-	config_1.step_1 = NAIVE;
-	config_1.step_2 = GREEDY;
-	if (!config_run(&config_1) || config_1.error)
-		return (config_free(&config_1), NULL);
-	if (!config_init(a, b, &config_2))
-		return (config_free(&config_1), NULL);
-	config_2.step_1 = NAIVE;
-	config_2.step_2 = GREEDY;
-	config_2.swap = true;
-	if (!config_run(&config_2) || config_2.error)
-		return (config_free(&config_1), config_free(&config_2), NULL);
-	res = malloc(sizeof *res);
-	if (!res)
-		return (config_free(&config_1), config_free(&config_2), NULL);
-	if (config_1.moves.len < config_2.moves.len)
+	// TODO: add (bool (*algo)(t_state *state, t_config *config) ptr to config struct)
+	i = 0;
+	config = configs[0];
+	while (config)
 	{
-		config_free(&config_2), stack_free(&config_1.a), stack_free(&config_1.b);
-		res->data = config_1.moves.data;
-		res->cap = config_1.moves.cap;
-		res->len = config_1.moves.len;
-		return (res);
+		// TODO: free state when failed
+		fprintf(stderr, "[ i ] ===> Running config %zu\n", i);
+		if (!state_dup(&state, inital_state))
+			return (abort_config(&state, best_moves, "Unable to duplicate state"));
+		if (config->algo_1 == NAIVE)
+			if (!naive(&state, config))
+				return (abort_config(&state, best_moves, "Naive algo failed"));
+		if (config->algo_2 == GREEDY)
+			if (!greedy(&state, config))
+				return (abort_config(&state, best_moves, "Greedy algo failed"));
+		if (!stack_is_sorted(&state.a) || state.b.len > 0)
+			return (abort_config(&state, best_moves, "A is not sorted and/or B is not empty"));
+		if (!finish(&state, config))
+			return (abort_config(&state, best_moves, "Finish algo failed"));
+		fprintf(stderr, "[ i ] ===> Moves = %zu\n\n", state.moves.len);
+		if (best_moves->cap == 0 || state.moves.len < best_moves->len)
+		{
+			buff_free(best_moves);
+			*best_moves = state.moves;
+			stack_free(&state.a);
+			stack_free(&state.b);
+		}
+		else
+			state_free(&state);
+		config = configs[++i];
 	}
-	else
-	{
-		config_free(&config_1), stack_free(&config_2.a), stack_free(&config_2.b);
-		res->data = config_2.moves.data;
-		res->cap = config_2.moves.cap;
-		res->len = config_2.moves.len;
-		return (res);
-	}
+	fprintf(stderr, "[ i ] ========> Best moves = %zu\n\n", best_moves->len);
+	return (true);
 }
 
-static int	free_and_print_error(t_state *state1, t_state *state2)
+static bool	abort_config(t_state *state, t_buff *moves, const char *error)
 {
-	state_free(state1);
-	state_free(state2);
+	state_free(state);
+	buff_free(moves);
+	ft_dprintf(STDERR_FILENO, "[!!!] %s, stopping\n", error);
+	return (false);
+}
+
+static int	free_and_print_error(t_state *state, t_config **configs)
+{
+	state_free(state);
+	config_list_free(&configs);
 	write(2, "Error\n", 6);
 	return (EXIT_FAILURE);
 }

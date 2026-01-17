@@ -63,6 +63,15 @@ void	config_list_free(t_config ***config_list)
 // TODO: tmp debug
 # include <stdio.h>
 # include "config_priv.h"
+void	config_print_all(t_config **configs)
+{
+	while(*configs)
+	{
+		config_print(*configs);
+		configs++;
+	}
+}
+
 void	config_print(t_config *config)
 {
 	printf("------ CONFIG ------ \n");

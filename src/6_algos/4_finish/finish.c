@@ -1,10 +1,11 @@
 #include "libft.h"
+#include "state.h"
 #include "config.h"
 #include "moves.h"
 
 static bool	get_target_index(t_stack *stack, size_t *ret);
 
-bool finish(t_config *config)
+bool finish(t_state *state, t_config *config)
 {
 	size_t	target_index;
 

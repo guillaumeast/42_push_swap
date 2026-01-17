@@ -1,4 +1,7 @@
+#include "config.h"
 #include "config_priv.h"
+#include <stdbool.h>
+#include <stdlib.h>
 
 static void		input_init(t_input *input);
 static size_t	add_couples(t_input *input, uint *configs);
@@ -26,7 +29,7 @@ uint	*generate_configs(size_t *count_ret)
 
 static void	input_init(t_input *input)
 {
-	static const uint	algos_1[] = {NAIVE, LIS, CHUNK, K_SORT};
+	static const uint	algos_1[] = {NAIVE};
 	static const uint	algos_2[] = {GREEDY};
 	static const uint	optis[] = {SWAP};
 	static const uint	optis_compat[] = {SWAP_COMPAT};

@@ -17,7 +17,7 @@ INCLUDES	:= \
 	-Isrc/4_state \
 	-Isrc/5_config \
 	-Isrc/6_algos \
-	-Isrc/6_algos/1_push_to_b \
+	-Isrc/6_algos/1_naive \
 	-Isrc/6_algos/2_k_sort \
 	-Isrc/6_algos/3_greedy \
 	-Isrc/6_algos/4_finish

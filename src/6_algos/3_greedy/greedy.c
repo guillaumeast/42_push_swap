@@ -5,7 +5,7 @@
 
 static t_insert	get_next_insert(t_stack *from, t_stack *to);
 
-bool	greedy(t_config *config)
+bool	greedy(t_state *state, t_config *config)
 {
 	t_insert	next_insertion;
 

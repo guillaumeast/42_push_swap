@@ -1,9 +1,9 @@
-#include "push.h"
+#include "naive.h"
 #include "moves.h"
 
 static bool		should_swap(t_stack *stack);
 
-bool	push_to_b(t_config *config)
+bool	naive(t_config *config)
 {
 	if (!config)
 		return (pb(&config->a, &config->b, config->a.len - 2, &config->moves));
