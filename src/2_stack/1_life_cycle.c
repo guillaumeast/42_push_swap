@@ -13,7 +13,7 @@ bool	stack_init(t_stack *a, t_stack *b, uint *values, size_t count)
 		return (false);
 	b->offset = 0;
 	b->len = 0;
-	b->cap = 0;
+	b->cap = count;
 	return (true);
 }
 

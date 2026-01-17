@@ -90,7 +90,7 @@ static bool	abort_config(t_state *state, t_buff *moves, const char *error)
 {
 	state_free(state);
 	buff_free(moves);
-	ft_dprintf(STDERR_FILENO, "⚠️ %s, stopping\n", error);
+	ft_dprintf(STDERR_FILENO, "‼️ %s, stopping\n", error);
 	return (false);
 }
 

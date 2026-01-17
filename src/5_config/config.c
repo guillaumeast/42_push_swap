@@ -22,7 +22,7 @@ t_config	**config_get_list(void)
 	if (!final_list)
 		return (free(raw_list), NULL);
 	i = 0;
-	printf("ℹ️ Generating configs...\n");
+	printf("ℹ️  Generating configs...\n");
 	while (i < raw_list_size)
 	{
 		final_list[i] = config_convert(raw_list[i]);
@@ -31,11 +31,9 @@ t_config	**config_get_list(void)
 		config_print(final_list[i], i, true);
 		i++;
 	}
+	printf ("\n");
 	final_list[i] = NULL;
 	free(raw_list);
-	printf("\n✅ Final list:\n");
-	config_print_all(final_list);
-	printf("\n");
 	return (final_list);
 }
 
