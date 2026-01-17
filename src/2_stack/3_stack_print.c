@@ -24,10 +24,10 @@ void	stack_print(t_stack *a, t_stack *b)
 	if (idx_len < 3)
 		idx_len = 3;
 	print_sep(max_value_len, idx_len);
-	fprintf(stdout, "| %*s | %*s | %*s || %*s | %*s | %*s |\n",
+	fprintf(stderr, "| %*s | %*s | %*s || %*s | %*s | %*s |\n",
 		idx_len, "idx", max_value_len, "A", max_value_len, "B",
 		idx_len, "idx", max_value_len, "A", max_value_len, "B");
-	fprintf(stdout, "| %*s | %*s | %*s || %*s | %*s | %*s |\n",
+	fprintf(stderr, "| %*s | %*s | %*s || %*s | %*s | %*s |\n",
 		idx_len, "mem", max_value_len, "mem", max_value_len, "mem",
 		idx_len, "log", max_value_len, "log", max_value_len, "log");
 	print_sep(max_value_len, idx_len);
@@ -38,7 +38,7 @@ void	stack_print(t_stack *a, t_stack *b)
 		i++;
 	}
 	print_sep(max_value_len, idx_len);
-	fprintf(stdout, "| %*s | %*zu | %*zu || %*s | %*zu | %*zu |\n",
+	fprintf(stderr, "| %*s | %*zu | %*zu || %*s | %*zu | %*zu |\n",
 		idx_len, "len", max_value_len, a->len, max_value_len, b->len,
 		idx_len, "off", max_value_len, a->offset, max_value_len, b->offset);
 	print_sep(max_value_len, idx_len);
@@ -78,7 +78,7 @@ static void	print_line(t_stack *a, t_stack *b, size_t i, int len, int idx_len)
 		snprintf(b_mem, sizeof(b_mem), "%u", b->data[i]);
 		snprintf(b_log, sizeof(b_log), "%u", stack_get_value(b, i));
 	}
-	fprintf(stdout, "| %*zu | %*s | %*s || %*zu | %*s | %*s |\n",
+	fprintf(stderr, "| %*zu | %*s | %*s || %*zu | %*s | %*s |\n",
 		idx_len, i, len, a_mem, len, b_mem,
 		idx_len, i, len, a_log, len, b_log);
 }
@@ -92,10 +92,10 @@ static void	print_sep(int max_value_len, int idx_len)
 	i = 0;
 	while (i < sep_len)
 	{
-		fprintf(stdout, "-");
+		fprintf(stderr, "-");
 		i++;
 	}
-	fprintf(stdout, "\n");
+	fprintf(stderr, "\n");
 }
 
 static int	get_max_len(t_stack *a, t_stack *b)

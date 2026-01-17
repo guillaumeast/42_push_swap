@@ -8,7 +8,6 @@ void	moves_print(t_buff *list)
 	size_t	printed_bytes;
 	t_move	move;
 
-	// ft_printf("MOVES (%i):\n", (int)move_list->len);	// TODO: delete before submit
 	printed_bytes = 0;
 	while (printed_bytes < list->len)
 	{

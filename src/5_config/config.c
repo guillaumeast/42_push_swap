@@ -22,7 +22,7 @@ t_config	**config_get_list(void)
 	if (!final_list)
 		return (free(raw_list), NULL);
 	i = 0;
-	printf("ℹ️  Generating configs...\n");
+	fprintf(stderr, "ℹ️  Generating configs...\n");
 	while (i < raw_list_size)
 	{
 		final_list[i] = config_convert(raw_list[i]);
@@ -31,7 +31,7 @@ t_config	**config_get_list(void)
 		config_print(final_list[i], i, true);
 		i++;
 	}
-	printf ("\n");
+	fprintf(stderr, "\n");
 	final_list[i] = NULL;
 	free(raw_list);
 	return (final_list);
@@ -93,8 +93,7 @@ void	config_print_all(t_config **configs)
 
 void	config_print(t_config *config, size_t index, bool print_index)
 {
-	printf("⚙️ CONFIG");
 	if (print_index)
-		printf("[%zu]", index);
-	printf(" => %s + %s %s\n", config->algo_1_name, config->algo_2_name, config->opti_names);
+		fprintf(stderr, "⚙️  CONFIG[%zu] => ", index);
+	fprintf(stderr, "%s + %s %s\n", config->algo_1_name, config->algo_2_name, config->opti_names);
 }
