@@ -14,11 +14,13 @@ INCLUDES	:= \
 	-Isrc/1_args \
 	-Isrc/2_stack \
 	-Isrc/3_moves \
-	-Isrc/4_algos \
-	-Isrc/4_algos/1_push_to_b \
-	-Isrc/4_algos/2_k_sort \
-	-Isrc/4_algos/3_greedy \
-	-Isrc/4_algos/4_finish
+	-Isrc/4_state \
+	-Isrc/5_config \
+	-Isrc/6_algos \
+	-Isrc/6_algos/1_push_to_b \
+	-Isrc/6_algos/2_k_sort \
+	-Isrc/6_algos/3_greedy \
+	-Isrc/6_algos/4_finish
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

@@ -1,39 +1,48 @@
 #include "args.h"
 #include "stack.h"
 #include "moves.h"
+#include "state.h"
 #include "config.h"
 #include <stdlib.h>
 #include <unistd.h>
 
-static t_buff	*best_moves(t_stack *a, t_stack *b);
-static int		free_and_print_error(t_stack *a, t_stack *b);
+static t_buff	*best_moves(t_state *in, t_state *out);
+static int		free_and_print_error(t_state *state1, t_state *state2);
 
 int	main(int argc, char **argv)
 {
 	t_args	args;
-	t_stack	a;
-	t_stack	b;
-	t_buff	*move_list;
+	t_state	initial_state;
+	t_state	final_state;
 
 	if (argc < 2)
 		return (0);
 	if (!args_parse(argc, argv, &args))
 		return (free_and_print_error(NULL, NULL));
-	if (!stack_init(&a, &b, args.values, args.count))
+	if (!state_init(&initial_state, args.values, args.count))
 		return (free(args.values), free_and_print_error(NULL, NULL));
-	move_list = best_moves(&a, &b);
-	if (!move_list)
-		return (free_and_print_error(&a, &b));
-	moves_print(move_list);
+	if (!state_init(&final_state, args.values, args.count))
+		return (free_and_print_error(&initial_state, NULL));
+	if (!best_moves(&initial_state, &final_state))
+		return (free_and_print_error(&initial_state, &final_state));
+	moves_print(&final_state.moves);
 	// stack_print(&a, &b);
-	buff_free(move_list);
-	free(move_list);
-	free(a.data);
-	free(b.data);
+	state_free(&final_state);
 	return (0);
 }
 
-static t_buff	*best_moves(t_stack *a, t_stack *b)
+/* TODO: refactor to handle state struct:
+*		while cycle (i < CONFIG_COUNT)
+*			state_dup(in)
+*			state_init(tmp)
+*			config_init(i)
+*			config_run(config)
+*			if (best_set == false) => best = tmp
+*			else if (tmp.moves.len < best.moves.len) => {state_free(best), best = tmp}
+*			else => state_free(tmp)
+*		return (best)
+*/
+static bool best_moves(t_state *in, t_state *out)
 {
 	t_config	config_1;
 	t_config	config_2;
@@ -72,15 +81,11 @@ static t_buff	*best_moves(t_stack *a, t_stack *b)
 		return (res);
 	}
 }
-// TODO: don't put t_buff inside config struct (it will be easier to free)
-// TODO: algos interface should be (t_stack *a, t_stack *b, t_opti *opti, t_buff *moves)
 
-static int	free_and_print_error(t_stack *a, t_stack *b)
+static int	free_and_print_error(t_state *state1, t_state *state2)
 {
-	if (a && a->data)
-		free(a->data);
-	if (b && b->data)
-		free(b->data);
+	state_free(state1);
+	state_free(state2);
 	write(2, "Error\n", 6);
 	return (EXIT_FAILURE);
 }
