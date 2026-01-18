@@ -7,6 +7,7 @@
 # include <stdio.h>	// TODO: tmp debug
 
 static t_config	*config_convert(uint raw_config);
+static void		process_opti_names(t_config *config);
 
 t_config	**config_get_list(void)
 {
@@ -59,11 +60,18 @@ static t_config	*config_convert(uint raw_config)
 	optis = (raw_config & OPTI_MASK);
 	res->swap = (optis & SWAP) != 0;
 	res->median = (optis & MEDIAN) != 0;
-	if (res->swap)
-		res->opti_names = "+ SWAP ";
-	if (res->median)
-		res->opti_names = "+ MEDIAN ";
+	process_opti_names(res);
 	return (res);
+}
+
+static void	process_opti_names(t_config *config)
+{
+	if (config->swap && config->median)
+		config->opti_names = "+ SWAP + MEDIAN";
+	else if (config->swap)
+		config->opti_names = "+ SWAP ";
+	else if (config->median)
+		config->opti_names = "+ MEDIAN ";
 }
 
 void	config_list_free(t_config ***config_list)

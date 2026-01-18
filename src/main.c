@@ -35,7 +35,7 @@ int	main(int argc, char **argv)
 	buff_init(&best_moves, 0);
 	if (!run_configs(&initial_state, configs, &best_moves))
 		return (free_and_print_error(&initial_state, configs));
-	moves_print(&best_moves);
+	// moves_print(&best_moves);
 	fprintf(stdout, " ");	// For parsing tester
 	state_free(&initial_state);
 	config_list_free(&configs);
