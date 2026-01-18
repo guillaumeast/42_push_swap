@@ -6,34 +6,34 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 17:03:35 by gastesan          #+#    #+#             */
-/*   Updated: 2026/01/13 20:50:05 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/01/17 21:05:22 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-#include "push_swap.h"
-#include <limits.h>
-#include <stdlib.h>
+// #include "libft.h"
+// #include "push_swap.h"
+// #include <limits.h>
+// #include <stdlib.h>
 
-static t_move	*get_next_move(t_stack *a, t_stack *b);
-static size_t	get_target_index(t_stack *a, int b_value);
-static void		compute_cost(t_move *mv, t_stack *a, t_stack *b);
-static void		execute_move(t_move *move, t_stack *a, t_stack *b);
+// static t_move	*get_next_move(t_stack *a, t_stack *b);
+// static size_t	get_target_index(t_stack *a, int b_value);
+// static void		compute_cost(t_move *mv, t_stack *a, t_stack *b);
+// static void		execute_move(t_move *move, t_stack *a, t_stack *b);
 
-bool	step_2(t_stack *a, t_stack *b)
-{
-	t_move	*move;
+// bool	step_2(t_stack *a, t_stack *b)
+// {
+// 	t_move	*move;
 
-	while (b->count > 0)
-	{
-		move = get_next_move(a, b);
-		if (!move)
-			return (false);
-		execute_move(move, a, b);
-		free(move);
-	}
-	return (true);
-}
+// 	while (b->count > 0)
+// 	{
+// 		move = get_next_move(a, b);
+// 		if (!move)
+// 			return (false);
+// 		execute_move(move, a, b);
+// 		free(move);
+// 	}
+// 	return (true);
+// }
 
 // static t_move	*get_next_move(t_stack *a, t_stack *b)
 // {
