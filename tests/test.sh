@@ -17,7 +17,7 @@ GREY='\033[0;90m'
 # threshold = max moves allowed for OK status
 PERF_TESTS=(
 	"100:100:700"
-	"500:100:5500"
+	"500:500:5500"
 )
 
 # Worst case test file
@@ -214,7 +214,7 @@ print_perf_results()
 	# Print configs if available
 	if [ "$has_structured" -eq 1 ] && [ -s "$configs_file" ]; then
 		echo -e "${GREY}🧠 Configs used:${NC}"
-		sort "$configs_file" | uniq -c | while read -r cnt cfg; do
+		sort "$configs_file" | uniq -c | sort -n | while read -r cnt cfg; do
 			echo -e "\t${BLUE}${cfg}${GREY} => ${NC}${cnt}"
 		done
 	fi

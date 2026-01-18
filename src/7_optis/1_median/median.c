@@ -54,6 +54,7 @@ static void	update(t_median *median)
 
 void	median_free(t_median *median)
 {
-	free(median->present);
+	if (median->present)
+		free(median->present);
 }
 

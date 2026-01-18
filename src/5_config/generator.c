@@ -29,7 +29,7 @@ uint	*generate_configs(size_t *count_ret)
 
 static void	input_init(t_input *input)
 {
-	static const uint	algos_1[] = {NAIVE};
+	static const uint	algos_1[] = {NAIVE, CHUNK};
 	static const uint	algos_2[] = {GREEDY};
 	static const uint	optis[] = {MEDIAN, LIS, SWAP};
 	static const uint	optis_compat[] = {MEDIAN_COMPAT, LIS_COMPAT, SWAP_COMPAT};

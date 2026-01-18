@@ -43,7 +43,7 @@
 # define LIS			131072U		/* 00000010 00000000 00000000 */
 # define LIS_COMPAT		65537U		/* 00000111 00000000 00000001 */
 # define SWAP			262144U		/* 00000100 00000000 00000000 */
-# define SWAP_COMPAT	458753U		/* 00000111 00000000 00000001 */
+# define SWAP_COMPAT	458753U		/* 00000111 00000000 00000011 */
 
 /* config (uint) represents the whole config on 24 bits:
 *	8 lowest bits	= ALGO_1

@@ -1,16 +1,14 @@
-# OTHERS
-
-⚠️ Avoid PB when PA will follow!
-
 # ALGO_1
 
-1. CHUNK
-2. K_SORT
+1. K_SORT
+
+# ALGO_2
+
+1. Test insert_max (always insert the max value of B into A)
 
 # OPTI
 
-1. LIS
-2. BACKTRACK
+1. BACKTRACK
 
 # CHECKER
 
