@@ -20,7 +20,8 @@ INCLUDES	:= \
 	-Isrc/6_algos/1_naive \
 	-Isrc/6_algos/2_k_sort \
 	-Isrc/6_algos/3_greedy \
-	-Isrc/6_algos/4_finish
+	-Isrc/6_algos/4_finish \
+	-Isrc/7_optis/1_median
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

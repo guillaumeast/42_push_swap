@@ -2,13 +2,10 @@
 #include "moves.h"
 #include "median.h"
 
-static bool	should_swap(t_stack *stack);
+static bool	swap(t_state *state);
 
-// TODO: implement LIS opti (swap rotate and push following LIS decision)
-
-// bool moyenne
-// bool lis_no_swap
-// bool lis_swap
+// TODO: lis_no_swap
+// TODO: lis_swap
 
 bool	naive(t_state *state, t_config *config)
 {
@@ -24,28 +21,42 @@ bool	naive(t_state *state, t_config *config)
 			return (false);
 		if (config->median)
 			median_update(&median, stack_get_value(&state->b, 0));
-		if (config->swap && should_swap(&state->b))
-			if (!sb(&state->b, &state->moves))
+		if (config->swap)
+			if (!swap(state))
 				return (false);
-		if (stack_get_value(&state->b, 0) < median.median)
+		if (config->median && stack_get_value(&state->b, 0) < median.median)
 			if (!rb(&state->b, 1, &state->moves))
 				return (false);
 	}
+	if (config->median)
+		median_free(&median);
 	return (true);
 }
 
-static bool	should_swap(t_stack *stack)
+// TODO: also swap A if possible
+static bool	swap(t_state *state)
 {
 	uint	first_value;
 	uint	second_value;
 	uint	third_value;
 
-	if (stack->len < 2)
-		return (false);
-	first_value = stack_get_value(stack, 0);
-	second_value = stack_get_value(stack, 1);
-	if (stack->len == 2)
-		return (first_value < second_value);
-	third_value = stack_get_value(stack, 2);
-	return (first_value < second_value && first_value > third_value);
+	if (state->b.len < 2)
+		return (true);
+	first_value = stack_get_value(&state->b, 0);
+	second_value = stack_get_value(&state->b, 1);
+	if (state->b.len == 2 && first_value > second_value)
+		return (true);
+	else
+	{
+		third_value = stack_get_value(&state->b, 2);
+		if (first_value > second_value || first_value < third_value)
+			return (true);
+	}
+	// TODO: add a lis_update() functionto recompute new_indexes (check if they can be inserted between previous keeped value and next keep value)
+	first_value = stack_get_value(&state->a, 0);
+	second_value = stack_get_value(&state->a, 1);
+	third_value = stack_get_value(&state->a, 2);
+	if (first_value > second_value && first_value < third_value)
+		return (ss(&state->a, &state->b, &state->moves));
+	return (sb(&state->b, &state->moves));
 }

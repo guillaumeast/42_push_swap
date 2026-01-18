@@ -16,8 +16,8 @@ GREY='\033[0;90m'
 # iterations = how many tests to run
 # threshold = max moves allowed for OK status
 PERF_TESTS=(
-	"100:10:700"
-	"500:1000:5500"
+	"100:100:700"
+	"500:100:5500"
 )
 
 # Worst case test file
@@ -107,7 +107,7 @@ update_progress_line()
 	if [ "$percent" -eq 100 ]; then
 		echo -ne "\r${GREEN}✔ ${label} [${percent_str} %]${NC}\n"
 	else
-		echo -ne "\r${GREY}${spinner} ${label} [${percent_str} %]${NC}"
+		echo -ne "\r${BOLD_YELLOW}${spinner}${NC} ${GREY}${label} [${percent_str} %]${NC}"
 	fi
 }
 
@@ -152,26 +152,27 @@ print_results()
 	local idx=0
 	for config in "${PERF_TESTS[@]}"; do
 		IFS=':' read -r count iterations threshold <<< "$config"
-		print_perf_results "$count" "$threshold" "${PERF_MOVES_FILES[$idx]}" "${PERF_CONFIGS_FILES[$idx]}" "${PERF_HAS_STRUCTURED[$idx]}"
+		print_perf_results "$count" "$iterations" "$threshold" "${PERF_MOVES_FILES[$idx]}" "${PERF_CONFIGS_FILES[$idx]}" "${PERF_HAS_STRUCTURED[$idx]}"
 		idx=$((idx + 1))
 	done
 	
 	# Worst case results
 	if [ -f "/tmp/push_swap_moves_worst.txt" ] && [ -s "/tmp/push_swap_moves_worst.txt" ]; then
-		print_perf_results "500 worst" "$WORST_500_THRESHOLD" "/tmp/push_swap_moves_worst.txt" "/tmp/push_swap_configs_worst.txt" "1"
+		print_perf_results "500 worst" "1" "$WORST_500_THRESHOLD" "/tmp/push_swap_moves_worst.txt" "/tmp/push_swap_configs_worst.txt" "1"
 	fi
 }
 
 print_perf_results()
 {
 	local count=$1
-	local threshold=$2
-	local moves_file=$3
-	local configs_file=$4
-	local has_structured=$5
+	local iterations=$2
+	local threshold=$3
+	local moves_file=$4
+	local configs_file=$5
+	local has_structured=$6
 
 	if [ ! -s "$moves_file" ]; then
-		echo -e "${RED}✖ Perfs for ${count} random numbers => NO DATA${NC}\n"
+		echo -e "${RED}✖ Perfs for ${count} random numbers (${iterations} iterations) => NO DATA${NC}\n"
 		return
 	fi
 
@@ -200,9 +201,9 @@ print_perf_results()
 
 	# Print OK/KO based on threshold
 	if [ "$max" -le "$threshold" ]; then
-		echo -e "${GREEN}✔ Perfs for ${count} random numbers => OK${NC}"
+		echo -e "${GREEN}✔ Perfs for ${count} random numbers (${iterations} iterations) => OK${NC}"
 	else
-		echo -e "${RED}✖ Perfs for ${count} random numbers => KO${NC}"
+		echo -e "${RED}✖ Perfs for ${count} random numbers (${iterations} iterations) => KO${NC}"
 	fi
 
 	# Print MIN, MOY, MAX
@@ -226,10 +227,16 @@ generate_numbers()
 {
 	local input_len=$1
 	local input_count=$2
+	
+	# Clear the file first
+	> "${PERF_INPUT_FILE}"
+	
 	for ((i=1; i<=input_count; i++)); do
-		shuf --input-range=0-2147483647 -n ${input_len} | tr '\n' ' '
-		echo
-	done > "${PERF_INPUT_FILE}"
+		# Update spinner during generation (shows 0% but spinner animates)
+		update_progress_line "Testing perfs (${input_len})..." "0" "1"
+		shuf --input-range=0-2147483647 -n ${input_len} | tr '\n' ' ' >> "${PERF_INPUT_FILE}"
+		echo >> "${PERF_INPUT_FILE}"
+	done
 }
 
 run_perf_tests()
