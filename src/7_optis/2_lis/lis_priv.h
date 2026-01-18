@@ -7,10 +7,10 @@
 typedef struct s_tail
 {
 	size_t	start_index;
-	int		*array;
+	uint	*array;
 	size_t	max_len;
-	int		*pos;
-	int		*prev;
+	size_t	*pos;
+	long	*prev;
 }	t_tail;
 
 t_tail	*tail_get(t_stack *stack, size_t start_index);

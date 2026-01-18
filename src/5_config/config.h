@@ -20,9 +20,8 @@
 // ALGO_1			(8 lowest bits)
 # define ALGO_1_OFFSET	1
 # define NAIVE			1U			/* 00000000 00000000 00000001 */
-# define LIS 			2U			/* 00000000 00000000 00000010 */
-# define CHUNK			4U			/* 00000000 00000000 00000100 */
-# define K_SORT			8U			/* 00000000 00000000 00001000 */
+# define CHUNK			2U			/* 00000000 00000000 00000010 */
+# define K_SORT			4U			/* 00000000 00000000 00000100 */
 
 // ALGO_2			(8 mid bits)
 # define ALGO_2_OFFSET	8
@@ -40,9 +39,11 @@
 // OPTI macros			(bits 17-24)	=> opti identifier
 // OPTI_COMPAT macros	(bits  1-24)	=> opti compatibilities (bits 1-8: ALGO_1, bits 9-17: ALGO_2, bits 18-24: OPTI)
 # define SWAP			65536U		/* 00000001 00000000 00000000 */
-# define SWAP_COMPAT	131073U		/* 00000010 00000000 00000001 */
+# define SWAP_COMPAT	131073U		/* 00000111 00000000 00000001 */
 # define MEDIAN			131072U		/* 00000010 00000000 00000000 */
-# define MEDIAN_COMPAT	65537U		/* 00000001 00000000 00000001 */
+# define MEDIAN_COMPAT	65537U		/* 00000111 00000000 00000001 */
+# define LIS			262144U		/* 00000100 00000000 00000000 */
+# define LIS_COMPAT		458753U		/* 00000111 00000000 00000001 */
 
 /* config (uint) represents the whole config on 24 bits:
 *	8 lowest bits	= ALGO_1
@@ -59,6 +60,7 @@ typedef struct s_config
 	const char	*opti_names;
 	bool		swap;
 	bool		median;
+	bool		lis;
 }	t_config;
 
 // Returns a NULL terminated list of t_config (owned by the caller, use config_list_free() to free it)

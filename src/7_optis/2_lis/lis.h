@@ -15,6 +15,7 @@ typedef struct s_lis
 	size_t	final_len;
 }	t_lis;
 
+// @warning: only works if stack->offset == 0 !!!
 t_lis	*lis_get_best(t_stack *stack);
 void	lis_free(t_lis **lis);
 

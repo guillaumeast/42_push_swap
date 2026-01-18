@@ -59,18 +59,27 @@ static t_config	*config_convert(uint raw_config)
 	optis = (raw_config & OPTI_MASK);
 	res->swap = (optis & SWAP) != 0;
 	res->median = (optis & MEDIAN) != 0;
+	res->lis = (optis & LIS) != 0;
 	process_opti_names(res);
 	return (res);
 }
 
 static void	process_opti_names(t_config *config)
 {
-	if (config->swap && config->median)
+	if (config->swap && config->median && config->lis)
+		config->opti_names = "+ SWAP + MEDIAN + LIS";
+	else if (config->swap && config->median)
 		config->opti_names = "+ SWAP + MEDIAN";
+	else if (config->swap && config->lis)
+		config->opti_names = "+ SWAP + LIS";
+	else if (config->median && config->lis)
+		config->opti_names = "+ MEDIAN + LIS";
 	else if (config->swap)
 		config->opti_names = "+ SWAP ";
 	else if (config->median)
 		config->opti_names = "+ MEDIAN ";
+	else if (config->lis)
+		config->opti_names = "+ LIS ";
 }
 
 void	config_list_free(t_config ***config_list)
