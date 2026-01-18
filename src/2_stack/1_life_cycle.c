@@ -1,6 +1,7 @@
 #include "libft.h"
 #include "stack.h"
 #include <stdlib.h>
+#include <stdio.h>	// TODO: tmp debug
 
 bool	stack_init(t_stack *a, t_stack *b, uint *values, size_t count)
 {
@@ -66,18 +67,18 @@ bool	stack_is_sorted(t_stack *stack)
 {
 	size_t	i;
 	size_t	breaks;
-	uint	last_value;
+	uint	previous_value;
 
 	if (stack->len <= 2)
 		return (true);
 	breaks = 0;
 	i = 0;
-	last_value = stack->data[i];
+	previous_value = stack->data[i];
 	while (++i < stack->len && breaks < 2)
 	{
-		if (stack->data[i] < last_value)
+		if (stack->data[i] < previous_value)
 			breaks++;
-		last_value = stack->data[i];
+		previous_value = stack->data[i];
 	}
 	return (breaks < 2);
 }

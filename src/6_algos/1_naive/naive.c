@@ -2,9 +2,10 @@
 #include "moves.h"
 #include "median.h"
 #include "lis.h"
+#include <stdio.h>	// TODO: tmp debug
 
 static bool	lis_push(t_state *state, t_config *config, t_median *med);
-static bool	lis_swap(t_state *state);
+static bool	lis_swap(t_state *state, t_lis *lis, uint current_value);
 static bool	basic_push(t_state *state, t_config *config, t_median *med);
 static bool	basic_swap(t_state *state, t_config *config);
 
@@ -24,7 +25,7 @@ bool	naive(t_state *state, t_config *config)
 	{
 		res = true;
 		while (state->a.len > 2)
-			if (basic_push(state, config, &median))
+			if (!basic_push(state, config, &median))
 				return (median_free(&median), false);
 	}
 	if (config->median)
@@ -44,7 +45,7 @@ static bool	lis_push(t_state *state, t_config *config, t_median *med)
 	{
 		current_value = stack_get_value(&state->a, 0);
 		if (lis->swap[current_value])
-			lis_swap(state);
+			lis_swap(state, lis, current_value);
 		else if (lis->keep[current_value])
 		{
 			if (!ra(&state->a, 1, &state->moves))	// Make bulk rotates (to reduce compute complexity)
@@ -58,12 +59,13 @@ static bool	lis_push(t_state *state, t_config *config, t_median *med)
 	return (true);
 }
 
-static bool	lis_swap(t_state *state)
+static bool	lis_swap(t_state *state, t_lis *lis, uint current_value)
 {
 	uint 	first_value;
 	uint 	second_value;
 	uint 	third_value;
 
+	lis->swap[current_value] = false;
 	if (state->b.len < 2)
 		if (!sa(&state->a, &state->moves))
 			return (false);
@@ -78,11 +80,6 @@ static bool	lis_swap(t_state *state)
 			return (false);
 	if (!sa(&state->a, &state->moves))
 		return (false);
-	if (!stack_is_sorted(&state->a))
-		if (!ra(&state->a, 1, &state->moves))
-			return (false);
-	if (!stack_is_sorted(&state->a))
-		return (ra(&state->a, 1, &state->moves));
 	return (true);
 }
 
