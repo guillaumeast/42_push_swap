@@ -1,7 +1,6 @@
 #include "config.h"
 #include "config_priv.h"
 #include "naive.h"
-#include "k_sort.h"
 #include "greedy.h"
 #include <stdlib.h>
 # include <stdio.h>	// TODO: tmp debug

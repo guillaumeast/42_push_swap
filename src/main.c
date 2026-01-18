@@ -1,9 +1,7 @@
 #include "libft.h"
 #include "args.h"
-#include "moves.h"
+// #include "moves.h"
 #include "state.h"
-#include "naive.h"
-#include "greedy.h"
 #include "finish.h"
 #include "config.h"
 #include <stdlib.h>
@@ -73,9 +71,9 @@ static bool	run_configs(t_state *inital_state, t_config **configs, t_buff *best_
 		if (best_moves->cap == 0 || state.moves.len < best_moves->len)
 		{
 			if (best_moves->cap == 0)
-				fprintf(stderr, "ℹ️  ===> Moves = \033[33m%zu\033[0m\n\n", state.moves.len);
+				fprintf(stderr, "ℹ️  ===> Moves  = \033[33m%zu\033[0m\n\n", state.moves.len);
 			else
-				fprintf(stderr, "ℹ️  ===> Moves = \033[32m%zu (%+ld)\033[0m\n\n", state.moves.len, (long)state.moves.len - (long)best_moves->len);
+				fprintf(stderr, "ℹ️  ===> Moves  = \033[32m%zu (%+ld)\033[0m\n\n", state.moves.len, (long)state.moves.len - (long)best_moves->len);
 			buff_free(best_moves);
 			*best_moves = state.moves;
 			best_config = config;
