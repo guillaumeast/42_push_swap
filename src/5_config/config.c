@@ -67,11 +67,11 @@ static t_config	*config_convert(uint raw_config)
 static void	process_opti_names(t_config *config)
 {
 	if (config->swap && config->median && config->lis)
-		config->opti_names = "+ SWAP + MEDIAN + LIS";
+		config->opti_names = "+ MEDIAN + LIS + SWAP";
 	else if (config->swap && config->median)
-		config->opti_names = "+ SWAP + MEDIAN";
+		config->opti_names = " + MEDIAN + SWAP";
 	else if (config->swap && config->lis)
-		config->opti_names = "+ SWAP + LIS";
+		config->opti_names = " + LIS + SWAP";
 	else if (config->median && config->lis)
 		config->opti_names = "+ MEDIAN + LIS";
 	else if (config->swap)
