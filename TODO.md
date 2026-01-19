@@ -1,3 +1,8 @@
+# Tests
+
+- Add chunksize to config (ptr to function to calculate chunksize depending on values_count => square roots and divide versions) (from /2 to /10 ??)
+- Add LIS to CHUNK
+
 # ALGO_1
 
 1. K_SORT

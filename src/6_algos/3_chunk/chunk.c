@@ -28,7 +28,10 @@ bool	chunk(t_state *state, t_config *config)
 
 static void	chunk_init(t_chunk *chunk, size_t values_count)
 {
-	chunk->size = 2 * (uint)square_root_rounded((int)values_count);	// cf TODO [1] at the top of the file
+	// cf TODO [1] at the top of the file
+	// chunk->size = 5 * (uint)square_root_rounded((int)values_count);
+	// chunk->size = 8 * (uint)square_root_rounded((int)values_count);
+	chunk->size = (uint)values_count / 3;
 	chunk->min = 0;
 	chunk->max = chunk->min + chunk->size;
 	chunk->median = (chunk->min + chunk->max) / 2;
