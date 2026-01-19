@@ -1,4 +1,3 @@
-#include "config.h"
 #include "config_priv.h"
 #include <stdbool.h>
 #include <stdlib.h>
@@ -7,11 +6,6 @@ static void		input_init(t_input *input);
 static size_t	add_couples(t_input *input, uint *configs);
 static size_t	add_optis(t_input *input, uint *configs);
 static bool		opti_is_valid(uint opti_compatibilities, uint config);
-
-// TODO: tmp debug
-# include "libft.h"
-# include <stdio.h>
-void	print_binary(const char *prefix, uint value, const char *suffix);
 
 uint	*generate_configs(size_t *count_ret)
 {
@@ -131,13 +125,4 @@ static bool	opti_is_valid(uint opti_compatibilities, uint config)
 	opti_list = (config & OPTI_MASK);
 	compatibilities = (opti_compatibilities & OPTI_MASK);
 	return ((opti_list & compatibilities) == opti_list);
-}
-
-void	print_binary(const char *prefix, uint value, const char *suffix)
-{
-	char	*binary;
-
-	binary = ft_ultoa_base((unsigned long)value, "01");
-	printf("%s %24s %s\n", prefix, binary, suffix);
-	free(binary);
 }

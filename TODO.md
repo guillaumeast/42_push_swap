@@ -2,6 +2,8 @@
 
 - Add chunksize to config (ptr to function to calculate chunksize depending on values_count => square roots and divide versions) (from /2 to /10 ??)
 - Add LIS to CHUNK
+- Add chunksize reduction to optis
+- Add moves_normalize to delete useless moves: [`PB` -> `PA`], [`RA` -> `RRA`], etc
 
 # ALGO_1
 
