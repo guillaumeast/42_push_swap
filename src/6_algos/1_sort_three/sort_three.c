@@ -10,7 +10,6 @@ bool	sort_three(t_state *state, t_config *config)
 		return (true);
 	if (!config->swap || state->b.len < 2)
 		return (sa(&state->a, &state->moves));
-	// NOTE: We don't use opti_swap because it swaps A only if SS is possible (and doesn't swap it at all when LIS is enabled)
 	first_value = stack_get_value(&state->b, 0);
 	second_value = stack_get_value(&state->b, 1);
 	// NOTE: We don't check if B[0] > third_value because sb is "free" when combined with sa so it's ALWAYS better to have greater value higher in B, even if then B[1] < B[2] (because anyway B[0] is already < B[2])

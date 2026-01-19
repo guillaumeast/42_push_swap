@@ -1,37 +1,44 @@
 #include "chunk.h"
 #include "sort_three.h"
 #include "moves.h"
+#include "lis.h"
 #include "swap.h"
 #include <stdlib.h>
 
 // TODO [1]: Reduce chunk_size while A is getting smaller ?		=> edit chunk_update()
 
-static bool	chunk_exec(t_state *state, t_config *config, t_chunk *chunk);
+static bool	do_basic(t_state *state, t_config *config, t_chunk *chunk);
+// static bool	do_lis(t_state *state, t_config *config, t_chunk *chunk, t_lis *lis);
 static void	chunk_update(t_chunk *chunk);
 
 bool	chunk(t_state *state, t_config *config)
 {
+	t_lis	lis;
+
 	if (!config->lis)
 	{
 		while (state->a.len > 3 && !stack_is_sorted(&state->a))
 		{
-			if (!chunk_exec(state, config, &config->chunk))
+			if (!do_basic(state, config, &config->chunk))
 				return (false);
 		}
 	}
 	else
 	{
+		if (!lis_compute_best(&state->a, &lis))
+			return (false);
 		while (state->a.len > 3 && !stack_is_sorted(&state->a))
 		{
 			// TODO: lis version
-			if (!chunk_exec(state, config, &config->chunk))
-				return (false);
+			if (!do_basic(state, config, &config->chunk))
+				return (lis_free(&lis), false);
 		}
+		lis_free(&lis);
 	}
 	return (sort_three(state, config));
 }
 
-static bool	chunk_exec(t_state *state, t_config *config, t_chunk *chunk)
+static bool	do_basic(t_state *state, t_config *config, t_chunk *chunk)
 {
 	size_t	target_index;
 	uint	target_value;
@@ -53,7 +60,7 @@ static bool	chunk_exec(t_state *state, t_config *config, t_chunk *chunk)
 	if (target_value < chunk->median)
 		if (!rb(&state->b, 1, &state->moves))
 			return (false);
-	if (config->swap && !opti_swap(state, config))
+	if (config->swap && !opti_swap_b(state, config))
 		return (false);
 	chunk_update(chunk);
 	return (true);
