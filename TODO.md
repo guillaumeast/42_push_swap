@@ -26,6 +26,7 @@
 - `Nominette`
 - Update `README.md`
 - Copy `libft` **files** instead of **submodule**
+- Remove all `TMP: remove before submit` targets (don't forget Makefile!)
 - Remove `push_swap_visualizer`
 - Remove `tester_SimonCROS`
 - Remove `tests`

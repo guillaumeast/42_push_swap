@@ -21,8 +21,8 @@ void	config_print(t_config *config, size_t index, bool print_index)
 {
 	if (print_index)
 		fprintf(stderr, "⚙️  CONFIG[%zu] => ", index);
-	fprintf(stderr, "%s + %s%s\n", config->algo_1_name, config->algo_2_name, config->opti_names);
-	if (config->algo_2 == chunk)
-		fprintf(stderr, "(chunk_size = %u)", config->chunk.size);
+	fprintf(stderr, "%s + %s%s", config->algo_1_name, config->algo_2_name, config->opti_names);
+	if (config->algo_1 == chunk)
+		fprintf(stderr, " (chunk_size = %u)", config->chunk.size);
 	fprintf(stderr, "\n");
 }

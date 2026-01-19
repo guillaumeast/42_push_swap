@@ -9,8 +9,10 @@ SRCS		:= \
 	$(wildcard src/*.c) \
 	$(wildcard src/*/*.c) \
 	$(wildcard src/*/*/*.c)
+# TMP: remove before submit (line "-Isrc/debug")
 INCLUDES	:= \
 	-I$(LIBFT_DIR) \
+	-Isrc/debug \
 	-Isrc/1_args \
 	-Isrc/2_stack \
 	-Isrc/3_moves \
