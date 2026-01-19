@@ -5,6 +5,7 @@
 #include "moves.h"
 #include "swap.h"
 
+# include <stdio.h>
 // TODO [1]: Include chunk_size into config to automaticaly test several values		=> edit chunk_init()
 // TODO [2]: Reduce chunk_size while A is getting smaller ?							=> edit chunk_update()
 
@@ -40,6 +41,7 @@ static void	chunk_update(t_chunk *chunk)
 	if (chunk->treated < chunk->size)
 		return ;
 	// cf TODO [2] at the top of the file
+	chunk->treated = 0;
 	chunk->min = chunk->max;
 	chunk->max = chunk->min + chunk->size;
 	chunk->median = (chunk->min + chunk->max) / 2;
@@ -53,7 +55,7 @@ static bool	chunk_push(t_state *state, t_config *config, t_chunk *chunk)
 	target_index = 0;
 	target_value = stack_get_value(&state->a, target_index);
 	while (target_value < chunk->min || target_value > chunk->max)
-		target_value = stack_get_value(&state->a, target_index++);
+		target_value = stack_get_value(&state->a, ++target_index);
 	if (target_index <= state->a.len / 2)
 	{
 		if (!ra(&state->a, target_index, &state->moves))

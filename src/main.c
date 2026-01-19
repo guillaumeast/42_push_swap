@@ -52,7 +52,7 @@ static bool	run_configs(t_state *inital_state, t_config **configs, t_buff *best_
 	config = configs[0];
 	while (config)
 	{
-		fprintf(stderr, "ℹ️  ===> Config = \033[34m");
+		fprintf(stderr, "ℹ️  Config = \033[34m");
 		config_print(config, i, false);
 		fprintf(stderr, "\033[0m");
 		if (!state_dup(&state, inital_state))
@@ -71,9 +71,9 @@ static bool	run_configs(t_state *inital_state, t_config **configs, t_buff *best_
 		if (best_moves->cap == 0 || state.moves.len < best_moves->len)
 		{
 			if (best_moves->cap == 0)
-				fprintf(stderr, "ℹ️  ===> Moves  = \033[33m%zu\033[0m\n\n", state.moves.len);
+				fprintf(stderr, "ℹ️  Moves  = \033[33m%zu\033[0m\n\n", state.moves.len);
 			else
-				fprintf(stderr, "ℹ️  ===> Moves  = \033[32m%zu (%+ld)\033[0m\n\n", state.moves.len, (long)state.moves.len - (long)best_moves->len);
+				fprintf(stderr, "ℹ️  Moves  = \033[32m%zu (%+ld)\033[0m\n\n", state.moves.len, (long)state.moves.len - (long)best_moves->len);
 			buff_free(best_moves);
 			*best_moves = state.moves;
 			best_config = config;
@@ -82,14 +82,14 @@ static bool	run_configs(t_state *inital_state, t_config **configs, t_buff *best_
 		}
 		else
 		{
-			fprintf(stderr, "ℹ️  ===> Moves  = \033[31m%zu (%+ld)\033[0m\n\n", state.moves.len, (long)state.moves.len - (long)best_moves->len);
+			fprintf(stderr, "ℹ️  Moves  = \033[31m%zu (%+ld)\033[0m\n\n", state.moves.len, (long)state.moves.len - (long)best_moves->len);
 			state_free(&state);
 		}
 		config = configs[++i];
 	}
-	fprintf(stderr, "✅ ========> Best config => \033[34m");
+	fprintf(stderr, "✅ ===> Best config => \033[34m");
 	config_print(best_config, 0, false);
-	fprintf(stderr, "\033[0m✅ ========> Best moves  => \033[32m%zu\033[0m\n\n", best_moves->len);
+	fprintf(stderr, "\033[0m✅ ===> Best moves  => \033[32m%zu\033[0m\n\n", best_moves->len);
 	return (true);
 }
 
