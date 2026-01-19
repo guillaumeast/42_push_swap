@@ -1,6 +1,18 @@
 #include "libft.h"
 #include "greedy_priv.h"
 
+typedef struct s_cost
+{
+	size_t	rotate;
+	size_t	reverse;
+}	t_cost;
+
+typedef struct s_cost_choice
+{
+	t_cost	opti;
+	t_cost	bad;
+}	t_cost_choice;
+
 static void	get_cost(size_t stack_len, size_t idx, t_cost_choice *cost);
 static void	cost_add(t_cost *a, t_cost *b, t_total_cost *res);
 

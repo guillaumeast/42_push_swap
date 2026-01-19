@@ -2,6 +2,20 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+typedef struct s_input
+{
+	const uint	*algos_1;
+	const uint	*algos_2;
+	const uint	*optis;
+	const uint	*optis_compat;
+	size_t		algos_1_count;
+	size_t		algos_2_count;
+	size_t		optis_count;
+	size_t		couples_count;
+	size_t		optis_max_combo_count;
+	size_t		configs_count;
+}	t_input;
+
 static void		input_init(t_input *input);
 static size_t	add_couples(t_input *input, uint *configs);
 static size_t	add_optis(t_input *input, uint *configs);

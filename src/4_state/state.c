@@ -1,5 +1,7 @@
 #include "state.h"
+#include <stdlib.h>
 
+// Caller must free dst (use state_free())
 bool	state_init(t_state *dst, uint *values, size_t values_size)
 {
 	if (!stack_init(&dst->a, &dst->b, values, values_size))
@@ -9,6 +11,7 @@ bool	state_init(t_state *dst, uint *values, size_t values_size)
 	return (true);
 }
 
+// Caller must free dst (use state_free())
 bool	state_dup(t_state *dst, t_state *src)
 {
 	if (!stack_dup(&dst->a, &src->a))
@@ -24,7 +27,9 @@ bool	state_dup(t_state *dst, t_state *src)
 
 void	state_free(t_state *state)
 {
-	stack_free(&state->a);
-	stack_free(&state->b);
+	if (state->a.data)
+		free(state->a.data);
+	if (state->b.data)
+		free(state->b.data);
 	buff_free(&state->moves);
 }

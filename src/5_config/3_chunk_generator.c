@@ -5,6 +5,12 @@
 #define CHUNK_N_MIN 2
 #define CHUNK_N_MAX 9
 
+typedef enum e_chunk_type
+{
+	DIVISION,
+	SQUARE_ROOT
+}	t_chunk_type;
+
 static void	chunk_init(t_chunk *chunk, size_t values_count, t_chunk_type type, size_t n);
 
 // Caller must free chunks->data

@@ -1,5 +1,6 @@
 #include "stack_ops.h"
 #include "moves.h"
+#include "moves_priv.h"
 
 bool	ss(t_stack *a, t_stack *b, t_buff *list)
 {

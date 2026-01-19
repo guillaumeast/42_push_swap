@@ -1,8 +1,8 @@
 #include "libft.h"
 #include "stack.h"
 #include <stdlib.h>
-#include <stdio.h>	// TODO: tmp debug
 
+// Caller must free stack->data
 bool	stack_init(t_stack *a, t_stack *b, uint *values, size_t count)
 {
 	a->data = values;
@@ -81,10 +81,4 @@ bool	stack_is_sorted(t_stack *stack)
 		previous_value = stack->data[i];
 	}
 	return (breaks < 2);
-}
-
-void	stack_free(t_stack *stack)
-{
-	if (stack->data)
-		free(stack->data);
 }

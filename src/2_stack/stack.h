@@ -18,7 +18,5 @@ bool	stack_dup(t_stack *dst, t_stack *src);
 uint	stack_get_value(t_stack *stack, size_t index);
 size_t	stack_get_target_index(t_stack *s, uint value);
 bool	stack_is_sorted(t_stack *stack);
-void	stack_free(t_stack *stack);
-void	stack_print(t_stack *a, t_stack *b);	// TODO: tmp debug
 
 #endif

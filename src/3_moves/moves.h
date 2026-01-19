@@ -4,22 +4,6 @@
 # include "libft.h"
 # include "stack.h"
 
-typedef enum e_move
-{
-	RA,
-	RB,
-	RR,
-	RRA,
-	RRB,
-	RRR,
-	SA,
-	SB,
-	SS,
-	PA,
-	PB,
-	NO_OP
-}	t_move;
-
 /* --- rotate.c --- */
 
 bool	rr(t_stack *a, t_stack *b, size_t count, t_buff *list);

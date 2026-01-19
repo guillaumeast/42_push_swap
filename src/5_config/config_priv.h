@@ -7,12 +7,12 @@
 /*
 * Note: to add a new algo:
 * 1. Add the corresponding binary value to the following defines
-* 2. Add the corresponding macro to the input_init() array (algos_1 or algos_2) in generator.c
+* 2. Add the corresponding macro to the input_init() array (algos_1 or algos_2) in config_generator.c
 * 3. Add the corresponding logic to config_convert() in config.c
 * Note: to add a new opti:
 * 1. Add the corresponding bool to the following t_config struct
 * 2. Add the corresponding binary values to the above defines (OPTI + OPTI_COMPAT)
-* 3. Add the corresponding macros to the input_init() arrays (optis and optis_compat) in generator.c
+* 3. Add the corresponding macros to the input_init() arrays (optis and optis_compat) in config_generator.c
 * 4. Add the corresponding logic to config_convert() in config.c
 */
 
@@ -43,26 +43,6 @@
 # define LIS_COMPAT		65537U		/* 00000111 00000000 00000001 */
 # define SWAP			262144U		/* 00000100 00000000 00000000 */
 # define SWAP_COMPAT	458755U		/* 00000111 00000000 00000011 */
-
-typedef struct s_input
-{
-	const uint	*algos_1;
-	const uint	*algos_2;
-	const uint	*optis;
-	const uint	*optis_compat;
-	size_t		algos_1_count;
-	size_t		algos_2_count;
-	size_t		optis_count;
-	size_t		couples_count;
-	size_t		optis_max_combo_count;
-	size_t		configs_count;
-}	t_input;
-
-typedef enum e_chunk_type
-{
-	DIVISION,
-	SQUARE_ROOT
-}	t_chunk_type;
 
 typedef struct s_chunk_list
 {

@@ -1,5 +1,9 @@
-#include "libft.h"
 #include "moves.h"
+#include "moves_priv.h"
+#include <unistd.h>
+
+// TODO[1]: add moves_normalize() to delete useless moves (NO_OP, PB+PA, RA+RRA, RB+RRB, RR+RRR, SA+SA, SB+SB, SS+SS...)
+// TODO[2]: build the final buffer and print it at once to avoid several write() calls!
 
 static void	print_move(t_move move);
 
@@ -19,29 +23,29 @@ void	moves_print(t_buff *list)
 static void	print_move(t_move move)
 {
 	if (move == RR)
-		ft_printf("RR\n");
+		write(1, "RR\n", 3);
 	else if (move == RRR)
-		ft_printf("RRR\n");
+		write(1, "RRR\n", 4);
 	else if (move == RA)
-		ft_printf("RA\n");
+		write(1, "RA\n", 3);
 	else if (move == RB)
-		ft_printf("RB\n");
+		write(1, "RB\n", 3);
 	else if (move == RRA)
-		ft_printf("RRA\n");
+		write(1, "RRA\n", 4);
 	else if (move == RRB)
-		ft_printf("RRB\n");
+		write(1, "RRB\n", 4);
 	else if (move == SS)
-		ft_printf("SS\n");
+		write(1, "SS\n", 3);
 	else if (move == SA)
-		ft_printf("SA\n");
+		write(1, "SA\n", 3);
 	else if (move == SB)
-		ft_printf("SB\n");
+		write(1, "SB\n", 3);
 	else if (move == PA)
-		ft_printf("PA\n");
+		write(1, "PA\n", 3);
 	else if (move == PB)
-		ft_printf("PB\n");
+		write(1, "PB\n", 3);
 	else if (move == NO_OP)
-		ft_printf("NO_OP\n");			// TODO: delete before submit
+		write(1, "NO_OP\n", 6);		// TMP: delete before submit
 	else
-		ft_printf("????????????\n");	// TODO: delete before submit
+		write(1, "UNKNOWN\n", 8);	// TMP: delete before submit
 }

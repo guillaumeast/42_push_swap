@@ -1,6 +1,8 @@
 #include "swap.h"
 #include "moves.h"
 
+// TODO[1]: does it really make sens to NOT swap when first_value < third_value ??
+
 bool	opti_swap(t_state *state, t_config *config)
 {
 	uint	first_value;
@@ -16,7 +18,7 @@ bool	opti_swap(t_state *state, t_config *config)
 	else
 	{
 		third_value = stack_get_value(&state->b, 2);
-		if (first_value > second_value || first_value < third_value)	// TODO: does it really make sens to NOT swap when first_value < third_value ??
+		if (first_value > second_value || first_value < third_value)	// cf TODO[1] at the top of the file
 			return (true);
 	}
 	if (!config->lis)	// NOTE: swapping A with LIS activated could broken A swaps computed by LIS module

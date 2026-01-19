@@ -3,6 +3,13 @@
 #include "greedy.h"
 #include "greedy_priv.h"
 
+typedef struct s_insert
+{
+	size_t			from_index;
+	size_t			target_index;
+	t_total_cost	cost;
+}	t_insert;
+
 static t_insert	get_next_insert(t_stack *from, t_stack *to);
 
 bool	greedy(t_state *state, t_config *config)

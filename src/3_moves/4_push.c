@@ -1,5 +1,6 @@
 #include "stack_ops.h"
 #include "moves.h"
+#include "moves_priv.h"
 
 bool	pa(t_stack *a, t_stack *b, size_t count, t_buff *list)
 {

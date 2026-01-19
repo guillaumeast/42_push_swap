@@ -35,8 +35,4 @@ typedef struct s_config_list
 
 bool	config_init_list(t_config_list *config_list, size_t values_count);
 
-// TODO: tmp debug
-void	config_print_all(t_config **configs);
-void	config_print(t_config *config, size_t index, bool print_index);
-
 #endif

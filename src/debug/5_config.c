@@ -1,6 +1,5 @@
-#include "config.h"
+#include "debug.h"
 #include "chunk.h"
-#include <stdio.h>
 
 // TMP: remove before submit
 
