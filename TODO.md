@@ -1,6 +1,6 @@
 # Tests
 
-- Add chunksize to config (ptr to function to calculate chunksize depending on values_count => square roots and divide versions) (from /2 to /10 ??)
+- Use hill climbing instead of bruteforce to find the best chunksize to use
 - Add LIS to CHUNK
 - Add chunksize reduction to optis
 - Add moves_normalize to delete useless moves: [`PB` -> `PA`], [`RA` -> `RRA`], etc

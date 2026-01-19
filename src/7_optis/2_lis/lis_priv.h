@@ -13,7 +13,7 @@ typedef struct s_tail
 	long	*prev;
 }	t_tail;
 
-t_tail	*tail_get(t_stack *stack, size_t start_index);
-void	tail_free(t_tail **tail);
+bool	tail_compute(t_tail *tail, t_stack *stack, size_t start_index);
+void	tail_free(t_tail *tail);
 
 #endif

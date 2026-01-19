@@ -5,9 +5,6 @@
 #include "lis.h"
 #include "swap.h"
 
-// TODO [1]: Keep track of first kept/swapped value to stop the loop (to reduce compute complexity)		=> edit lis_push()
-// TODO [2]: Make lis_get_best() take a lis ptr and return a bool (reduce function length by 2 lines)	=> edit lis_push()
-
 static bool	lis_push(t_state *state, t_config *config, t_median *med);
 static bool	lis_swap(t_state *state, t_lis *lis, uint current_value);
 static bool	naive_push(t_state *state, t_config *config, t_median *med);
@@ -41,25 +38,27 @@ bool	naive(t_state *state, t_config *config)
 
 static bool	lis_push(t_state *state, t_config *config, t_median *med)
 {
-	t_lis	*lis;
+	t_lis	lis;
 	uint	current_value;
 
-	lis = lis_get_best(&state->a);							// cf TODO [2] at the top of the file
-	if (!lis)
+	if (!lis_compute_best(&state->a, &lis))
 		return (false);
-	while (state->a.len > 3 && !stack_is_sorted(&state->a))	// cf TODO [1] at the top of the file
+	while (state->a.len > 3 && !stack_is_sorted(&state->a))
 	{
 		current_value = stack_get_value(&state->a, 0);
-		if (lis->swap[current_value])
-			lis_swap(state, lis, current_value);
-		else if (lis->keep[current_value])
+		if (lis.swap[current_value])
+		{
+			if (!lis_swap(state, &lis, current_value))
+				return (lis_free(&lis), false);
+		}
+		else if (lis.keep[current_value])
 		{
 			if (!ra(&state->a, 1, &state->moves))
-				return (false);
+				return (lis_free(&lis), false);
 		}
 		else
 			if (!naive_push(state, config, med))
-				return (false);
+				return (lis_free(&lis), false);
 	}
 	lis_free(&lis);
 	return (true);

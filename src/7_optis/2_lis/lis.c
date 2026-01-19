@@ -3,95 +3,84 @@
 #include "lis_priv.h"
 #include <stdlib.h>
 
-static t_lis	*lis_get(t_stack *stack, size_t start_index);
-static t_lis	*lis_new(t_tail *tail, t_stack *stack);
-static void		lis_compute_swaps(t_lis *lis, t_stack *stack, size_t index);
+static bool	lis_compute(t_lis *lis, t_stack *stack, size_t start_index);
+static bool	lis_init(t_lis *lis, t_tail *tail, t_stack *stack);
+static void	lis_compute_swaps(t_lis *lis, t_stack *stack, size_t index);
 
-t_lis	*lis_get_best(t_stack *stack)
+bool	lis_compute_best(t_stack *stack, t_lis *lis)
 {
 	size_t	start_index;
-	t_lis	*tmp_lis;
-	t_lis	*best_lis;
+	t_lis	tmp_lis;
 	size_t	max_len;
 
-	best_lis = NULL;
 	max_len = 0;
 	start_index = 0;
+	lis->keep = NULL;
+	lis->swap = NULL;
 	while (start_index < stack->len)
 	{
-		tmp_lis = lis_get(stack, start_index);
-		if (!tmp_lis)
-			continue ;
-		else if (tmp_lis->final_len > max_len)
+		if (!lis_compute(&tmp_lis, stack, start_index))
+			return (false);
+		else if (tmp_lis.final_len > max_len)
 		{
-			lis_free(&best_lis);
-			best_lis = tmp_lis;
-			max_len = best_lis->final_len;
+			lis_free(lis);
+			*lis = tmp_lis;
+			max_len = tmp_lis.final_len;
 		}
 		else
 			lis_free(&tmp_lis);
 		start_index++;
 	}
-	return (best_lis);
+	return (true);
 }
 
-static t_lis	*lis_get(t_stack *stack, size_t start_index)
+static bool	lis_compute(t_lis *lis, t_stack *stack, size_t start_index)
 {
-	t_tail	*tail;
-	t_lis	*lis;
+	t_tail	tail;
 	long	index;
 
-	tail = tail_get(stack, start_index);
-	if (!tail)
-		return (NULL);
-	lis = lis_new(tail, stack);
-	if (!lis)
-		return (tail_free(&tail), NULL);
-	index = (long)tail->pos[tail->max_len - 1];
+	if (!tail_compute(&tail, stack, start_index))
+		return (false);
+	if (!lis_init(lis, &tail, stack))
+		return (false);
+	index = (long)tail.pos[tail.max_len - 1];
 	while (index != -1)
 	{
 		lis->keep[stack->data[index]] = true;
 		lis->keep_count++;
-		index = tail->prev[index];
+		index = tail.prev[index];
 	}
 	index = 0;
-	while (index < (int)stack->len)
+	while (index < (long)stack->len)
 	{
 		lis_compute_swaps(lis, stack, (size_t)index);
 		index++;
 	}
 	lis->final_len = lis->keep_count + lis->swap_count;
-	return (lis);
+	return (true);
 }
 
-static t_lis	*lis_new(t_tail *tail, t_stack *stack)
+static bool	lis_init(t_lis *lis, t_tail *tail, t_stack *stack)
 {
-	t_lis	*lis;
-
-	if (!tail || !stack)
-		return (NULL);
-	lis = malloc(sizeof * lis);
-	if (!lis)
-		return (NULL);
 	lis->keep = malloc(stack->len * sizeof * lis->keep);
 	lis->swap = malloc(stack->len * sizeof * lis->keep);
 	if (!lis->keep || !lis->swap)
-		return (lis_free(&lis), NULL);
+		return (lis_free(lis), false);
 	ft_memset(lis->keep, false, stack->len * sizeof * lis->keep);
 	ft_memset(lis->swap, false, stack->len * sizeof * lis->swap);
 	lis->keep_count = 0;
 	lis->swap_count = 0;
 	lis->final_len = 0;
 	lis->start_index = tail->start_index;
-	return (lis);
+	return (true);
 }
 
 static void	lis_compute_swaps(t_lis *lis, t_stack *stack, size_t index)
 {
 	size_t	next_kept_i;
-	uint		current;
-	uint		next;
-	uint		second_next;
+	uint	current;
+	uint	next;
+	uint	second_next;
 
 	current = stack->data[index];
 	next = stack->data[(index + 1) % stack->len];
@@ -110,14 +99,10 @@ static void	lis_compute_swaps(t_lis *lis, t_stack *stack, size_t index)
 	}
 }
 
-void	lis_free(t_lis **lis)
+void	lis_free(t_lis *lis)
 {
-	if (!lis || !*lis)
-		return ;
-	if ((*lis)->keep)
-		free((*lis)->keep);
-	if ((*lis)->swap)
-		free((*lis)->swap);
-	free(*lis);
-	*lis = NULL;
+	if (lis->keep)
+		free(lis->keep);
+	if (lis->swap)
+		free(lis->swap);
 }

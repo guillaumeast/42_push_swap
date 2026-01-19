@@ -2,18 +2,16 @@
 #include "lis_priv.h"
 #include <stdlib.h>
 
-static t_tail	*tail_new(size_t start_index, size_t capacity);
-static void		tail_update(t_tail *tail, uint value, size_t index);
+static bool	tail_init(t_tail *tail, size_t start_index, size_t capacity);
+static void	tail_update(t_tail *tail, uint value, size_t index);
 
-t_tail	*tail_get(t_stack *stack, size_t start_index)
+bool	tail_compute(t_tail *tail, t_stack *stack, size_t start_index)
 {
-	t_tail	*tail;
 	size_t	i;
 	size_t	index;
 
-	tail = tail_new(start_index, stack->len);
-	if (!tail)
-		return (NULL);
+	if (!tail_init(tail, start_index, stack->len))
+		return (false);
 	i = 0;
 	while (i < stack->len)
 	{
@@ -24,13 +22,8 @@ t_tail	*tail_get(t_stack *stack, size_t start_index)
 	return (tail);
 }
 
-static t_tail	*tail_new(size_t start_index, size_t capacity)
+static bool	tail_init(t_tail *tail, size_t start_index, size_t capacity)
 {
-	t_tail	*tail;
-
-	tail = malloc(sizeof * tail);
-	if (!tail)
-		return (NULL);
 	tail->start_index = start_index;
 	tail->array = NULL;
 	tail->pos = NULL;
@@ -40,8 +33,8 @@ static t_tail	*tail_new(size_t start_index, size_t capacity)
 	tail->prev = malloc(capacity * sizeof * tail->prev);
 	if (!tail->array || !tail->pos || !tail->prev)
 	{
-		tail_free(&tail);
-		return (NULL);
+		tail_free(tail);
+		return (false);
 	}
 	ft_memset(tail->pos, -1, capacity * sizeof * tail->pos);
 	ft_memset(tail->prev, -1, capacity * sizeof * tail->prev);
@@ -77,16 +70,12 @@ static void	tail_update(t_tail *tail, uint value, size_t index)
 		tail->prev[index] = -1;
 }
 
-void	tail_free(t_tail **tail)
+void	tail_free(t_tail *tail)
 {
-	if (!tail || !*tail)
-		return ;
-	if ((*tail)->array)
-		free((*tail)->array);
-	if ((*tail)->pos)
-		free((*tail)->pos);
-	if ((*tail)->prev)
-		free((*tail)->prev);
-	free(*tail);
-	*tail = NULL;
+	if (tail->array)
+		free(tail->array);
+	if (tail->pos)
+		free(tail->pos);
+	if (tail->prev)
+		free(tail->prev);
 }

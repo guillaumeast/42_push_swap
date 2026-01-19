@@ -11,10 +11,22 @@ static void	chunk_update(t_chunk *chunk);
 
 bool	chunk(t_state *state, t_config *config)
 {
-	while (state->a.len > 3)
+	if (!config->lis)
 	{
-		if (!chunk_exec(state, config, &config->chunk))
-			return (false);
+		while (state->a.len > 3 && !stack_is_sorted(&state->a))
+		{
+			if (!chunk_exec(state, config, &config->chunk))
+				return (false);
+		}
+	}
+	else
+	{
+		while (state->a.len > 3 && !stack_is_sorted(&state->a))
+		{
+			// TODO: lis version
+			if (!chunk_exec(state, config, &config->chunk))
+				return (false);
+		}
 	}
 	return (sort_three(state, config));
 }
