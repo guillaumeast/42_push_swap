@@ -1,17 +1,12 @@
-# Tests
+# TODO
 
 - Use hill climbing instead of bruteforce to find the best chunksize to use
-- Add LIS to CHUNK
 - Add chunksize reduction to optis
 - Add moves_normalize to delete useless moves: [`PB` -> `PA`], [`RA` -> `RRA`], etc
 
 # ALGO_1
 
 1. K_SORT
-
-# ALGO_2
-
-1. Test insert_max (always insert the max value of B into A)
 
 # OPTI
 
