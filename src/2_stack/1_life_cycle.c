@@ -73,12 +73,13 @@ bool	stack_is_sorted(t_stack *stack)
 		return (true);
 	breaks = 0;
 	i = 0;
-	previous_value = stack->data[i];
-	while (++i < stack->len && breaks < 2)
+	previous_value = stack->data[stack->len - 1];
+	while (i < stack->len && breaks < 2)
 	{
 		if (stack->data[i] < previous_value)
 			breaks++;
 		previous_value = stack->data[i];
+		i++;
 	}
 	return (breaks < 2);
 }

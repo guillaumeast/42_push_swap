@@ -59,8 +59,11 @@ static bool	run_configs(t_state *inital_state, t_config_list *configs, t_buff *b
 			return (abort_config(&state, best_moves, "algo_1 failed"));
 		if (!config.algo_2(&state, &config))
 			return (abort_config(&state, best_moves, "algo_2 failed"));
-		if (!stack_is_sorted(&state.a) || state.b.len > 0)
-			return (abort_config(&state, best_moves, "A is not sorted or B is not empty"));
+		// TMP: remove before submit (4 lines)
+		if (!stack_is_sorted(&state.a))
+			return (abort_config(&state, best_moves, "A is not sorted"));
+		if (state.b.len > 0)
+			return (abort_config(&state, best_moves, "B is not empty"));
 		if (!finish(&state, &config))
 			return (abort_config(&state, best_moves, "Finish algo failed"));
 		if (stack_get_value(&state.a, 0) != 0)
@@ -95,6 +98,7 @@ static bool	run_configs(t_state *inital_state, t_config_list *configs, t_buff *b
 
 static bool	abort_config(t_state *state, t_buff *moves, const char *error)
 {
+	stack_print(&state->a, &state->b);
 	state_free(state);
 	buff_free(moves);
 	fprintf(stderr, "‼️ %s, stopping\n", error);	// TMP: remove before submit
