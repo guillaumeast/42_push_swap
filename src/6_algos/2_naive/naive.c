@@ -25,8 +25,11 @@ bool	naive(t_state *state, t_config *config)
 	median.present = NULL;	// NOTE: in case of premature free from lis_push / naive_push() failure
 	if (config->median && !median_init(&median, state->a.len))
 		return (false);
-	if (config->lis && !lis_push(state, config, &median))
-		return (median_free(&median), false);
+	if (config->lis)
+	{
+		if (!lis_push(state, config, &median))
+			return (median_free(&median), false);
+	}
 	else
 		while (state->a.len > 3)
 			if (!naive_push(state, config, &median))

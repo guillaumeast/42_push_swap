@@ -86,8 +86,10 @@ static size_t	add_optis(t_input *input, uint *configs)
 
 	couples_index = 0;
 	target_index = input->couples_count;
+	fprintf(stderr, "[🔦 DEBUG] ===> input->couples_count = %zu\n", input->couples_count);
 	while (couples_index < input->couples_count)
 	{
+		fprintf(stderr, "[🔦 DEBUG] ===> couples_index = %zu\n", couples_index);
 		combined_optis = (1U << OPTI_OFFSET);
 		while (combined_optis < (input->optis_max_combo_count << OPTI_OFFSET))
 		{

@@ -17,6 +17,7 @@ t_config	**config_get_list(void)
 	t_config	**final_list;
 	size_t		i;
 
+	fprintf(stderr, "ℹ️  Generating configs...\n");
 	raw_list = generate_configs(&raw_list_size);
 	if (!raw_list)
 		return (NULL);
@@ -24,7 +25,6 @@ t_config	**config_get_list(void)
 	if (!final_list)
 		return (free(raw_list), NULL);
 	i = 0;
-	fprintf(stderr, "ℹ️  Generating configs...\n");
 	while (i < raw_list_size)
 	{
 		final_list[i] = config_convert(raw_list[i]);
@@ -66,7 +66,7 @@ static bool process_algos(t_config *config, uint raw_config)
 		config->algo_1 = naive;
 		config->algo_1_name = "NAIVE";
 	}
-	else if ((raw_config & ALGO_2_MASK) == CHUNK)
+	else if ((raw_config & ALGO_1_MASK) == CHUNK)
 	{
 		config->algo_1 = chunk;
 		config->algo_1_name = "CHUNK";
