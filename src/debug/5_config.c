@@ -5,14 +5,14 @@
 
 /* ---------- config ---------- */
 
-void	config_print_all(t_config **configs)
+void	config_print_all(t_config_list *configs)
 {
 	size_t	i;
 
 	i = 0;
-	while(configs[i])
+	while(i < configs->count)
 	{
-		config_print(configs[i], i, true);
+		config_print(&configs->data[i], i, true);
 		i++;
 	}
 }
