@@ -15,8 +15,8 @@ INCLUDES	:= \
 	-Isrc/debug \
 	-Isrc/1_args \
 	-Isrc/2_stack \
-	-Isrc/3_moves \
-	-Isrc/4_state \
+	-Isrc/3_state \
+	-Isrc/4_moves \
 	-Isrc/5_config \
 	-Isrc/6_algos \
 	-Isrc/6_algos/1_sort_three \

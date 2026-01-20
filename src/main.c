@@ -26,13 +26,13 @@ int	main(int argc, char **argv)
 		return (free_and_print_error(NULL, NULL));
 	if (!state_init(&initial_state, args.values, args.count))
 		return (free(args.values), free_and_print_error(NULL, NULL));
-	if (!config_init_list(&configs, args.count))
+	if (!config_init_list(&configs, &initial_state))
 		return (free_and_print_error(&initial_state, NULL));
 	buff_init(&best_moves, 0);
 	if (!run_configs(&initial_state, &configs, &best_moves))
 		return (free_and_print_error(&initial_state, &configs));
 	// moves_print(&best_moves);	// TMP: uncomment before submit (It's commented to make debug outputs readable)
-	fprintf(stdout, " ");	// TMP: remove before submit (It's here for parsing tester)
+	fprintf(stdout, " ");			// TMP: remove before submit (It's here for parsing tester)
 	state_free(&initial_state);
 	free(configs.data);
 	buff_free(&best_moves);
@@ -109,6 +109,11 @@ static int	free_and_print_error(t_state *state, t_config_list *configs)
 {
 	if (state)
 		state_free(state);
+	if (configs->lis_set)
+	{
+		lis_free(&configs->lis);
+		lis_free(&configs->lis_swap);
+	}
 	if (configs && configs->data)
 		free(configs->data);
 	write(2, "Error\n", 6);

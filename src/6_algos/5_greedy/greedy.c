@@ -20,19 +20,19 @@ bool	greedy(t_state *state, t_config *config)
 	while (state->b.len > 0)
 	{
 		next_insertion = get_next_insert(&state->b, &state->a);
-		if (!rr(&state->a, &state->b, next_insertion.cost.rr, &state->moves))
+		if (!rr(state, next_insertion.cost.rr))
 			return (false);
-		if (!ra(&state->a, next_insertion.cost.ra, &state->moves))
+		if (!ra(state, next_insertion.cost.ra))
 			return (false);
-		if (!rb(&state->b, next_insertion.cost.rb, &state->moves))
+		if (!rb(state, next_insertion.cost.rb))
 			return (false);
-		if (!rrr(&state->a, &state->b, next_insertion.cost.rrr, &state->moves))
+		if (!rrr(state, next_insertion.cost.rrr))
 			return (false);
-		if (!rra(&state->a, next_insertion.cost.rra, &state->moves))
+		if (!rra(state, next_insertion.cost.rra))
 			return (false);
-		if (!rrb(&state->b, next_insertion.cost.rrb, &state->moves))
+		if (!rrb(state, next_insertion.cost.rrb))
 			return (false);
-		if (!pa(&state->a, &state->b, 1, &state->moves))
+		if (!pa(state, 1))
 			return (false);
 	}
 	return (true);

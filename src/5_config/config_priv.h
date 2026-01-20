@@ -52,10 +52,10 @@ typedef struct s_chunk_list
 
 /* ---------- config_generator.c ---------- */
 
-uint	*generate_configs(size_t *count_ret);
+bool	generate_configs(uint **ret_list, size_t *ret_count);
 
 /* ---------- chunk_generator.c ---------- */
 
-bool	chunk_generate(t_chunk_list *chunks, size_t values_count);
+bool	generate_chunks(t_chunk_list *chunks, size_t values_count);
 
 #endif

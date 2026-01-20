@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include "debug.h"	// TMP: remove before submit
 
-// TODO [1]: Reduce chunk_size while A is getting smaller ?		=> edit chunk_update()
+// TODO [1]: Reduce chunk_size while A is getting smaller ?		=> edit update_chunk()
 
 typedef struct s_target
 {
@@ -14,78 +14,69 @@ typedef struct s_target
 	uint	val;
 }	t_target;
 
+static bool	go_next(t_state *state, t_config *config, t_target *target);
 static bool	do_step(t_state *state, t_config *config, uint value, t_lis *lis);
-static void	chunk_update(t_chunk *chunk);
+static void	update_chunk(t_chunk *chunk);
 
 bool	chunk(t_state *state, t_config *config)
 {
 	t_target	target;
 	t_lis		lis;
 
-	if (config->chunk.size == 6)
-		stack_print(&state->a, &state->b);
-	if (config->lis && !lis_compute_best(&state->a, &lis))
-		return (false);
-	if (config->lis)
-		lis_print(state, &lis);
+	if (config->opti_lis)
+		lis = config->lis;
+	else if (config->opti_lis_swap)
+		lis = config->lis_swap;
 	while (state->a.len > 3 && !stack_is_sorted(&state->a))
 	{
-		target.index = 0;
-		target.val = stack_get_value(&state->a, target.index);
-		fprintf(stderr, "\n[🔦 DEBUG] Searching next target...\n");
-		while (target.val < config->chunk.min || target.val > config->chunk.max)
-			target.val = stack_get_value(&state->a, ++target.index);
-		fprintf(stderr, "\n[🔦 DEBUG] Target found!\n");
-		if (target.index <= state->a.len / 2)
-		{
-			if (!ra(&state->a, target.index, &state->moves))
-				return (false);
-		}
-		else
-			if (!rra(&state->a, state->a.len - target.index, &state->moves))
-				return (false);
+		if (!go_next(state, config, &target))
+			return (false);
 		if (!do_step(state, config, target.val, &lis))
 			return (false);
+		update_chunk(&config->chunk);
 	}
-	if (config->chunk.size == 6)
-		fprintf(stderr, "\n[🔦 DEBUG] chunk algo finished (before sort_three)\n");
-	if (config->lis)
-		lis_free(&lis);
 	return (sort_three(state, config));
+}
+
+static bool	go_next(t_state *state, t_config *config, t_target *target)
+{
+	target->index = 0;
+	target->val = stack_get_value(&state->a, target->index);
+	fprintf(stderr, "\n[🔦 DEBUG] Searching next target...\n");					// TODO: tmp debug
+	while (target->val < config->chunk.min || target->val > config->chunk.max)
+		target->val = stack_get_value(&state->a, ++target->index);
+	fprintf(stderr, "\n[🔦 DEBUG] Target found!\n");							// TODO: tmp debug
+	if (target->index <= state->a.len / 2)
+	{
+		if (!ra(state, target->index))
+			return (false);
+	}
+	else
+		if (!rra(state, state->a.len - target->index))
+			return (false);
+	return (true);
 }
 
 static bool	do_step(t_state *state, t_config *config, uint value, t_lis *lis)
 {
-	if (config->lis && lis->swap[value])
-	{
-		if (!opti_swap_lis(state, lis, value))
-			return (false);
-	}
-	else if (config->lis && lis->keep[value])
-	{
-		if (!ra(&state->a, 1, &state->moves))
-			return (false);
-	}
+	if (config->opti_lis_swap && lis->swap[value])
+		return (opti_swap_lis(state, lis, value));
+	else if ((config->opti_lis || config->opti_lis_swap) && lis->keep[value])
+		return (ra(state, 1));
 	else
 	{
-		if (!pb(&state->a, &state->b, 1, &state->moves))
+		if (!pb(state, 1))
 			return (false);
 		if (value < config->chunk.median)
-			if (!rb(&state->b, 1, &state->moves))
+			if (!rb(state, 1))
 				return (false);
-		if (config->swap && !opti_swap_b(state, config))
+		if (config->opti_swap_b && !opti_swap_b(state, config))
 			return (false);
-	}
-	chunk_update(&config->chunk);
-	if (config->chunk.size == 6)
-	{
-		fprintf(stderr, "\n[🔦 DEBUG] chunk->size = %u (%u - %u) | chunk->treated = %zu\n", config->chunk.size, config->chunk.min, config->chunk.max, config->chunk.treated);
-		stack_print(&state->a, &state->b);
 	}
 	return (true);
 }
 
-static void	chunk_update(t_chunk *chunk)
+static void	update_chunk(t_chunk *chunk)
 {
 	chunk->treated++;
 	if (chunk->treated < chunk->size)

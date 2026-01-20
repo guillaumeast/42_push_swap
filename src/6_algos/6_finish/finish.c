@@ -13,8 +13,8 @@ bool finish(t_state *state, t_config *config)
 	if (!get_target_index(&state->a, &target_index))
 		return (false);
 	if (target_index <= state->a.len / 2)
-		return (ra(&state->a, target_index, &state->moves));
-	return (rra(&state->a, state->a.len - target_index, &state->moves));
+		return (ra(state, target_index));
+	return (rra(state, state->a.len - target_index));
 }
 
 static bool	get_target_index(t_stack *stack, size_t *ret)

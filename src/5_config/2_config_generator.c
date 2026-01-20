@@ -21,18 +21,17 @@ static size_t	add_couples(t_input *input, uint *configs);
 static size_t	add_optis(t_input *input, uint *configs);
 static bool		opti_is_valid(uint opti_compatibilities, uint config);
 
-uint	*generate_configs(size_t *count_ret)
+bool	generate_configs(uint **ret_list, size_t *ret_count)
 {
 	t_input	input;
-	uint	*configs;
 
 	input_init(&input);
-	configs = malloc(input.configs_count * sizeof * configs);
-	if (!configs)
-		return (NULL);
-	*count_ret = add_couples(&input, configs);
-	*count_ret += add_optis(&input, configs);
-	return (configs);
+	*ret_list = malloc(input.configs_count * sizeof ** ret_list);
+	if (!*ret_list)
+		return (false);
+	*ret_count = add_couples(&input, *ret_list);
+	*ret_count += add_optis(&input, *ret_list);
+	return (true);
 }
 
 static void	input_init(t_input *input)

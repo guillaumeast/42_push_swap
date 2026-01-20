@@ -14,7 +14,7 @@ typedef enum e_chunk_type
 static bool	chunk_init(t_chunk *chunk, size_t values_count, t_chunk_type type, size_t n);
 
 // Caller must free chunks->data
-bool	chunk_generate(t_chunk_list *chunks, size_t values_count)
+bool	generate_chunks(t_chunk_list *chunks, size_t values_count)
 {
 	size_t	i;
 	size_t	n;

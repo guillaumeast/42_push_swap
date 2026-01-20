@@ -8,10 +8,11 @@
 
 static void	process_algos(t_config *config, uint raw_config);
 static void	process_optis(t_config *config, uint raw_config);
-static void	process_chunks(t_chunk_list *chunks, t_config_list *configs, size_t *i);
+static void	process_chunks(t_chunk_list *chunks, t_config_list *configs);
+static bool	process_lis(t_config_list *configs, t_state *state);
 
-// Caller must free configs->data
-bool	config_init_list(t_config_list *configs, size_t values_count)
+// Caller must free configs->data, configs->lis and configs->lis_swap
+bool	config_init_list(t_config_list *configs, t_state *state)
 {
 	uint			*raw_list;
 	size_t			raw_list_size;
@@ -19,10 +20,9 @@ bool	config_init_list(t_config_list *configs, size_t values_count)
 	size_t	i;
 
 	fprintf(stderr, "ℹ️  Generating configs...\n");	// TMP: remove before submit
-	raw_list = generate_configs(&raw_list_size);
-	if (!raw_list)
+	if (!generate_configs(&raw_list, &raw_list_size))
 		return (false);
-	if (!chunk_generate(&chunk_list, values_count))
+	if (!generate_chunks(&chunk_list, state->a.len))
 		return (free(raw_list), false);
 	configs->count = raw_list_size * chunk_list.count;
 	configs->data = malloc(configs->count * sizeof * configs->data);
@@ -34,10 +34,13 @@ bool	config_init_list(t_config_list *configs, size_t values_count)
 	{
 		process_algos(&configs->data[configs->count], raw_list[i]);
 		process_optis(&configs->data[configs->count], raw_list[i]);
-		process_chunks(&chunk_list, configs, &configs->count);
+		process_chunks(&chunk_list, configs);
 		i++;
 	}
-	fprintf(stderr, "\n");	// TMP: remove before submit
+	if (!process_lis(configs, state))
+		return (free(raw_list), free(chunk_list.data), false);
+	config_print_all(configs);	// TMP: remove before submit
+	fprintf(stderr, "\n");		// TMP: remove before submit
 	return (free(raw_list), free(chunk_list.data), true);
 }
 
@@ -62,48 +65,81 @@ static void process_algos(t_config *config, uint raw_config)
 
 static void	process_optis(t_config *config, uint raw_config)
 {
-	uint		optis;
+	uint	optis;
 
 	optis = (raw_config & OPTI_MASK);
-	config->swap = (optis & SWAP) != 0;
-	config->median = (optis & MEDIAN) != 0;
-	config->lis = (optis & LIS) != 0;
-	if (config->swap && config->median && config->lis)
-		config->opti_names = " + MEDIAN + LIS + SWAP";
-	else if (config->swap && config->median)
-		config->opti_names = " + MEDIAN + SWAP";
-	else if (config->swap && config->lis)
-		config->opti_names = " + LIS + SWAP";
-	else if (config->median && config->lis)
+	config->opti_swap_b = (optis & SWAP) != 0;
+	config->opti_median = (optis & MEDIAN) != 0;
+	config->opti_lis = (optis & LIS) != 0;
+	// TMP: remove before submit (all following lines)
+	if (config->opti_swap_b && config->opti_median && config->opti_lis)
+		config->opti_names = " + MEDIAN + LIS + SWAP_B";
+	if (config->opti_swap_b && config->opti_median && config->opti_lis_swap)
+		config->opti_names = " + MEDIAN + LIS_SWAP + SWAP_B";
+	else if (config->opti_swap_b && config->opti_median)
+		config->opti_names = " + MEDIAN + SWAP_B";
+	else if (config->opti_swap_b && config->opti_lis)
+		config->opti_names = " + LIS + SWAP_B";
+	else if (config->opti_swap_b && config->opti_lis_swap)
+		config->opti_names = " + LIS_SWAP + SWAP_B";
+	else if (config->opti_median && config->opti_lis)
 		config->opti_names = " + MEDIAN + LIS";
-	else if (config->swap)
-		config->opti_names = " + SWAP";
-	else if (config->median)
+	else if (config->opti_median && config->opti_lis_swap)
+		config->opti_names = " + MEDIAN + LIS_SWAP";
+	else if (config->opti_swap_b)
+		config->opti_names = " + SWAP_B";
+	else if (config->opti_median)
 		config->opti_names = " + MEDIAN";
-	else if (config->lis)
+	else if (config->opti_lis)
 		config->opti_names = " + LIS";
+	else if (config->opti_lis)
+		config->opti_names = " + LIS_SWAP";
 	else
 		config->opti_names = "";
 }
 
-static void	process_chunks(t_chunk_list *chunks, t_config_list *configs, size_t *i)
+static void	process_chunks(t_chunk_list *chunks, t_config_list *configs)
 {
 	size_t		chunk_i;
 	t_config	initial_config;
 
-	if (configs->data[*i].algo_1 == chunk)
+	if (configs->data[configs->count].algo_1 == chunk)
 	{
-		initial_config = configs->data[*i];
+		initial_config = configs->data[configs->count];
 		chunk_i = 0;
 		while (chunk_i < chunks->count)
 		{
-			configs->data[*i] = initial_config;
-			configs->data[*i].chunk = chunks->data[chunk_i];
-			config_print(&configs->data[*i], *i, true);	// TMP: remove before submit
-			(*i)++;
+			configs->data[configs->count] = initial_config;
+			configs->data[configs->count].chunk = chunks->data[chunk_i];
+			configs->count++;
 			chunk_i++;
 		}
 	}
 	else
-		(*i)++;
+		configs->count++;
+}
+
+static bool	process_lis(t_config_list *configs, t_state *state)
+{
+	t_lis	lis;
+	t_lis	lis_swap;
+	size_t	i;
+
+	if (!lis_compute_best(&state->a, &lis))
+		return (false);
+	if (!lis_compute_best(&state->a, &lis_swap))
+		return (lis_free(&lis), false);
+	configs->lis = lis;
+	configs->lis_swap = lis_swap;
+	configs->lis_set = true;
+	i = 0;
+	while (i < configs->count)
+	{
+		if (configs->data[i].opti_lis)
+			configs->data[i].lis = lis;
+		if (configs->data[i].opti_lis_swap)
+			configs->data[i].lis_swap = lis_swap;
+		i++;
+	}
+	return (true);
 }
