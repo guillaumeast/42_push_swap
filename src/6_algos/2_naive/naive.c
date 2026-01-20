@@ -4,7 +4,6 @@
 #include "median.h"
 #include "lis.h"
 #include "swap.h"
-#include "debug.h"	// TMP: remove before submit
 
 static bool	do_lis(t_state *state, t_config *config, t_median *med);
 static bool	do_basic(t_state *state, t_config *config, t_median *med);
@@ -17,14 +16,7 @@ bool	naive(t_state *state, t_config *config)
 	{
 		if (!pb(&state->a, &state->b, state->a.len - 3, &state->moves))
 			return (false);
-		fprintf(stderr, "[🔦 DEBUG] After NAIVE but before sort_three:\n");
-		stack_print(&state->a, &state->b);
-		sort_three(state, config);
-		fprintf(stderr, "\n[🔦 DEBUG] After sort_three:\n");
-		stack_print(&state->a, &state->b);
-		fprintf(stderr, "\n[🔦 DEBUG] After greedy:\n");
-		return (true);
-		// return (sort_three(state, config));
+		return (sort_three(state, config));
 	}
 	median.present = NULL;	// NOTE: in case of premature free from do_lis / do_basic() failure
 	if (config->median && !median_init(&median, state->a.len))

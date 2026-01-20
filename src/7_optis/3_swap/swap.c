@@ -30,6 +30,7 @@ bool	opti_swap_lis(t_state *state, t_lis *lis, uint current_value)
 	uint 	third_value;
 
 	lis->swap[current_value] = false;
+	lis->keep[current_value] = true;
 	if (state->b.len < 2)
 		return (sa(&state->a, &state->moves));
 	first_value = stack_get_value(&state->b, 0);

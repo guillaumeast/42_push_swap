@@ -4,6 +4,7 @@
 #include "lis.h"
 #include "swap.h"
 #include <stdlib.h>
+#include "debug.h"	// TMP: remove before submit
 
 // TODO [1]: Reduce chunk_size while A is getting smaller ?		=> edit chunk_update()
 
@@ -21,14 +22,20 @@ bool	chunk(t_state *state, t_config *config)
 	t_target	target;
 	t_lis		lis;
 
+	if (config->chunk.size == 6)
+		stack_print(&state->a, &state->b);
 	if (config->lis && !lis_compute_best(&state->a, &lis))
 		return (false);
+	if (config->lis)
+		lis_print(state, &lis);
 	while (state->a.len > 3 && !stack_is_sorted(&state->a))
 	{
 		target.index = 0;
 		target.val = stack_get_value(&state->a, target.index);
+		fprintf(stderr, "\n[🔦 DEBUG] Searching next target...\n");
 		while (target.val < config->chunk.min || target.val > config->chunk.max)
 			target.val = stack_get_value(&state->a, ++target.index);
+		fprintf(stderr, "\n[🔦 DEBUG] Target found!\n");
 		if (target.index <= state->a.len / 2)
 		{
 			if (!ra(&state->a, target.index, &state->moves))
@@ -40,6 +47,8 @@ bool	chunk(t_state *state, t_config *config)
 		if (!do_step(state, config, target.val, &lis))
 			return (false);
 	}
+	if (config->chunk.size == 6)
+		fprintf(stderr, "\n[🔦 DEBUG] chunk algo finished (before sort_three)\n");
 	if (config->lis)
 		lis_free(&lis);
 	return (sort_three(state, config));
@@ -68,6 +77,11 @@ static bool	do_step(t_state *state, t_config *config, uint value, t_lis *lis)
 			return (false);
 	}
 	chunk_update(&config->chunk);
+	if (config->chunk.size == 6)
+	{
+		fprintf(stderr, "\n[🔦 DEBUG] chunk->size = %u (%u - %u) | chunk->treated = %zu\n", config->chunk.size, config->chunk.min, config->chunk.max, config->chunk.treated);
+		stack_print(&state->a, &state->b);
+	}
 	return (true);
 }
 

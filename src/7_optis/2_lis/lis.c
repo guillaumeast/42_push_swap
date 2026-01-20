@@ -95,6 +95,7 @@ static void	lis_compute_swaps(t_lis *lis, t_stack *stack, size_t index)
 	if (current > next && (current < second_next || second_next == 0))
 	{
 		lis->swap[current] = true;
+		lis->keep[current] = true;
 		lis->swap_count++;
 	}
 }

@@ -1,6 +1,5 @@
 #include "sort_three.h"
 #include "moves.h"
-#include "debug.h"	// TMP: remove before submit
 
 bool	sort_three(t_state *state, t_config *config)
 {
@@ -9,7 +8,6 @@ bool	sort_three(t_state *state, t_config *config)
 
 	if (stack_is_sorted(&state->a))
 		return (true);
-	fprintf(stderr, "\n[🔦 DEBUG] Executing sort_three...\n");
 	if (!config->swap || state->b.len < 2)
 		return (sa(&state->a, &state->moves));
 	first_value = stack_get_value(&state->b, 0);
