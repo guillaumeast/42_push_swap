@@ -23,12 +23,12 @@ bool	opti_swap_b(t_state *state, t_config *config)
 	return (sb(state));
 }
 
-bool	opti_swap_lis(t_state *state, t_lis *lis, uint current_value)
+bool	opti_swap_lis(t_state *state, t_config *config, uint value)
 {
 	uint 	first_value;
 	uint 	second_value;
 
-	lis->swap[current_value] = false;
+	config->lis.swap[value] = false;
 	if (state->b.len < 2)
 		return (sa(state));
 	first_value = stack_get_value(&state->b, 0);

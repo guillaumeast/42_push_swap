@@ -6,7 +6,7 @@
 	- LIS with swaps:
 		- Compute all possible swaps (values[i] > values[i + 1] && (values[i + 2] = 0 || values[i] < values[i + 2]))
 		- Compute LIS (with swapped stack)
-		- Remove useless swaps (if swap[values[i]] = true && keep[values[i]] = false => swap[values[i] = false])
+		- Remove useless swaps (if swap[values[i]] = true && (keep[values[i]] = false || keep[values[i]] = false) => swap[values[i] = false])
 		- Tie break = LIS with less swap_count for the same len
 - Add opti lis_swap:
 	- if opti = lis => use config->lis data

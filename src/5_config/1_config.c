@@ -68,32 +68,33 @@ static void	process_optis(t_config *config, uint raw_config)
 	uint	optis;
 
 	optis = (raw_config & OPTI_MASK);
-	config->opti_swap_b = (optis & SWAP) != 0;
 	config->opti_median = (optis & MEDIAN) != 0;
-	config->opti_lis = (optis & LIS) != 0;
+	config->opti_lis_swap = (optis & LIS_SWAP) != 0;
+	config->opti_lis = config->opti_lis_swap || (optis & LIS) != 0;
+	config->opti_swap_b = (optis & SWAP) != 0;
 	// TMP: remove before submit (all following lines)
-	if (config->opti_swap_b && config->opti_median && config->opti_lis)
-		config->opti_names = " + MEDIAN + LIS + SWAP_B";
 	if (config->opti_swap_b && config->opti_median && config->opti_lis_swap)
 		config->opti_names = " + MEDIAN + LIS_SWAP + SWAP_B";
-	else if (config->opti_swap_b && config->opti_median)
-		config->opti_names = " + MEDIAN + SWAP_B";
-	else if (config->opti_swap_b && config->opti_lis)
-		config->opti_names = " + LIS + SWAP_B";
-	else if (config->opti_swap_b && config->opti_lis_swap)
-		config->opti_names = " + LIS_SWAP + SWAP_B";
-	else if (config->opti_median && config->opti_lis)
-		config->opti_names = " + MEDIAN + LIS";
+	else if (config->opti_swap_b && config->opti_median && config->opti_lis)
+		config->opti_names = " + MEDIAN + LIS + SWAP_B";
 	else if (config->opti_median && config->opti_lis_swap)
 		config->opti_names = " + MEDIAN + LIS_SWAP";
-	else if (config->opti_swap_b)
-		config->opti_names = " + SWAP_B";
+	else if (config->opti_median && config->opti_lis)
+		config->opti_names = " + MEDIAN + LIS";
+	else if (config->opti_swap_b && config->opti_median)
+		config->opti_names = " + MEDIAN + SWAP_B";
+	else if (config->opti_swap_b && config->opti_lis_swap)
+		config->opti_names = " + LIS_SWAP + SWAP_B";
+	else if (config->opti_swap_b && config->opti_lis)
+		config->opti_names = " + LIS + SWAP_B";
 	else if (config->opti_median)
 		config->opti_names = " + MEDIAN";
+	else if (config->opti_lis_swap)
+		config->opti_names = " + LIS_SWAP";
 	else if (config->opti_lis)
 		config->opti_names = " + LIS";
-	else if (config->opti_lis)
-		config->opti_names = " + LIS_SWAP";
+	else if (config->opti_swap_b)
+		config->opti_names = " + SWAP_B";
 	else
 		config->opti_names = "";
 }
@@ -125,9 +126,9 @@ static bool	process_lis(t_config_list *configs, t_state *state)
 	t_lis	lis_swap;
 	size_t	i;
 
-	if (!lis_compute_best(&state->a, &lis))
+	if (!lis_compute_best(&state->a, &lis, false))
 		return (false);
-	if (!lis_compute_best(&state->a, &lis_swap))
+	if (!lis_compute_best(&state->a, &lis_swap, true))
 		return (lis_free(&lis), false);
 	configs->lis = lis;
 	configs->lis_swap = lis_swap;
@@ -135,10 +136,10 @@ static bool	process_lis(t_config_list *configs, t_state *state)
 	i = 0;
 	while (i < configs->count)
 	{
-		if (configs->data[i].opti_lis)
-			configs->data[i].lis = lis;
 		if (configs->data[i].opti_lis_swap)
-			configs->data[i].lis_swap = lis_swap;
+			configs->data[i].lis = lis_swap;
+		else if (configs->data[i].opti_lis)
+			configs->data[i].lis = lis;
 		i++;
 	}
 	return (true);

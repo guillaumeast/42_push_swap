@@ -16,7 +16,7 @@ typedef struct s_lis
 }	t_lis;
 
 // WARNING: only works if stack->offset == 0 !!!
-bool	lis_compute_best(t_stack *stack, t_lis *lis);
+bool	lis_compute_best(t_stack *stack, t_lis *lis, bool enable_swap);
 void	lis_free(t_lis *lis);
 
 #endif

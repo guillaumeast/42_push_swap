@@ -1,5 +1,6 @@
 #include "libft.h"
 #include "median.h"
+#include "moves.h"
 #include <stdlib.h>
 
 static void	update(t_median *median);
@@ -50,6 +51,14 @@ static void	update(t_median *median)
 		while (!median->present[median->median])
 			median->median--;
 	}
+}
+
+bool	opti_median(t_state *state, t_median *median, uint value)
+{
+	median_update(median, value);
+	if (value < median->median)
+		return (rb(state, 1));
+	return (true);
 }
 
 void	median_free(t_median *median)

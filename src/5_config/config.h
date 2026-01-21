@@ -28,7 +28,6 @@ typedef struct s_config
 	bool		opti_lis_swap;
 	t_chunk		chunk;
 	t_lis		lis;
-	t_lis		lis_swap;
 }	t_config;
 
 typedef struct s_config_list

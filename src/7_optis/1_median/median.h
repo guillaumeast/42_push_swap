@@ -1,6 +1,7 @@
 #ifndef MEDIAN_H
 # define MEDIAN_H
 
+# include "state.h"
 # include <stdbool.h>
 # include <sys/types.h>
 
@@ -14,6 +15,7 @@ typedef struct s_median
 
 bool	median_init(t_median *median, size_t values_count);
 void	median_update(t_median *median, uint new_value);
+bool	opti_median(t_state *state, t_median *median, uint value);
 void	median_free(t_median *median);
 
 #endif

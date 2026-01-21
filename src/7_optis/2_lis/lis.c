@@ -7,12 +7,13 @@ static bool	lis_compute(t_lis *lis, t_stack *stack, size_t start_index);
 static bool	lis_init(t_lis *lis, t_tail *tail, t_stack *stack);
 static void	lis_compute_swaps(t_lis *lis, t_stack *stack, size_t index);
 
-bool	lis_compute_best(t_stack *stack, t_lis *lis)
+bool	lis_compute_best(t_stack *stack, t_lis *lis, bool enable_swap)
 {
 	size_t	start_index;
 	t_lis	tmp_lis;
 	size_t	max_len;
 
+	(void)enable_swap;	// TODO
 	max_len = 0;
 	start_index = 0;
 	lis->keep = NULL;

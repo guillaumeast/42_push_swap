@@ -38,8 +38,8 @@ static void	input_init(t_input *input)
 {
 	static const uint	algos_1[] = {NAIVE, CHUNK};
 	static const uint	algos_2[] = {GREEDY};
-	static const uint	optis[] = {MEDIAN, LIS, SWAP};
-	static const uint	optis_compat[] = {MEDIAN_COMPAT, LIS_COMPAT, SWAP_COMPAT};
+	static const uint	optis[] = {MEDIAN, LIS, LIS_SWAP, SWAP};
+	static const uint	optis_compat[] = {MEDIAN_COMPAT, LIS_COMPAT, LIS_SWAP_COMPAT, SWAP_COMPAT};
 
 	input->algos_1 = algos_1;
 	input->algos_1_count = sizeof(algos_1) / sizeof(algos_1[0]);
