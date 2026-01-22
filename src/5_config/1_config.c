@@ -122,24 +122,18 @@ static void	process_chunks(t_chunk_list *chunks, t_config_list *configs)
 
 static bool	process_lis(t_config_list *configs, t_state *state)
 {
-	t_lis	lis;
-	t_lis	lis_swap;
 	size_t	i;
 
-	if (!lis_compute_best(&state->a, &lis, false))
+	if (!lis_compute_both(&state->a, &configs->lis, &configs->lis_swap))
 		return (false);
-	if (!lis_compute_best(&state->a, &lis_swap, true))
-		return (lis_free(&lis), false);
-	configs->lis = lis;
-	configs->lis_swap = lis_swap;
 	configs->lis_set = true;
 	i = 0;
 	while (i < configs->count)
 	{
 		if (configs->data[i].opti_lis_swap)
-			configs->data[i].lis = lis_swap;
+			configs->data[i].lis = configs->lis_swap;
 		else if (configs->data[i].opti_lis)
-			configs->data[i].lis = lis;
+			configs->data[i].lis = configs->lis;
 		i++;
 	}
 	return (true);
