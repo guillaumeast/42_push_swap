@@ -12,11 +12,9 @@ typedef struct s_lis
 	size_t	keep_count;
 	bool	*swap;
 	size_t	swap_count;
-	size_t	final_len;
 }	t_lis;
 
-// WARNING: only works if stack->offset == 0 !!!
-bool	lis_compute_best(t_stack *stack, t_lis *lis, bool enable_swap);
+bool	lis_compute_both(t_stack *stack, t_lis *lis, t_lis *lis_swap);
 void	lis_free(t_lis *lis);
 
 #endif

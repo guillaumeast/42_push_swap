@@ -1,16 +1,26 @@
 # LIS optimization
 
-- Store LIS in config to avoid recomputing it each time
 - Store two types of LIS:
 	- LIS without swaps => compute all LIS => Tie break = LIS with less swap_count for the same len
 	- LIS with swaps:
 		- Compute all possible swaps (values[i] > values[i + 1] && (values[i + 2] = 0 || values[i] < values[i + 2]))
 		- Compute LIS (with swapped stack)
-		- Remove useless swaps (if swap[values[i]] = true && (keep[values[i]] = false || keep[values[i]] = false) => swap[values[i] = false])
+		- Remove useless swaps (if swap[values[i]] = true && (keep[values[i]] = false || keep[values[i + 1]] = false) => swap[values[i] = false])
 		- Tie break = LIS with less swap_count for the same len
-- Add opti lis_swap:
-	- if opti = lis => use config->lis data
-	- if opti = lis_swap => user config->lis_swap data
+
+**LIS_SWAP MANAGEMENT**
+1. STACK_1 => Compute swaps except the two last indexes (they depend on indexes 0 and 1 possible swaps)
+2. If STACK_1 didn't swap 0 and didn't swap 1:
+	- Compute two last indexes swaps
+3. If STACK_1 did swap 0 or did swap 1:
+	- STACK_2 = stack_dup(STACK_1)
+	- Compute 2 last swaps from STACK_1 (with swap 0/1)
+	- Remove first swap (0 or 1) from STACK_2
+	- Compute 2 last swaps from STACK_2 (without swap 0/1)
+4. Run LIS (best = highest len => if equality => lowest swap_count wins):
+	- LIS_1 = best LIS of STACK_1
+	- LIS_2 = best LIS of STACK_2 (**only if STACK_2 exists**)
+5. Return best LIS between LIS_1 and LIS_2
 
 ⚠️ ===> Tests
 - [3, 0, 2, 1, 4]		=> should swap [2 - 1] + [4 - 3]	=> [4, 0, 1, 2, 3]			=> LIS = 5
@@ -31,7 +41,7 @@
 
 - Use hill climbing instead of bruteforce to find the best chunksize to use
 - Add chunksize reduction to optis
-- Add moves_normalize to delete useless moves: [`PB` -> `PA`], [`RA` -> `RRA`], swap combos, etc
+- Add moves_normalize to delete useless moves: `NO_OP`, [`PB` -> `PA`], [`RA` -> `RRA`], swap combos, etc
 
 # ALGO_1
 
@@ -40,6 +50,18 @@
 # OPTI
 
 1. BACKTRACK
+2. EARLY_REINTEGRATION
+	- if (keep[A[0] == true]):
+		- if (KEEP_LAST == NULL):
+			- KEEP_LAST = A[0]
+		- else
+			- KEEP_CURRENT = A[0]
+			- TARGET_COUNT = values in B which are > KEEP_LAST and are < KEEP_CURRENT
+			- while (TARGET_COUNT > 0)
+				- PA(greedy/highest value of B between KEEP_LAST and KEEP_CURRENT)
+				- keep[A[0]] = true
+				- TARGET_COUNT--
+			- KEEP_LAST = KEEP_CURRENT
 
 # CHECKER
 

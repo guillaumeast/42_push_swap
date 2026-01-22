@@ -18,6 +18,6 @@ void	config_print(t_config *config, size_t index, bool print_index);
 
 /* ---------- lis.c ---------- */
 
-void	lis_print(t_state *state, t_lis *lis);
+void	lis_print(t_lis *lis, size_t len);
 
 #endif
