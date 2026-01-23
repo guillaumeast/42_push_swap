@@ -19,6 +19,7 @@
 
 /* ---------- stack.c ---------- */
 
+void	stack_print_line(t_stack *stack);
 void	stack_print(t_stack *a, t_stack *b);
 
 /* ---------- config.c ---------- */

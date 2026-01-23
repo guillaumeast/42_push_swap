@@ -101,14 +101,8 @@ static void compute_swaps(t_swapped_stack *stack, long start, size_t iter, bool 
 		else
 			index = modulo(start + (long)i, stack->stack.len);
 		next_index = modulo((long)index + 1, stack->stack.len);
-		fprintf(stderr, "⚠️  [%zu] => [%u %u %u] \n", 
-			index, 
-			stack->stack.data[index], 
-			stack->stack.data[next_index], 
-			stack->stack.data[modulo((long)next_index + 1, stack->stack.len)]);
 		if (should_swap(&stack->stack, index))
 		{
-			fprintf(stderr, "🍀 swaps[%u] = true\n", stack->stack.data[index]);
 			stack->swaps[stack->stack.data[index]] = true;
 			tmp = stack->stack.data[index];
 			stack->stack.data[index] = stack->stack.data[next_index];

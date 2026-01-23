@@ -7,6 +7,24 @@ static void	print_sep(int max_value_len, int idx_len);
 static int	get_max_len(t_stack *a, t_stack *b);
 static int	get_value_len(uint nb);
 
+void	stack_print_line(t_stack *stack)
+{
+	uint	value;
+	size_t	i;
+
+	fprintf(stderr, "[");
+	i = 0;
+	while (i < stack->len)
+	{
+		value = stack_get_value(stack, i);
+		fprintf(stderr, "%u", value);
+		if (stack->len - i > 1)
+			fprintf(stderr, " ");
+		i++;
+	}
+	fprintf(stderr, "]\n");
+}
+
 void	stack_print(t_stack *a, t_stack *b)
 {
 	size_t	i;

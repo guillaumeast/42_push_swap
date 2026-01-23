@@ -40,18 +40,81 @@ uint	future(t_stack *stack, size_t index, size_t depth, uint stop_value)
 
 bool	should_swap(t_stack *stack, size_t index)
 {
+	uint	previous;
 	uint	current;
-	uint	second;
+	uint	next;
 	uint	third;
+	uint	future_third;
 
+	// TODO: handle indexes 0 1 len - 1 len - 2 specifically
+	log_debug("should_swap", 0, "index %zu of ", index);
+	stack_print_line(stack);
 	if (index > stack->len)
 		return (false);
 	current = stack_get_value(stack, index);
-	second = stack_get_value(stack, index + 1);
+	next = stack_get_value(stack, index + 1);
 	third = stack_get_value(stack, index + 2);
-	if (current < second)
+	if (current == 0)
+	{
+		previous = stack_get_value(stack, index + stack->len - 1);
+		log_debug("should_swap", 0, "previous (index = %zu) = %u\n", index + stack->len - 1, previous);
+		if (next < previous)
+		{
+			log_debug("should_swap", 0, "index %zu [%u %u %u] => ", index, current, next, third);
+			fprintf(stderr, "false (%scurrent == 0 && previous > next%s)\n", RED, NC);
+			return (false);
+		}
+		if (next > third)						// 0 && next > third
+		{
+			log_debug("should_swap", 0, "index %zu [%u %u %u] => ", index, current, next, third);
+			fprintf(stderr, "🍀 true (%scurrent == 0 && previous < next && next > third%s)\n", GREEN, NC);
+			return (true);
+		}
+		future_third = future(stack, index + 2, 1, current);
+		if (next > future_third)				// 0 && next > future(third)
+		{
+			log_debug("should_swap", 0, "index %zu [%u %u %u] => ", index, current, next, third);
+			fprintf(stderr, "🍀 true (%scurrent == 0 && previous < next && next > future(third)%s)\n", GREEN, NC);
+			return (true);
+		}
+	}
+	else if (current < next && next < third)		// Already sorted
+	{
+		log_debug("should_swap", 0, "index %zu [%u %u %u] => ", index, current, next, third);
+		fprintf(stderr, "false (%scurrent < next && next < third%s)\n", RED, NC);
 		return (false);
-	return (current > third || current > future(stack, index + 2, 1, current));
+	}
+	else if (current > next)
+	{
+		if (current < third)					// OK with current third value (non-zero)
+		{
+			log_debug("should_swap", 0, "index %zu [%u %u %u] => ", index, current, next, third);
+			fprintf(stderr, "🍀 true (%scurrent > next && current < third%s)\n", GREEN, NC);
+			return (true);
+		}
+		if (third == 0)							// OK with current third value (0)
+		{
+			log_debug("should_swap", 0, "index %zu [%u %u %u] => ", index, current, next, third);
+			fprintf(stderr, "🍀 true (%scurrent > next && third == 0%s)\n", GREEN, NC);
+			return (true);
+		}
+		third = future(stack, index + 2, 1, current);
+		if (current < third)					// OK with future third value
+		{
+			log_debug("should_swap", 0, "index %zu [%u %u %u] => ", index, current, next, third);
+			fprintf(stderr, "🍀 true (%scurrent > next && current < future(third)%s)\n", GREEN, NC);
+			return (true);
+		}
+		if (third == 0)							// OK with future third value (0)
+		{
+			log_debug("should_swap", 0, "index %zu [%u %u %u] => ", index, current, next, third);
+			fprintf(stderr, "🍀 true (%scurrent > next && future(third) == 0%s)\n", GREEN, NC);
+			return (true);
+		}
+	}
+	log_debug("should_swap", 0, "index %zu [%u %u %u] => ", index, current, next, third);
+	fprintf(stderr, "false\n");
+	return (false);
 }
 
 // TMP: remove before submit
