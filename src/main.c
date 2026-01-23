@@ -16,6 +16,7 @@ int	main(int argc, char **argv)
 {
 	t_args			args;
 	t_state			initial_state;
+	t_stack		tmp_debug;
 	// t_config_list	configs;
 	// t_buff			best_moves;
 
@@ -26,7 +27,7 @@ int	main(int argc, char **argv)
 		return (free_and_print_error(NULL, NULL));
 	if (!state_init(&initial_state, args.values, args.count))
 		return (free(args.values), free_and_print_error(NULL, NULL));
-	test_swaps(&initial_state.a);
+	(void)test_swaps(&tmp_debug, &initial_state.a);
 	return (state_free(&initial_state), 0);
 	// if (!config_init_list(&configs, &initial_state))
 	// 	return (free_and_print_error(&initial_state, NULL));

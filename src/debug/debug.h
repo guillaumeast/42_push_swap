@@ -39,6 +39,6 @@ void	log_debug(const char *func_name, size_t depth, const char *message, ...)
 
 /* ---------- TMPD: debug ---------- */
 
-void	test_swaps(t_stack *stack);
+bool	test_swaps(t_stack *dst, t_stack *src);
 
 #endif

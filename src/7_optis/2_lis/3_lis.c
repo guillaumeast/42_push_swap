@@ -86,37 +86,42 @@ static bool	set_stack_2(t_stack *stk, t_swapped_stack *v1, t_swapped_stack *v2)
 // A B C D => A must be < C to swap so best possibilities if swap(C, D) is possible because it means that D < C
 static void compute_swaps(t_swapped_stack *stack, long start, size_t iter, bool backward)
 {
-	size_t	i;
-	size_t	index;
-	size_t	next_index;
-	uint	tmp;
+	// size_t	i;
+	// size_t	index;
+	// size_t	next_index;
+	// uint	tmp;
 
-	if (stack->stack.len <= 3)	// NOTE: sort_three() will handle it
-		return ;
-	i = 0;
-	while (i <= iter)
-	{
-		if (backward)	// TODO: doesn't work ??
-			index = modulo(start - (long)i, stack->stack.len);
-		else
-			index = modulo(start + (long)i, stack->stack.len);
-		next_index = modulo((long)index + 1, stack->stack.len);
-		if (should_swap(&stack->stack, index, stack_get_value(&stack->stack, (long)index), 0))
-		{
-			stack->swaps[stack->stack.data[index]] = true;
-			tmp = stack->stack.data[index];
-			stack->stack.data[index] = stack->stack.data[next_index];
-			stack->stack.data[next_index] = tmp;
-			// fprintf(stderr, "👉 [%zu] => [%u %u %u] \n\n", 
-			// 	index, 
-			// 	stack->stack.data[index], 
-			// 	stack->stack.data[next_index], 
-			// 	stack->stack.data[modulo((long)next_index + 1, stack->stack.len)]);
-			i += 2;
-		}
-		else
-			i++;
-	}
+	(void)stack;
+	(void)start;
+	(void)iter;
+	(void)backward;
+
+	// if (stack->stack.len <= 3)	// NOTE: sort_three() will handle it
+	// 	return ;
+	// i = 0;
+	// while (i <= iter)
+	// {
+	// 	if (backward)	// TODO: doesn't work ??
+	// 		index = modulo(start - (long)i, stack->stack.len);
+	// 	else
+	// 		index = modulo(start + (long)i, stack->stack.len);
+	// 	next_index = modulo((long)index + 1, stack->stack.len);
+	// 	if (should_swap(&stack->stack, index, stack_get_value(&stack->stack, (long)index), 0))
+	// 	{
+	// 		stack->swaps[stack->stack.data[index]] = true;
+	// 		tmp = stack->stack.data[index];
+	// 		stack->stack.data[index] = stack->stack.data[next_index];
+	// 		stack->stack.data[next_index] = tmp;
+	// 		// fprintf(stderr, "👉 [%zu] => [%u %u %u] \n\n", 
+	// 		// 	index, 
+	// 		// 	stack->stack.data[index], 
+	// 		// 	stack->stack.data[next_index], 
+	// 		// 	stack->stack.data[modulo((long)next_index + 1, stack->stack.len)]);
+	// 		i += 2;
+	// 	}
+	// 	else
+	// 		i++;
+	// }
 }
 
 static void	free_all(t_lis *lis, t_swapped_stack *stack_1, t_swapped_stack *stack_2)
