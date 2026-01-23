@@ -22,12 +22,57 @@
 	- LIS_2 = best LIS of STACK_2 (**only if STACK_2 exists**)
 5. Return best LIS between LIS_1 and LIS_2
 
-⚠️ ===> Tests
-✅ `3 0 2 1 4`		=> BEST => swaps (2) = `2, 4`		| lis (5) = `0 1 2 3 4`
+🧪 Tests **1 nombre**
+✅ `0`				=> BEST => swaps (0)				| lis (1) = `0`				| 🐛 **heap-buffer-overflow in NAIVE + GREEDY**
+
+🧪 Tests **2 nombres**
+✅ `0 1`				=> BEST => swaps (0)				| lis (2) = `0 1`			| 🐛 
+✅ `1 0`				=> BEST => swaps (0)				| lis (2) = `0 1`			| 🐛 
+
+🧪 Tests **3 nombre** (`sort_three()` will handle it so **don't compute swaps**)
+**// TODO: if swap_count are equals => compute total_weight (sum of the keep indexes) => keep the lowest weighted lis**
+✅ `0 1 2`			=> BEST => swaps (0)				| lis (2) = `0 1 2`			| 🐛 
+✅ `0 2 1`			=> BEST => swaps (0)				| lis (2) = `0 1`			| 🐛 
+❌ `1 0 2`			=> BEST => swaps (0)				| lis (2) = `0 1`			| 🐛 lis (2) = `0 2`
+✅ `1 2 0`			=> BEST => swaps (0)				| lis (2) = `0 1 2`			| 🐛 
+✅ `2 0 1`			=> BEST => swaps (0)				| lis (2) = `0 1 2`			| 🐛 
+❌ `2 1 0`			=> BEST => swaps (0)				| lis (2) = `0 1`			| 🐛 lis (2) = `0 2`
+
+🧪 Tests **4 nombres**
+❌ `0 1 2 3`			=> BEST => swaps (0)				| lis (2) = `0 1 2 3`		| 🐛 					| lis (3) = `0 1 2`
+❌ `0 1 3 2`			=> BEST => swaps (1) = `3`			| lis (2) = `0 1 2 3`		| 🐛 swaps (0)			| lis (3) = `0 1 2`
+❌ `0 2 1 3`			=> BEST => swaps (1) = `2`			| lis (2) = `0 1 2 3`		| 🐛 swaps (1) = `3`	| lis (3) = `0, 2, 3`
+❌ `0 2 3 1`			=> BEST => swaps (1) = `1`			| lis (2) = `0 1 2 3`		| 🐛 swaps (1) = `3`	| lis (3) = `0, 2, 3`
+❌ `0 3 1 2`			=> BEST => swaps (1) = `0`			| lis (2) = `0 1 2 3`		| 🐛 swaps (0)			| lis (3) = `0 1 2`
+❌ `0 3 2 1`			=> BEST => swaps (2) = `3 1`		| lis (2) = `0 1 2 3`		| 🐛 swaps (1) = `3`	| lis (3) = `0, 2, 3`
+
+⚠️ `1 0 2 3`		=> BEST => swaps (1) = `1`			| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `1 0 3 2`		=> BEST => swaps (2) = `1 3`		| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `1 2 0 3`		=> BEST => swaps (1) = `0`			| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `1 2 3 0`		=> BEST => swaps (0)				| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `1 3 0 2`		=> BEST => swaps (1) = `2`			| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `1 3 2 0`		=> BEST => swaps (1) = `3`			| lis (2) = `0 1 2 3`		| 🐛 
+
+⚠️ `2 0 1 3`		=> BEST => swaps (1) = `3`			| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `2 0 3 1`		=> BEST => swaps (1) = `0`			| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `2 1 0 3`		=> BEST => swaps (2) = `2 3`		| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `2 1 3 0`		=> BEST => swaps (1) = `2`			| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `2 3 0 1`		=> BEST => swaps (0)				| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `2 3 1 0`		=> BEST => swaps (1) = `1`			| lis (2) = `0 1 2 3`		| 🐛 
+
+⚠️ `3 0 1 2`		=> BEST => swaps (0)				| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `3 0 2 1`		=> BEST => swaps (1) = `2`			| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `3 1 0 2`		=> BEST => swaps (1) = `1`			| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `3 1 2 0`		=> BEST => swaps (1) = `0`			| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `3 2 0 1`		=> BEST => swaps (1) = `3`			| lis (2) = `0 1 2 3`		| 🐛 
+⚠️ `3 2 1 0`		=> BEST => swaps (1) = `3 1`		| lis (2) = `0 1 2 3`		| 🐛 
+
+🧪 Tests **>= 5 nombres**
+⚠️ `3 0 2 1 4`		=> BEST => swaps (2) = `2, 4`		| lis (5) = `0 1 2 3 4`
 ⚠️ `0 3 2 1 4`		=> BEST => swaps (3) = `0, 2, 4`	| lis (5) = `0 1 2 3 4`
-✅ `0 2 3 4 5 1`		=> BEST => swaps (1) = `1`			| lis (6) = `0 1 2 3 4 5`
-✅ `2 0 3 4 5 1`		=> BEST => swaps (2) = `2, 1`		| lis (6) = `0 1 2 3 4 5`
-🧪 `5 3 6 2 0 4 1`	=> BEST => swaps (1) = `5`			| lis (5) = `0 1 3 5 6`
+⚠️ `0 2 3 4 5 1`	=> BEST => swaps (1) = `1`			| lis (6) = `0 1 2 3 4 5`
+⚠️ `2 0 3 4 5 1`	=> BEST => swaps (2) = `2, 1`		| lis (6) = `0 1 2 3 4 5`
+⚠️ `5 3 6 2 0 4 1`	=> BEST => swaps (1) = `5`			| lis (5) = `0 1 3 5 6`
 
 # Implement LIS vs LIS_SWAP in NAIVE and CHUNK algos
 

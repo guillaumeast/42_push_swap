@@ -39,7 +39,9 @@ bool	config_init_list(t_config_list *configs, t_state *state)
 	}
 	if (!process_lis(configs, state))
 		return (free(raw_list), free(chunk_list.data), false);
-	configs->lis_set = false;
+	configs->lis_set = true;
+	fprintf(stderr, "✅ %zu configs created (STOPPING NOW)\n\n", configs->count);
+	return (free(raw_list), free(chunk_list.data), false);
 	// config_print_all(configs);	// TMP: remove before submit
 	// fprintf(stderr, "\n");		// TMP: remove before submit
 	return (free(raw_list), free(chunk_list.data), true);
@@ -127,7 +129,6 @@ static bool	process_lis(t_config_list *configs, t_state *state)
 
 	if (!lis_compute_both(&state->a, &configs->lis, &configs->lis_swap))
 		return (false);
-	configs->lis_set = true;
 	i = 0;
 	while (i < configs->count)
 	{

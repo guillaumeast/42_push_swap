@@ -8,7 +8,7 @@
 
 static bool	set_stack_1(t_swapped_stack *dst, t_stack *src);
 static bool	set_stack_2(t_stack *stk, t_swapped_stack *v1, t_swapped_stack *v2);
-static void compute_swaps(t_swapped_stack *stack, long start, long end);
+static void compute_swaps(t_swapped_stack *stack, long start, size_t iter, bool backward);
 static void	free_all(t_lis *lis, t_swapped_stack *stack_1, t_swapped_stack *stack_2);
 
 bool	lis_compute_both(t_stack *stack, t_lis *lis, t_lis *lis_swap)
@@ -16,35 +16,37 @@ bool	lis_compute_both(t_stack *stack, t_lis *lis, t_lis *lis_swap)
 	t_swapped_stack	stack_1;
 	t_swapped_stack	stack_2;
 
-	fprintf(stderr, "[🔦 DEBUG] lis_compute_both()...\n");
+	log_debug("lis_compute_both", 0, "Starting...\n");
 	if (!lis_best(stack, NULL, lis))
 		return (false);
 	if (!set_stack_1(&stack_1, stack))
 		return (free_all(lis, NULL, NULL), false);
-	compute_swaps(&stack_1, (long)stack->len - 2, (long)stack->len - 1);
-	fprintf(stderr, "stack_1->swaps = ");
+	compute_swaps(&stack_1, 0, stack->len, false);
+	log_debug("lis_compute_both", 0, "stack_1->swaps = ");
 	print_bool_array(stack_1.swaps, stack_1.stack.len);
 	stack_print(stack, &stack_1.stack);
 	if (stack_1.first_swapped)
 	{
-		fprintf(stderr, "Setting stack_2...\n");
+		log_debug("lis_compute_both", 0, "Setting stack_2...\n");
 		if (!set_stack_2(stack, &stack_1, &stack_2))
 			return (free_all(lis, &stack_1, NULL), false);
-		fprintf(stderr, "Computing swaps...\n");
-		compute_swaps(&stack_2, (long)stack->len - 2, (long)stack->len -1);
-		fprintf(stderr, "stack_2->swaps = ");
+		log_debug("lis_compute_both", 0, "Computing swaps...\n");
+		compute_swaps(&stack_1, (long)stack->len - 2, stack->len, false);
+		log_debug("lis_compute_both", 0, "stack_2->swaps = ");
 		print_bool_array(stack_2.swaps, stack->len);
 		stack_print(stack, &stack_1.stack);
 		if (!lis_best_between(&stack_1, &stack_2, lis_swap))
 			return (free_all(lis, &stack_1, &stack_2), false);
-		fprintf(stderr, "\n[🔦 DEBUG] RESULTS:\n");
+		fprintf(stderr, "\n");
+		log_debug("lis_compute_both", 0, "RESULTS:\n");
 		lis_print(lis, stack->len);
 		lis_print(lis_swap, stack->len);
 		return (free_all(NULL, &stack_1, &stack_2), true);
 	}
 	else if (!lis_best(&stack_1.stack, stack_1.swaps, lis_swap))
 		return (free_all(lis, &stack_1, NULL), false);
-	fprintf(stderr, "\n[🔦 DEBUG] RESULTS:\n");
+	fprintf(stderr, "\n");
+	log_debug("lis_compute_both", 0, "RESULTS:\n");
 	lis_print(lis, stack->len);
 	lis_print(lis_swap, stack->len);
 	return (free_all(NULL, &stack_1, NULL), true);
@@ -82,37 +84,43 @@ static bool	set_stack_2(t_stack *stk, t_swapped_stack *v1, t_swapped_stack *v2)
 
 // NOTE: Computes backward to allow as much swaps as possible
 // A B C D => A must be < C to swap so best possibilities if swap(C, D) is possible because it means that D < C
-static void compute_swaps(t_swapped_stack *stack, long start, long end)
+static void compute_swaps(t_swapped_stack *stack, long start, size_t iter, bool backward)
 {
-	uint	first_value;
-	uint	second_value;
-	uint	third_value;
+	size_t	i;
+	size_t	index;
+	size_t	next_index;
+	uint	tmp;
 
-	if (stack->stack.len < 3)
+	if (stack->stack.len <= 3)	// NOTE: sort_three() will handle it
 		return ;
-	start = (long)modulo(start, stack->stack.len);
-	end = (long)modulo(end, stack->stack.len);
-	stack_rotate(&stack->stack, (size_t)start);
-	while (true)
+	i = 0;
+	while (i <= iter)
 	{
-		first_value = stack_get_value(&stack->stack, 0);
-		second_value = stack_get_value(&stack->stack, 1);
-		third_value = stack_get_value(&stack->stack, 2);
-		fprintf(stderr, "⚠️ start = %zu | offset = %zu => first = %u | second = %u | third = %u ", start, stack->stack.offset, first_value, second_value, third_value);
-		if (first_value > second_value && first_value < third_value)
+		if (backward)	// TODO: doesn't work ??
+			index = modulo(start - (long)i, stack->stack.len);
+		else
+			index = modulo(start + (long)i, stack->stack.len);
+		next_index = modulo((long)index + 1, stack->stack.len);
+		fprintf(stderr, "⚠️  [%zu] => [%u %u %u] \n", 
+			index, 
+			stack->stack.data[index], 
+			stack->stack.data[next_index], 
+			stack->stack.data[modulo((long)next_index + 1, stack->stack.len)]);
+		if (should_swap(&stack->stack, index))
 		{
-			stack->swaps[first_value] = true;
-			stack_swap(&stack->stack);
-			if (start < 2)
-				stack->first_swapped = true;
+			fprintf(stderr, "🍀 swaps[%u] = true\n", stack->stack.data[index]);
+			stack->swaps[stack->stack.data[index]] = true;
+			tmp = stack->stack.data[index];
+			stack->stack.data[index] = stack->stack.data[next_index];
+			stack->stack.data[next_index] = tmp;
 		}
-		stack_reverse_rotate(&stack->stack, 1);
-		fprintf(stderr, "=> swaps[%u] = %i\n", first_value, stack->swaps[first_value]);
-		if (start == end)
-			break ;
-		start = (long)modulo(start - 1, stack->stack.len);
+		i++;
+		fprintf(stderr, "👉 [%zu] => [%u %u %u] \n\n", 
+			index, 
+			stack->stack.data[index], 
+			stack->stack.data[next_index], 
+			stack->stack.data[modulo((long)next_index + 1, stack->stack.len)]);
 	}
-	stack_reverse_rotate(&stack->stack, stack->stack.offset);
 }
 
 static void	free_all(t_lis *lis, t_swapped_stack *stack_1, t_swapped_stack *stack_2)

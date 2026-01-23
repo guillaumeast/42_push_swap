@@ -1,35 +1,40 @@
 #include "stack.h"
 # include "debug.h"	// TMP: remove before submit
 
-static void	print_future(size_t depth, long value);	// TMP: remove before submit
+static void	print_future(size_t depth, bool print_new_value, uint value, uint new_value);	// TMP: remove before submit
 
-uint	future(t_stack *stack, size_t index, size_t depth)
+uint	future(t_stack *stack, size_t index, size_t depth, uint stop_value)
 {
 	uint	current;
 	uint	second;
 	uint	third;
 
-
-	print_future(depth, -1);
 	current = stack_get_value(stack, index);
+	print_future(depth, false, current, 0);
+	if (current == stop_value)
+	{
+		log_debug("future", depth, "🚦 Stopping, stop_value = current = %u\n", stop_value);
+		print_future(depth, true, current, current);
+		return (current);
+	}
 	if (index > stack->len)
 	{
-		print_future(depth, (long)current);
+		print_future(depth, true, current, current);
 		return (current);
 	}
 	second = stack_get_value(stack, index + 1);
 	if (current < second)
 	{
-		print_future(depth, (long)current);
+		print_future(depth, true, current, current);
 		return (current);
 	}
-	third = future(stack, index + 2, depth + 1);
-	if (current > third)
+	third = stack_get_value(stack, index + 2);
+	if (current > third || current > future(stack, index + 2, depth + 1, stop_value))
 	{
-		print_future(depth, (long)current);
+		print_future(depth, true, current, current);
 		return (current);
 	}
-	print_future(depth, (long)second);
+	print_future(depth, true, current, second);
 	return (second);
 }
 
@@ -46,21 +51,16 @@ bool	should_swap(t_stack *stack, size_t index)
 	third = stack_get_value(stack, index + 2);
 	if (current < second)
 		return (false);
-	if (current < third)
-		return (true);
-	return (current < future(stack, index + 2, 1));
+	return (current > third || current > future(stack, index + 2, 1, current));
 }
 
 // TMP: remove before submit
-static void	print_future(size_t depth, long value)
+static void	print_future(size_t depth, bool print_new_value, uint value, uint new_value)
 {
-	size_t	i;
-
-	i = 0;
-	while (i++ < depth)
-		fprintf(stderr, "=");
-	if (value > 0)
-		fprintf(stderr, "> future [%zu] = %ld", depth, value);
+	if (print_new_value && value == new_value)
+		log_debug("future", depth, "%s%u -> %u%s\n", GREY, value, new_value, NC);
+	else if (print_new_value && value != new_value)
+		log_debug("future", depth, "%s%u -> %s%u%s \n", GREY, value, GREEN, new_value, NC);
 	else
-		fprintf(stderr, "> future [%zu]...", depth);
+		log_debug("future", depth, "%s%u...%s\n", GREY, value, NC);
 }
