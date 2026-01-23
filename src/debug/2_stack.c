@@ -16,13 +16,13 @@ void	stack_print_line(t_stack *stack)
 	i = 0;
 	while (i < stack->len)
 	{
-		value = stack_get_value(stack, i);
+		value = stack_get_value(stack, (long)i);
 		fprintf(stderr, "%u", value);
 		if (stack->len - i > 1)
 			fprintf(stderr, " ");
 		i++;
 	}
-	fprintf(stderr, "]\n");
+	fprintf(stderr, "]");
 }
 
 void	stack_print(t_stack *a, t_stack *b)
@@ -89,12 +89,12 @@ static void	print_line(t_stack *a, t_stack *b, size_t i, int len, int idx_len)
 	if (i < a->len)
 	{
 		snprintf(a_mem, sizeof(a_mem), "%u", a->data[i]);
-		snprintf(a_log, sizeof(a_log), "%u", stack_get_value(a, i));
+		snprintf(a_log, sizeof(a_log), "%u", stack_get_value(a, (long)i));
 	}
 	if (i < b->len)
 	{
 		snprintf(b_mem, sizeof(b_mem), "%u", b->data[i]);
-		snprintf(b_log, sizeof(b_log), "%u", stack_get_value(b, i));
+		snprintf(b_log, sizeof(b_log), "%u", stack_get_value(b, (long)i));
 	}
 	fprintf(stderr, "| %*zu | %*s | %*s || %*zu | %*s | %*s |\n",
 		idx_len, i, len, a_mem, len, b_mem,
@@ -126,7 +126,7 @@ static int	get_max_len(t_stack *a, t_stack *b)
 	max_len = 0;
 	while (i < a->len)
 	{
-		len = get_value_len(stack_get_value(a, i));
+		len = get_value_len(stack_get_value(a, (long)i));
 		if (len > max_len)
 			max_len = len;
 		i++;
@@ -134,7 +134,7 @@ static int	get_max_len(t_stack *a, t_stack *b)
 	i = 0;
 	while (i < b->len)
 	{
-		len = get_value_len(stack_get_value(b, i));
+		len = get_value_len(stack_get_value(b, (long)i));
 		if (len > max_len)
 			max_len = len;
 		i++;

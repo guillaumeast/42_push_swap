@@ -130,8 +130,8 @@ static void	normalize_swaps(t_stack *stack, t_lis *lis)
 	}
 	while (i < stack->len)
 	{
-		prev = stack_get_value(stack, i - 1);
-		current = stack_get_value(stack, i);
+		prev = stack_get_value(stack, (long)i - 1);
+		current = stack_get_value(stack, (long)i);
 		// fprintf(stderr, "           prev = %u | current = %u | swap[%u] = %i\n", prev, current, current, lis->swap[current]);
 		if (lis->swap[current] && (!lis->keep[current] || !lis->keep[prev]))
 			lis->swap[current] = false;

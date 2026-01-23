@@ -37,4 +37,8 @@ void	print_bool_array(bool *arr, size_t len);
 void	log_debug(const char *func_name, size_t depth, const char *message, ...)
 	__attribute__((format(printf, 3, 4)));
 
+/* ---------- TMPD: debug ---------- */
+
+void	test_swaps(t_stack *stack);
+
 #endif

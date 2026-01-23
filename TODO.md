@@ -22,27 +22,14 @@
 	- LIS_2 = best LIS of STACK_2 (**only if STACK_2 exists**)
 5. Return best LIS between LIS_1 and LIS_2
 
-🧪 Tests **1 nombre**
-✅ `0`				=> BEST => swaps (0)				| lis (1) = `0`				| 🐛 **heap-buffer-overflow in NAIVE + GREEDY**
-
-🧪 Tests **2 nombres**
-✅ `0 1`				=> BEST => swaps (0)				| lis (2) = `0 1`			| 🐛 
-✅ `1 0`				=> BEST => swaps (0)				| lis (2) = `0 1`			| 🐛 
-
-🧪 Tests **3 nombre** (`sort_three()` will handle it so **don't compute swaps**)
-**// TODO: if swap_count are equals => compute total_weight (sum of the keep indexes) => keep the lowest weighted lis**
-✅ `0 1 2`			=> BEST => swaps (0)				| lis (3) = `0 1 2`			| 🐛 
-✅ `0 2 1`			=> BEST => swaps (0)				| lis (2) = `0 1`			| 🐛 
-❌ `1 0 2`			=> BEST => swaps (0)				| lis (2) = `0 1`			| 🐛 lis (2) = `0 2`
-✅ `1 2 0`			=> BEST => swaps (0)				| lis (3) = `0 1 2`			| 🐛 
-✅ `2 0 1`			=> BEST => swaps (0)				| lis (3) = `0 1 2`			| 🐛 
-❌ `2 1 0`			=> BEST => swaps (0)				| lis (2) = `0 1`			| 🐛 lis (2) = `0 2`
+🧪 Tests **<= 3 nombres**
+- `sort_three()` will handle it so **don't compute swaps**
 
 🧪 Tests **4 nombres**
 ✅ `0 1 2 3`			=> BEST => swaps (0)				| lis (4) = `0 1 2 3`		| 🐛
 ✅ `0 1 3 2`			=> BEST => swaps (1) = `3`			| lis (4) = `0 1 2 3`		| 🐛
 ✅ `0 2 1 3`			=> BEST => swaps (1) = `2`			| lis (4) = `0 1 2 3`		| 🐛
-❌ `0 2 3 1`			=> BEST => swaps (1) = `1`			| lis (4) = `0 1 2 3`		| 🐛 swaps (1) = `3`	| lis (3) = `0, 1, 3`
+✅ `0 2 3 1`			=> BEST => swaps (1) = `1`			| lis (4) = `0 1 2 3`		| 🐛
 ✅ `0 3 1 2`			=> BEST => swaps (1) = `0`			| lis (4) = `0 1 2 3`		| 🐛
 ✅ `0 3 2 1`			=> BEST => swaps (2) = `0 2`		| lis (4) = `0 1 2 3`		| 🐛
 

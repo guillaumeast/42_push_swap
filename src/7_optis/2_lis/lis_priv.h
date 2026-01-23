@@ -24,6 +24,6 @@ bool	lis_compute(t_lis *lis, t_stack *stack, bool *swap, size_t start_index);
 /* ---------- should_swap.c ---------- */
 
 uint	future(t_stack *stack, size_t index, size_t depth, uint stop_value);
-bool	should_swap(t_stack *stack, size_t index);
+bool	should_swap(t_stack *stack, size_t index, uint stop_value, size_t depth);
 
 #endif

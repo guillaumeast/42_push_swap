@@ -31,9 +31,12 @@ bool	stack_dup(t_stack *dst, t_stack *src)
 	return (true);
 }
 
-uint	stack_get_value(t_stack *stack, size_t index)
+uint	stack_get_value(t_stack *stack, long index)
 {
-	return (stack->data[(stack->offset + index) % stack->len]);
+	size_t	i;
+
+	i = modulo((long)stack->offset + index, stack->len);
+	return (stack->data[i]);
 }
 
 size_t	stack_get_target_index(t_stack *s, uint value)
