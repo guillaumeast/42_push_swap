@@ -19,5 +19,6 @@ void	config_print(t_config *config, size_t index, bool print_index);
 /* ---------- lis.c ---------- */
 
 void	lis_print(t_lis *lis, size_t len);
+void	print_bool_array(bool *arr, size_t len);
 
 #endif

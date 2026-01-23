@@ -23,9 +23,11 @@
 5. Return best LIS between LIS_1 and LIS_2
 
 ⚠️ ===> Tests
-- [3, 0, 2, 1, 4]		=> should swap [2 - 1] + [4 - 3]	=> [4, 0, 1, 2, 3]			=> LIS = 5
-- [3, 2, 1, 0]			=> should swap [3 - 2] + [1 - 0]	=> [2, 3, 0, 1]				=> LIS = 4
-- [5, 3, 6, 2, 0, 4, 1]	=> should swap [5 - 3] + [2 - 0]	=> [3, 5, 6, 0, 2, 4, 1]	=> LIS = 5
+✅ `3 0 2 1 4`		=> BEST => swaps (2) = `2, 4`		| lis (5) = `0 1 2 3 4`
+⚠️ `0 3 2 1 4`		=> BEST => swaps (3) = `0, 2, 4`	| lis (5) = `0 1 2 3 4`
+✅ `0 2 3 4 5 1`		=> BEST => swaps (1) = `1`			| lis (6) = `0 1 2 3 4 5`
+✅ `2 0 3 4 5 1`		=> BEST => swaps (2) = `2, 1`		| lis (6) = `0 1 2 3 4 5`
+🧪 `5 3 6 2 0 4 1`	=> BEST => swaps (1) = `5`			| lis (5) = `0 1 3 5 6`
 
 # Implement LIS vs LIS_SWAP in NAIVE and CHUNK algos
 

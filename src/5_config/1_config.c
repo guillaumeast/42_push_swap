@@ -11,7 +11,7 @@ static void	process_optis(t_config *config, uint raw_config);
 static void	process_chunks(t_chunk_list *chunks, t_config_list *configs);
 static bool	process_lis(t_config_list *configs, t_state *state);
 
-// Caller must free configs->data, configs->lis and configs->lis_swap
+// Caller must free configs->data (and configs->lis and configs->lis_swap if configs->lis_set is true)
 bool	config_init_list(t_config_list *configs, t_state *state)
 {
 	uint			*raw_list;
@@ -39,8 +39,9 @@ bool	config_init_list(t_config_list *configs, t_state *state)
 	}
 	if (!process_lis(configs, state))
 		return (free(raw_list), free(chunk_list.data), false);
-	config_print_all(configs);	// TMP: remove before submit
-	fprintf(stderr, "\n");		// TMP: remove before submit
+	configs->lis_set = false;
+	// config_print_all(configs);	// TMP: remove before submit
+	// fprintf(stderr, "\n");		// TMP: remove before submit
 	return (free(raw_list), free(chunk_list.data), true);
 }
 

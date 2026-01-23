@@ -28,7 +28,7 @@ bool	lis_compute(t_lis *lis, t_stack *stack, bool *swaps, size_t start_index)
 	t_tail	tail;
 	long	i;
 
-	fprintf(stderr, "[🔦 DEBUG] ======> lis_compute() from index [%zu]...\n", start_index);	// TMP: remove before submit
+	// fprintf(stderr, "[🔦 DEBUG] ======> lis_compute() from index [%zu]...\n", start_index);	// TMP: remove before submit
 	lis->start_index = start_index;
 	lis->keep = malloc(stack->len * sizeof * lis->keep);
 	if (!lis->keep)
@@ -55,7 +55,7 @@ bool	lis_compute(t_lis *lis, t_stack *stack, bool *swaps, size_t start_index)
 	if (swaps)
 		normalize_swaps(stack, lis);
 	free_tail(&tail);
-	lis_print(lis, stack->len);	// TMP: remove before submit
+	// lis_print(lis, stack->len);	// TMP: remove before submit
 	return (true);
 }
 
@@ -116,9 +116,10 @@ static void	normalize_swaps(t_stack *stack, t_lis *lis)
 	uint	current;
 	uint	prev;
 
+	// fprintf(stderr, "[🔦 DEBUG] ======> normalize_swaps()...\n");	// TMP: remove before submit
 	lis->swap_count = 0;
 	i = 0;
-	if (lis->swap[stack->data[0]] && lis->swap[stack->data[1]] && 
+	if (stack->len > 2 && lis->swap[stack->data[0]] && lis->swap[stack->data[1]] && 
 		lis->keep[stack->data[stack->len - 1]] && lis->keep[stack->data[1]])
 	{
 		if (!lis->swap[stack->data[0]])
@@ -129,14 +130,17 @@ static void	normalize_swaps(t_stack *stack, t_lis *lis)
 	}
 	while (i < stack->len)
 	{
-		prev = stack->data[i - 1];
-		current = stack->data[i];
+		prev = stack_get_value(stack, i - 1);
+		current = stack_get_value(stack, i);
+		// fprintf(stderr, "           prev = %u | current = %u | swap[%u] = %i\n", prev, current, current, lis->swap[current]);
 		if (lis->swap[current] && (!lis->keep[current] || !lis->keep[prev]))
 			lis->swap[current] = false;
 		else if (lis->swap[current])
 			lis->swap_count++;
+		// fprintf(stderr, "           => swap[%u] = %i\n", current, lis->swap[current]);
 		i++;
 	}
+	// fprintf(stderr, "           normalize_swaps() done!\n");
 }
 
 static void	free_tail(t_tail *tail)

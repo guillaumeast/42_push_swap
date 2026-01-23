@@ -6,7 +6,7 @@
 #include "config.h"
 #include <stdlib.h>
 #include <unistd.h>
-#include "debug.h"	// TMP: remove before submit
+# include "debug.h"	// TMP: remove before submit
 
 static bool	run_configs(t_state *inital_state, t_config_list *configs, t_buff *best_moves);
 static bool	abort_config(t_state *state, t_buff *moves, const char *error);
@@ -109,7 +109,7 @@ static int	free_and_print_error(t_state *state, t_config_list *configs)
 {
 	if (state)
 		state_free(state);
-	if (configs->lis_set)
+	if (configs && configs->lis_set)
 	{
 		lis_free(&configs->lis);
 		lis_free(&configs->lis_swap);
