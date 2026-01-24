@@ -1,5 +1,6 @@
 #include "stack.h"
 #include <stdio.h>
+# include "debug.h"	// TMP: remove before submit
 
 static int	get_idx_len(size_t max_size);
 static void	print_line(const t_stack *a, const t_stack *b, size_t i, int len, int idx_len);
@@ -7,22 +8,25 @@ static void	print_sep(int max_value_len, int idx_len);
 static int	get_max_len(const t_stack *a, const t_stack *b);
 static int	get_value_len(uint nb);
 
-void	stack_print_line(const t_stack *stack)
+void	stack_print_line(const t_stack *stack, const t_stack *versus, const char *color)
 {
 	uint	value;
 	size_t	i;
 
-	fprintf(stderr, "[");
+	fprintf(stderr, "%s[", color);
 	i = 0;
 	while (i < stack->len)
 	{
 		value = stack_get_value(stack, (long)i);
-		fprintf(stderr, "%u", value);
+		if (versus && value != stack_get_value(versus, (long)i))
+			fprintf(stderr, "%s%u%s", YELLOW, value, color);
+		else
+			fprintf(stderr, "%u", value);
 		if (stack->len - i > 1)
 			fprintf(stderr, " ");
 		i++;
 	}
-	fprintf(stderr, "]");
+	fprintf(stderr, "]%s", NC);
 }
 
 void	stack_print(const t_stack *a, const t_stack *b)

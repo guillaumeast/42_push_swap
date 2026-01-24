@@ -19,7 +19,7 @@
 
 /* ---------- stack.c ---------- */
 
-void	stack_print_line(const t_stack *stack);
+void	stack_print_line(const t_stack *stack, const t_stack *versus, const char *color);
 void	stack_print(const t_stack *a, const t_stack *b);
 
 /* ---------- config.c ---------- */
@@ -30,7 +30,7 @@ void	config_print(const t_config *config, size_t index, bool print_index);
 /* ---------- lis.c ---------- */
 
 void	lis_print(const t_lis *lis, size_t len);
-void	print_bool_array(const bool *arr, size_t len);
+void	print_bool_array(const bool *arr, const bool *versus, size_t len, const char *color);
 
 /* ---------- LOGS ---------- */
 
