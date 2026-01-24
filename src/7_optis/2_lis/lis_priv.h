@@ -3,27 +3,14 @@
 
 # include "stack.h"
 # include "lis.h"
-# include <stddef.h>
 
-typedef struct s_swapped_stack
+typedef struct s_swaps
 {
-	t_stack	stack;			// Stack (swapped)
-	bool	*swaps;			// Value-indexed array of executed swaps
-	bool	first_swapped;	// True if stack[0] or stack[1] has been swapped
-}	t_swapped_stack;
+	uint	*from;
+	uint	*to;
+	size_t	count;
+}	t_swaps;
 
-/* ---------- lis_best.c ---------- */
-
-bool	lis_best_between(t_swapped_stack *v1, t_swapped_stack *v2, t_lis *lis);
-bool	lis_best(t_stack *stack, bool *swaps, t_lis *lis);
-
-/* ---------- lis.c ---------- */
-
-bool	lis_compute(t_lis *lis, t_stack *stack, bool *swap, size_t start_index);
-
-/* ---------- should_swap.c ---------- */
-
-uint	future(t_stack *stack, size_t index, size_t depth, uint stop_value);
-bool	should_swap(t_stack *stack, size_t index, uint stop_value, size_t depth);
+bool	lis_best(t_lis *lis, const t_stack *stack, t_swaps *swaps);
 
 #endif

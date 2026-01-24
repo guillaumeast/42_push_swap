@@ -3,9 +3,9 @@
 #include "config.h"
 #include "moves.h"
 
-static bool	get_target_index(t_stack *stack, size_t *ret);
+static bool	get_target_index(const t_stack *stack, size_t *ret);
 
-bool finish(t_state *state, t_config *config)
+bool finish(t_state *state, const t_config *config)
 {
 	size_t	target_index;
 
@@ -17,7 +17,7 @@ bool finish(t_state *state, t_config *config)
 	return (rra(state, state->a.len - target_index));
 }
 
-static bool	get_target_index(t_stack *stack, size_t *ret)
+static bool	get_target_index(const t_stack *stack, size_t *ret)
 {
 	size_t	i;
 

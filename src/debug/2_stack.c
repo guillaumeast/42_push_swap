@@ -2,12 +2,12 @@
 #include <stdio.h>
 
 static int	get_idx_len(size_t max_size);
-static void	print_line(t_stack *a, t_stack *b, size_t i, int len, int idx_len);
+static void	print_line(const t_stack *a, const t_stack *b, size_t i, int len, int idx_len);
 static void	print_sep(int max_value_len, int idx_len);
-static int	get_max_len(t_stack *a, t_stack *b);
+static int	get_max_len(const t_stack *a, const t_stack *b);
 static int	get_value_len(uint nb);
 
-void	stack_print_line(t_stack *stack)
+void	stack_print_line(const t_stack *stack)
 {
 	uint	value;
 	size_t	i;
@@ -25,7 +25,7 @@ void	stack_print_line(t_stack *stack)
 	fprintf(stderr, "]");
 }
 
-void	stack_print(t_stack *a, t_stack *b)
+void	stack_print(const t_stack *a, const t_stack *b)
 {
 	size_t	i;
 	size_t	max_size;
@@ -75,7 +75,7 @@ static int	get_idx_len(size_t max_size)
 	return (len);
 }
 
-static void	print_line(t_stack *a, t_stack *b, size_t i, int len, int idx_len)
+static void	print_line(const t_stack *a, const t_stack *b, size_t i, int len, int idx_len)
 {
 	char	a_mem[32];
 	char	b_mem[32];
@@ -116,7 +116,7 @@ static void	print_sep(int max_value_len, int idx_len)
 	fprintf(stderr, "\n");
 }
 
-static int	get_max_len(t_stack *a, t_stack *b)
+static int	get_max_len(const t_stack *a, const t_stack *b)
 {
 	size_t	i;
 	int		len;

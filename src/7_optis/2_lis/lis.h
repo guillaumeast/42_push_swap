@@ -14,7 +14,7 @@ typedef struct s_lis
 	size_t	swap_count;
 }	t_lis;
 
-bool	lis_compute_both(t_stack *stack, t_lis *lis, t_lis *lis_swap);
+bool	lis_compute_both(const t_stack *stack, t_lis *lis, t_lis *lis_swap);
 void	lis_free(t_lis *lis);
 
 #endif

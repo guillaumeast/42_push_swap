@@ -8,43 +8,44 @@
 
 static void	process_algos(t_config *config, uint raw_config);
 static void	process_optis(t_config *config, uint raw_config);
-static void	process_chunks(t_chunk_list *chunks, t_config_list *configs);
-static bool	process_lis(t_config_list *configs, t_state *state);
+static void	process_sizes(t_configs *configs, const size_t *sizes, size_t len);
+static bool	process_lis(t_configs *configs, const t_state *state);
 
 // Caller must free configs->data (and configs->lis and configs->lis_swap if configs->lis_set is true)
-bool	config_init_list(t_config_list *configs, t_state *state)
+bool	config_init_list(t_configs *configs, const t_state *state)
 {
-	uint			*raw_list;
-	size_t			raw_list_size;
-	t_chunk_list	chunk_list;
+	uint	*raw_configs;
+	size_t	raw_configs_count;
+	size_t	*chunk_sizes;
+	size_t	chunk_sizes_count;
 	size_t	i;
 
 	fprintf(stderr, "ℹ️  Generating configs...\n");	// TMP: remove before submit
-	if (!generate_configs(&raw_list, &raw_list_size))
+	if (!generate_raw_configs(&raw_configs, &raw_configs_count))
 		return (false);
-	if (!generate_chunks(&chunk_list, state->a.len))
-		return (free(raw_list), false);
-	configs->count = raw_list_size * chunk_list.count;
+	if (!get_chunk_sizes(&chunk_sizes, &chunk_sizes_count, &state->a))
+		return (free(raw_configs), false);
+	configs->count = raw_configs_count * chunk_sizes_count;
 	configs->data = malloc(configs->count * sizeof * configs->data);
 	if (!configs->data)
-		return (free(raw_list), free(chunk_list.data), false);
+		return (free(raw_configs), free(chunk_sizes), false);
 	i = 0;
 	configs->count = 0;
-	while (i < raw_list_size)
+	while (i < raw_configs_count)
 	{
-		process_algos(&configs->data[configs->count], raw_list[i]);
-		process_optis(&configs->data[configs->count], raw_list[i]);
-		process_chunks(&chunk_list, configs);
+		process_algos(&configs->data[configs->count], raw_configs[i]);
+		process_optis(&configs->data[configs->count], raw_configs[i]);
+		process_sizes(configs, chunk_sizes, chunk_sizes_count);
 		i++;
 	}
 	if (!process_lis(configs, state))
-		return (free(raw_list), free(chunk_list.data), false);
+		return (free(raw_configs), free(chunk_sizes), false);
 	configs->lis_set = true;
 	fprintf(stderr, "✅ %zu configs created (STOPPING NOW)\n\n", configs->count);
-	return (free(raw_list), free(chunk_list.data), false);
+	return (free(raw_configs), free(chunk_sizes), false);
 	// config_print_all(configs);	// TMP: remove before submit
 	// fprintf(stderr, "\n");		// TMP: remove before submit
-	return (free(raw_list), free(chunk_list.data), true);
+	return (free(raw_configs), free(chunk_sizes), true);
 }
 
 static void process_algos(t_config *config, uint raw_config)
@@ -102,28 +103,28 @@ static void	process_optis(t_config *config, uint raw_config)
 		config->opti_names = "";
 }
 
-static void	process_chunks(t_chunk_list *chunks, t_config_list *configs)
+static void	process_sizes(t_configs *configs, const size_t *sizes, size_t len)
 {
-	size_t		chunk_i;
 	t_config	initial_config;
+	size_t		i;
 
-	if (configs->data[configs->count].algo_1 == chunk)
+	initial_config = configs->data[configs->count];
+	if (initial_config.algo_1 != chunk)
 	{
-		initial_config = configs->data[configs->count];
-		chunk_i = 0;
-		while (chunk_i < chunks->count)
-		{
-			configs->data[configs->count] = initial_config;
-			configs->data[configs->count].chunk = chunks->data[chunk_i];
-			configs->count++;
-			chunk_i++;
-		}
-	}
-	else
 		configs->count++;
+		return ;
+	}
+	i = 0;
+	while (i < len)
+	{
+		configs->data[configs->count] = initial_config;
+		configs->data[configs->count].chunk_size = sizes[i];
+		configs->count++;
+		i++;
+	}
 }
 
-static bool	process_lis(t_config_list *configs, t_state *state)
+static bool	process_lis(t_configs *configs, const t_state *state)
 {
 	size_t	i;
 

@@ -7,12 +7,12 @@ typedef struct s_insert
 {
 	size_t			from_index;
 	size_t			target_index;
-	t_total_cost	cost;
+	t_total	cost;
 }	t_insert;
 
-static t_insert	get_next_insert(t_stack *from, t_stack *to);
+static t_insert	get_next_insert(const t_stack *from, const t_stack *to);
 
-bool	greedy(t_state *state, t_config *config)
+bool	greedy(t_state *state, const t_config *config)
 {
 	t_insert	next_insertion;
 
@@ -38,7 +38,7 @@ bool	greedy(t_state *state, t_config *config)
 	return (true);
 }
 
-static t_insert	get_next_insert(t_stack *from, t_stack *to)
+static t_insert	get_next_insert(const t_stack *from, const t_stack *to)
 {
 	size_t		i;
 	bool		best_is_set;
@@ -52,9 +52,9 @@ static t_insert	get_next_insert(t_stack *from, t_stack *to)
 	{
 		ft_bzero(&current, sizeof current);
 		current.from_index = i;
-		current_value = stack_get_value(from, i);
+		current_value = stack_get_value(from, (long)i);
 		current.target_index = stack_get_target_index(to, current_value);
-		current.cost = get_best_cost(to, current.target_index, from, i);
+		current.cost = best_cost(to, current.target_index, from, i);
 		if (!best_is_set || current.cost.total < best.cost.total)
 		{
 			best = current;

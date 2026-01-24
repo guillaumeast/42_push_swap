@@ -1,7 +1,6 @@
 #include "libft.h"
 #include "stack.h"
 #include <stdlib.h>
-# include "debug.h"	// TMP: remove before submit
 
 // Caller must free stack->data
 bool	stack_init(t_stack *a, t_stack *b, uint *values, size_t count)
@@ -19,7 +18,7 @@ bool	stack_init(t_stack *a, t_stack *b, uint *values, size_t count)
 	return (true);
 }
 
-bool	stack_dup(t_stack *dst, t_stack *src)
+bool	stack_dup(t_stack *dst, const t_stack *src)
 {
 	dst->data = malloc(src->cap * sizeof * dst->data);
 	if (!dst->data)
@@ -31,7 +30,7 @@ bool	stack_dup(t_stack *dst, t_stack *src)
 	return (true);
 }
 
-uint	stack_get_value(t_stack *stack, long index)
+uint	stack_get_value(const t_stack *stack, long index)
 {
 	size_t	i;
 
@@ -39,7 +38,7 @@ uint	stack_get_value(t_stack *stack, long index)
 	return (stack->data[i]);
 }
 
-size_t	stack_get_target_index(t_stack *s, uint value)
+size_t	stack_get_target_index(const t_stack *s, uint value)
 {
 	size_t	i;
 	long	target_i;
@@ -67,7 +66,7 @@ size_t	stack_get_target_index(t_stack *s, uint value)
 	return (modulo(smallest_i - (long)s->offset, s->len));
 }
 
-bool	stack_is_sorted(t_stack *stack)
+bool	stack_is_sorted(const t_stack *stack)
 {
 	size_t	i;
 	size_t	breaks;

@@ -2,7 +2,7 @@
 #include "lis.h"
 #include <stdio.h>
 
-void	lis_print(t_lis *lis, size_t len)
+void	lis_print(const t_lis *lis, size_t len)
 {
 	fprintf(stderr, "🏹 LIS from [%zu]:\n", lis->start_index);
 	fprintf(stderr, "          => keep %3zu => ", lis->keep_count);
@@ -16,7 +16,7 @@ void	lis_print(t_lis *lis, size_t len)
 		fprintf(stderr, "          => no_swap\n");
 }
 
-void	print_bool_array(bool *arr, size_t len)
+void	print_bool_array(const bool *arr, size_t len)
 {
 	size_t	i;
 	bool	first;

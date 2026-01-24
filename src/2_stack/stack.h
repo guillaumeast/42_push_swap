@@ -14,9 +14,9 @@ typedef struct s_stack
 }	t_stack;
 
 bool	stack_init(t_stack *a, t_stack *b, uint *values, size_t count);
-bool	stack_dup(t_stack *dst, t_stack *src);
-uint	stack_get_value(t_stack *stack, long index);
-size_t	stack_get_target_index(t_stack *s, uint value);
-bool	stack_is_sorted(t_stack *stack);
+bool	stack_dup(t_stack *dst, const t_stack *src);
+uint	stack_get_value(const t_stack *stack, long index);
+size_t	stack_get_target_index(const t_stack *s, uint value);
+bool	stack_is_sorted(const t_stack *stack);
 
 #endif

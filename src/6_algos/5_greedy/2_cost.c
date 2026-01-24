@@ -1,41 +1,41 @@
 #include "libft.h"
 #include "greedy_priv.h"
 
-typedef struct s_cost
+typedef struct s_raw_cost
 {
 	size_t	rotate;
 	size_t	reverse;
-}	t_cost;
+}	t_raw_cost;
 
-typedef struct s_cost_choice
+typedef struct s_choice
 {
-	t_cost	opti;
-	t_cost	bad;
-}	t_cost_choice;
+	t_raw_cost	opti;
+	t_raw_cost	bad;
+}	t_choice;
 
-static void	get_cost(size_t stack_len, size_t idx, t_cost_choice *cost);
-static void	cost_add(t_cost *a, t_cost *b, t_total_cost *res);
+static void	compute_raw(t_choice *cost, size_t stack_len, size_t idx);
+static void	compute_tot(const t_raw_cost *a, const t_raw_cost *b, t_total *res);
 
-t_total_cost	get_best_cost(t_stack *a, size_t i_a, t_stack *b, size_t i_b)
+t_total	best_cost(const t_stack *a, size_t i_a, const t_stack *b, size_t i_b)
 {
-	t_cost_choice	a_cost;
-	t_cost_choice	b_cost;
-	t_total_cost	best;
-	t_total_cost	current;
+	t_choice	a_cost;
+	t_choice	b_cost;
+	t_total		best;
+	t_total		current;
 
-	get_cost(a->len, i_a, &a_cost);
-	get_cost(b->len, i_b, &b_cost);
-	cost_add(&a_cost.opti, &b_cost.opti, &best);
-	cost_add(&a_cost.opti, &b_cost.bad, &current);
+	compute_raw(&a_cost, a->len, i_a);
+	compute_raw(&b_cost, b->len, i_b);
+	compute_tot(&a_cost.opti, &b_cost.opti, &best);
+	compute_tot(&a_cost.opti, &b_cost.bad, &current);
 	if (current.total < best.total)
 		best = current;
-	cost_add(&a_cost.bad, &b_cost.opti, &current);
+	compute_tot(&a_cost.bad, &b_cost.opti, &current);
 	if (current.total < best.total)
-		return (current);
+		best = current;
 	return (best);
 }
 
-static void	get_cost(size_t stack_len, size_t idx, t_cost_choice *cost)
+static void	compute_raw(t_choice *cost, size_t stack_len, size_t idx)
 {
 	if (idx <= stack_len / 2)
 	{
@@ -53,7 +53,7 @@ static void	get_cost(size_t stack_len, size_t idx, t_cost_choice *cost)
 	}
 }
 
-static void	cost_add(t_cost *a, t_cost *b, t_total_cost *res)
+static void	compute_tot(const t_raw_cost *a, const t_raw_cost *b, t_total *res)
 {
 	res->rr = (size_t)min((long)a->rotate, (long)b->rotate);
 	res->rrr = (size_t)min((long)a->reverse, (long)b->reverse);

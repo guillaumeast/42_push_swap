@@ -19,26 +19,22 @@
 
 /* ---------- stack.c ---------- */
 
-void	stack_print_line(t_stack *stack);
-void	stack_print(t_stack *a, t_stack *b);
+void	stack_print_line(const t_stack *stack);
+void	stack_print(const t_stack *a, const t_stack *b);
 
 /* ---------- config.c ---------- */
 
-void	config_print_all(t_config_list *configs);
-void	config_print(t_config *config, size_t index, bool print_index);
+void	config_print_all(const t_configs *configs);
+void	config_print(const t_config *config, size_t index, bool print_index);
 
 /* ---------- lis.c ---------- */
 
-void	lis_print(t_lis *lis, size_t len);
-void	print_bool_array(bool *arr, size_t len);
+void	lis_print(const t_lis *lis, size_t len);
+void	print_bool_array(const bool *arr, size_t len);
 
 /* ---------- LOGS ---------- */
 
 void	log_debug(const char *func_name, size_t depth, const char *message, ...)
 	__attribute__((format(printf, 3, 4)));
-
-/* ---------- TMPD: debug ---------- */
-
-bool	test_swaps(t_stack *dst, t_stack *src);
 
 #endif

@@ -21,7 +21,7 @@ static size_t	add_couples(t_input *input, uint *configs);
 static size_t	add_optis(t_input *input, uint *configs);
 static bool		opti_is_valid(uint opti_compatibilities, uint config);
 
-bool	generate_configs(uint **ret_list, size_t *ret_count)
+bool	generate_raw_configs(uint **ret_list, size_t *ret_count)
 {
 	t_input	input;
 

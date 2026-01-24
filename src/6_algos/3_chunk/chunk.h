@@ -4,6 +4,6 @@
 # include "state.h"
 # include "config.h"
 
-bool	chunk(t_state *state, t_config *config);
+bool	chunk(t_state *state, const t_config *config);
 
 #endif

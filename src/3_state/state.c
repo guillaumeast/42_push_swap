@@ -12,7 +12,7 @@ bool	state_init(t_state *dst, uint *values, size_t values_size)
 }
 
 // Caller must free dst (use state_free())
-bool	state_dup(t_state *dst, t_state *src)
+bool	state_dup(t_state *dst, const t_state *src)
 {
 	if (!stack_dup(&dst->a, &src->a))
 		return (false);

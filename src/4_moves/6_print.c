@@ -7,7 +7,7 @@
 
 static void	print_move(t_move move);
 
-void	moves_print(t_buff *list)
+void	moves_print(const t_buff *list)
 {
 	size_t	printed_bytes;
 	t_move	move;

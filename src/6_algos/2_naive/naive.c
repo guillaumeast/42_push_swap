@@ -5,9 +5,9 @@
 #include "lis.h"
 #include "swap.h"
 
-static bool	push_to_b(t_state *state, t_config *config, t_median *median);
+static bool	push_to_b(t_state *state, const t_config *config, t_median *median);
 
-bool	naive(t_state *state, t_config *config)
+bool	naive(t_state *state, const t_config *config)
 {
 	t_median	median;
 	
@@ -24,7 +24,7 @@ bool	naive(t_state *state, t_config *config)
 	return (sort_three(state, config));
 }
 
-static bool	push_to_b(t_state *state, t_config *config, t_median *median)
+static bool	push_to_b(t_state *state, const t_config *config, t_median *median)
 {
 	uint	value;
 

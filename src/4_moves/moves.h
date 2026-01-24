@@ -29,6 +29,6 @@ bool	pb(t_state *state, size_t count);
 
 /* --- print.c --- */
 
-void	moves_print(t_buff *list);
+void	moves_print(const t_buff *list);
 
 #endif

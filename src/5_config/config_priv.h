@@ -1,7 +1,8 @@
 #ifndef CONFIG_PRIV_H
 # define CONFIG_PRIV_H
 
-# include "config.h"
+# include "stack.h"
+# include <stdbool.h>
 # include <sys/types.h>
 
 /*
@@ -46,18 +47,9 @@
 # define SWAP				524288U		/* 00001000 00000000 00000000 */
 # define SWAP_COMPAT		983043U		/* 00001111 00000000 00000011 */
 
-typedef struct s_chunk_list
-{
-	t_chunk	*data;
-	size_t	count;
-}	t_chunk_list;
-
 /* ---------- config_generator.c ---------- */
 
-bool	generate_configs(uint **ret_list, size_t *ret_count);
-
-/* ---------- chunk_generator.c ---------- */
-
-bool	generate_chunks(t_chunk_list *chunks, size_t values_count);
+bool	generate_raw_configs(uint **ret_list, size_t *ret_count);
+bool	get_chunk_sizes(size_t **ret, size_t *ret_size, const t_stack *stack);
 
 #endif

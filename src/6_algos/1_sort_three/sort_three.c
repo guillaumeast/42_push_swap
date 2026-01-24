@@ -1,7 +1,7 @@
 #include "sort_three.h"
 #include "moves.h"
 
-bool	sort_three(t_state *state, t_config *config)
+bool	sort_three(t_state *state, const t_config *config)
 {
 	uint	first_value;
 	uint	second_value;
