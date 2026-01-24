@@ -2,6 +2,7 @@
 #include "stack.h"
 #include "lis_priv.h"
 #include <stdlib.h>
+# include "debug.h"
 
 typedef struct s_tail
 {
@@ -12,64 +13,37 @@ typedef struct s_tail
 	long	*prev;
 }	t_tail;
 
-static bool	compute_lis(t_lis *lis, const t_stack *stack, size_t start);
 static bool	compute_tail(t_tail *tail, const t_stack *stack, size_t start);
 static void	update_tail(t_tail *tail, uint value, size_t index);
 static void	compute_swaps(t_lis *lis, const t_swaps *swaps);
 
-bool	lis_best(t_lis *lis, const t_stack *stack, t_swaps *swaps)
-{
-	t_lis	current_lis;
-	size_t	i;
-
-	if (!compute_lis(lis, stack, 0))
-		return (false);
-	compute_swaps(lis, swaps);
-	i = 1;
-	while (i < stack->len)
-	{
-		if (!compute_lis(&current_lis, stack, i))
-			return (lis_free(lis), false);
-		compute_swaps(&current_lis, swaps);
-		if (current_lis.keep_count < lis->keep_count)
-			lis_free(&current_lis);
-		else if (current_lis.keep_count > lis->keep_count || current_lis.swap_count < lis->swap_count)
-		{
-			lis_free(lis);
-			*lis = current_lis;
-		}
-		else
-			lis_free(&current_lis);
-		i++;
-	}
-	return (true);
-}
-
-static bool	compute_lis(t_lis *lis, const t_stack *stack, size_t start)
+// i = start_index
+bool	get_lis(t_lis *lis, const t_stack *stk, size_t i, const t_swaps *swaps)
 {
 	t_tail	tail;
-	long	i;
+	long	index;
 
-	lis->start_index = start;
-	lis->keep = malloc(stack->len * sizeof * lis->keep);
+	lis->start_index = i;
+	lis->keep = malloc(stk->len * sizeof * lis->keep);
 	if (!lis->keep)
 		return (false);
-	ft_memset(lis->keep, false, stack->len * sizeof * lis->keep);
-	lis->swap = malloc(stack->len * sizeof * lis->swap);
+	ft_memset(lis->keep, false, stk->len * sizeof * lis->keep);
+	lis->swap = malloc(stk->len * sizeof * lis->swap);
 	if (!lis->swap)
 		return (free(lis->keep), false);
-	ft_memset(lis->swap, false, stack->len * sizeof * lis->swap);
+	ft_memset(lis->swap, false, stk->len * sizeof * lis->swap);
 	lis->swap_count = 0;
-	if (!compute_tail(&tail, stack, start))
+	if (!compute_tail(&tail, stk, i))
 		return (free(lis->keep), false);
 	lis->keep_count = 0;
-	i = (long)tail.pos[tail.max_len - 1];
-	while (i != -1)
+	index = (long)tail.pos[tail.max_len - 1];
+	while (index != -1)
 	{
-		lis->keep[stack->data[i]] = true;
+		lis->keep[stk->data[index]] = true;
 		lis->keep_count++;
-		i = tail.prev[i];
+		index = tail.prev[index];
 	}
+	compute_swaps(lis, swaps);
 	return (free(tail.array), free(tail.pos), free(tail.prev), true);
 }
 
@@ -144,4 +118,12 @@ static void	compute_swaps(t_lis *lis, const t_swaps *swaps)
 		}
 		i++;
 	}
+}
+
+void	lis_free(t_lis *lis)
+{
+	if (lis->keep)
+		free(lis->keep);
+	if (lis->swap)
+		free(lis->swap);
 }

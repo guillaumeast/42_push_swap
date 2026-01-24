@@ -56,10 +56,10 @@
 
 🧪 Tests **>= 5 nombres**
 ✅ `3 0 2 1 4`		=> BEST => swaps (2) = `2, 4`		| lis (5) = `0 1 2 3 4`
-⚠️ `0 3 2 1 4`		=> BEST => swaps (3) = `0, 2, 4`	| lis (5) = `0 1 2 3 4`		=> 💡 Forcer le swap de 0 et comparer ?
+✅ `0 3 2 1 4`		=> BEST => swaps (3) = `0, 2, 4`	| lis (5) = `0 1 2 3 4`
 ✅ `0 2 3 4 5 1`		=> BEST => swaps (1) = `1`			| lis (6) = `0 1 2 3 4 5`
 ✅ `2 0 3 4 5 1`		=> BEST => swaps (2) = `2, 1`		| lis (6) = `0 1 2 3 4 5`
-✅ `5 3 6 2 0 4 1`	=> BEST => swaps (1) = `5`			| lis (5) = `0 1 3 5 6`		=> 🤔 Swap conflict ?
+✅ `5 3 6 2 0 4 1`	=> BEST => swaps (1) = `5`			| lis (5) = `0 1 3 5 6`
 
 🚨 Conflict = 1 with this input
 `./push_swap 5 13 7 8 9 6 11 4 0 12 2 14 3 10 1` => ✅ solved correctly

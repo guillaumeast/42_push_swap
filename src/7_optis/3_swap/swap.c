@@ -2,6 +2,8 @@
 #include "moves.h"
 #include "lis.h"
 
+// TODO: opti_swap_a()
+
 bool	opti_swap_b(t_state *state, const t_config *config)
 {
 	uint	first_value;
@@ -23,6 +25,7 @@ bool	opti_swap_b(t_state *state, const t_config *config)
 	return (sb(state));
 }
 
+// TODO: rename to opti_swap_a_lis()
 bool	opti_swap_lis(t_state *state, const t_config *config, uint value)
 {
 	uint 	first_value;
