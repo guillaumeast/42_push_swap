@@ -47,7 +47,6 @@ bool	chunk(t_state *state, const t_config *config)
 	chunk.max = (uint)chunk.size;
 	chunk.median = (chunk.min + chunk.max) / 2;
 	chunk.treated_count = 0;
-	// fprintf(stderr, "Initial => ");
 	// stack_print_line(&state->a, NULL, YELLOW);
 	// fprintf(stderr, "\n");
 	while (!stack_is_sorted(&state->a))
@@ -58,7 +57,6 @@ bool	chunk(t_state *state, const t_config *config)
 			return (config_free(&cfg), free(chunk.treated), false);
 		if (!exec(state, &cfg, target.val, &chunk))
 			return (config_free(&cfg), free(chunk.treated), false);
-		// fprintf(stderr, "After   => ");
 		// stack_print_line(&state->a, NULL, YELLOW);
 		// fprintf(stderr, "\n");
 	}
@@ -69,15 +67,15 @@ bool	chunk(t_state *state, const t_config *config)
 
 static bool	find(t_state *st, const t_config *cfg, t_target *trg, t_chunk *chk)
 {
-	// fprintf(stderr, "[🔦 DEBUG] Searching next target (%u - %u)...\n", chk->min, chk->max);	// TODO: tmp debug
+	// fprintf(stderr, "%sSearching next target (%u - %u)...%s\n", GREY, chk->min, chk->max, NC);	// TODO: tmp debug
 	trg->index = 0;
 	while (true)
 	{
 		trg->val = stack_get_value(&st->a, (long)trg->index);
-		if (cfg->opti_lis_swap && cfg->lis.swap[trg->val])
+		if (cfg->opti_lis_swap && cfg->lis.swap[trg->val])		// [???] Si la valeur doit être swapped
 			break ;
-		if (trg->val >= chk->min && trg->val <= chk->max)
-			break ;
+		if (trg->val >= chk->min && trg->val < chk->max)		// [???] Si la valeur fait partie du chunk
+			break ;												// [NON] => on la traite normalement
 		trg->index++;
 		if (trg->index >= st->a.len)
 		{
@@ -85,7 +83,7 @@ static bool	find(t_state *st, const t_config *cfg, t_target *trg, t_chunk *chk)
 			return (false);
 		}
 	}
-	// fprintf(stderr, "[🔦 DEBUG] Target %u found!\n", trg->val);				// TODO: tmp debug
+	// fprintf(stderr, "%s%u%s targeted!\n", YELLOW, trg->val, NC);				// TODO: tmp debug
 	return (true);
 }
 
@@ -102,30 +100,30 @@ static bool	exec(t_state *state, t_config *cfg, uint val, t_chunk *chunk)
 	// fprintf(stderr, "[🔦 DEBUG] Processing %u...\n", val);						// TODO: tmp debug
 	if (cfg->opti_lis_swap && cfg->lis.swap[val])
 	{
-		// fprintf(stderr, "[🔦 DEBUG] Calling opti_swap_lis()...\n");				// TODO: tmp debug
+		// fprintf(stderr, "%s%u %sopti_swap_lis()%s\n", YELLOW, val, BLUE, NC);				// TODO: tmp debug
 		if (!opti_swap_lis(state, cfg, val))
 			return (false);
 	}
 	if (cfg->opti_lis && cfg->lis.keep[val])
 	{
-		// fprintf(stderr, "[🔦 DEBUG] Calling ra()...\n");				// TODO: tmp debug
+		// fprintf(stderr, "%s%u %sra()%s\n", YELLOW, val, GREEN, NC);				// TODO: tmp debug
 		if (!ra(state, 1))
 			return (false);
 	}
 	else
 	{
-		// fprintf(stderr, "[🔦 DEBUG] Calling pb()...\n");				// TODO: tmp debug
+		// fprintf(stderr, "%s%u %spb()%s\n", YELLOW, val, RED, NC);				// TODO: tmp debug
 		if (!pb(state, 1))
 			return (false);
 		if (cfg->opti_median && val < chunk->median)
 		{
-			// fprintf(stderr, "[🔦 DEBUG] Calling rb()...\n");				// TODO: tmp debug
+			// fprintf(stderr, "%s%u %srb()%s\n", YELLOW, val, BLUE, NC);				// TODO: tmp debug
 			if (!rb(state, 1))
 				return (false);
 		}
 		if (cfg->opti_swap_b)
 		{
-			// fprintf(stderr, "[🔦 DEBUG] Calling opti_swap_b()...\n");				// TODO: tmp debug
+			// fprintf(stderr, "%s%u %sopti_swap_b()%s\n", YELLOW, val, BLUE, NC);				// TODO: tmp debug
 			if (!opti_swap_b(state, cfg))
 				return (false);
 		}
@@ -137,17 +135,30 @@ static bool	exec(t_state *state, t_config *cfg, uint val, t_chunk *chunk)
 
 static void	update_chunk(t_chunk *chunk, uint value)
 {
-	if (value < chunk->min || value > chunk->max)
+	if (value < chunk->min || value >= chunk->max)
+	{
+		// fprintf(stderr, "%s%u%s outside chunk boundaries (%u - %u): skipping update%s\n", YELLOW, value, RED, chunk->min, chunk->max, NC);
 		return ;
-	if (chunk->treated[value])
-		return ;
+	}
+	// if (chunk->treated[value])
+	// {
+	// 	fprintf(stderr, "%streated (%zu) => (array_disabled)%s\n", GREY, chunk->treated_count, NC);
+	// 	// print_array_u(chunk->treated, chunk->treated_count, GREY, YELLOW, value, true);
+	// 	fprintf(stderr, "%s%u%s already treated: skipping update%s\n", YELLOW, value, RED, NC);
+	// 	exit(EXIT_FAILURE);
+	// 	// return ;
+	// }
 	chunk->treated[value] = true;
 	chunk->treated_count++;
 	if (chunk->treated_count < chunk->size)
+	{
+		// fprintf(stderr, "%s%u%s treated: chunk is now %u - %u (%zu / %zu)%s\n", YELLOW, value, BLUE, chunk->min, chunk->max, chunk->treated_count, chunk->size, NC);
 		return ;
+	}
 	// cf TODO [1] at the top of the file
 	chunk->treated_count = 0;
 	chunk->min = chunk->max;
 	chunk->max = chunk->min + (uint)chunk->size;
 	chunk->median = (chunk->min + chunk->max) / 2;
+	// fprintf(stderr, "%s%u%s treated: chunk is now %u - %u (%zu / %zu)%s\n", YELLOW, value, GREEN, chunk->min, chunk->max, chunk->treated_count, chunk->size, NC);
 }

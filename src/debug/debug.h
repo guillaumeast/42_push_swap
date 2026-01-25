@@ -37,4 +37,6 @@ void	print_bool_array(const bool *arr, const bool *versus, size_t len, const cha
 void	log_debug(const char *func_name, size_t depth, const char *message, ...)
 	__attribute__((format(printf, 3, 4)));
 
+void	print_array_u(uint *array, size_t len, const char *array_color, const char *value_color, uint value, bool nl);
+
 #endif

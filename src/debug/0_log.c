@@ -12,3 +12,25 @@ void	log_debug(const char *func_name, size_t depth, const char *message, ...)
 	vfprintf(stderr, message, args);
 	va_end(args);
 }
+
+void	print_array_u(uint *array, size_t len, const char *array_color, const char *value_color, uint value, bool nl)
+{
+	uint	current;
+	size_t	i;
+
+	fprintf(stderr, "%s[", array_color);
+	i = 0;
+	while (i < len)
+	{
+		current = array[i];
+		if (current == value)
+			fprintf(stderr, "%s%u%s", value_color, array[i], array_color);
+		else
+			fprintf(stderr, "%u", array[i]);
+		if (i < len - 1)
+			fprintf(stderr, " ");
+	}
+	fprintf(stderr, "]%s", NC);
+	if (nl)
+		fprintf(stderr, "\n");
+}
