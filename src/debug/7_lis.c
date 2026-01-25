@@ -29,7 +29,7 @@ void	print_bool_array(const bool *arr, const bool *versus, size_t len, const cha
 		if (arr[i])
 		{
 			if (!first)
-				fprintf(stderr, ", ");
+				fprintf(stderr, " ");
 			if (versus && !versus[i])
 				fprintf(stderr, "%s%zu%s", YELLOW, i, color);
 			else

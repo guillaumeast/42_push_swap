@@ -32,59 +32,83 @@ bool	naive(t_state *state, const t_config *config)
 static bool	push_to_b(t_state *state, t_config *config, t_median *median)
 {
 	uint	value;
+	bool	print_logs;
 
+	print_logs = false;	// TMP: remove before submit
+	if (print_logs)
+		stack_print(&state->a, &state->b);
+	// size_t i = 0;
+	// while (i < 10 && !stack_is_sorted(&state->a))
 	while (!stack_is_sorted(&state->a))
 	{
 		value = stack_get_value(&state->a, 0);
-		// fprintf(stderr, "\n%spush_to_b()%s => %s", YELLOW, NC, BLUE);
-		// config_print(config, 0, false);
-		// if (config->opti_lis_swap)
-		// {
-		// 	fprintf(stderr, "%s            => swap = ", NC);
-		// 	print_bool_array(config->lis.swap, NULL, state->a.len + state->b.len, NC);
-		// 	fprintf(stderr, "\n");
-		// }
-		// fprintf(stderr, "           %s => %s", NC, YELLOW);
-		// stack_print_line(&state->a, NULL, YELLOW);
-		// fprintf(stderr, "%s => %s%u%s\n", NC, YELLOW, value, NC);
+		if (print_logs)
+		{
+			// i++;
+			fprintf(stderr, "\n%spush_to_b()%s => %s", YELLOW, NC, BLUE);
+			config_print(config, 0, false);
+			if (config->opti_lis_swap)
+			{
+				fprintf(stderr, "%s            => swap     => ", NC);
+				print_bool_array(config->lis.swap, NULL, state->a.len + state->b.len, NC);
+				fprintf(stderr, "\n");
+			}
+			if (config->opti_lis)
+			{
+				fprintf(stderr, "           %s => lis      => %s", NC, YELLOW);
+				print_bool_array(config->lis.keep, NULL, state->a.len + state->b.len, GREEN);
+				fprintf(stderr, "\n");
+			}
+			fprintf(stderr, "           %s => stack    => %s", NC, YELLOW);
+			stack_print_line(&state->a, NULL, YELLOW);
+			fprintf(stderr, "%s\n", NC);
+		}
 		if (config->opti_lis_swap && config->lis.swap[value])
 		{
-			// fprintf(stderr, "            => %sswap%s   => calling opti_swap_lis()...\n", BLUE, NC);
+			if (print_logs)
+				fprintf(stderr, "            => %sswap %s%3u%s => calling opti_swap_lis()...\n", BLUE, YELLOW, value, NC);
 			if (!opti_swap_lis(state, config, value))
 				return (false);
 		}
 		else if (config->opti_lis && config->lis.keep[value])
 		{
-			// fprintf(stderr, "            => %skeep%s   => calling ra()...\n", GREEN, NC);
+			if (print_logs)
+			{
+				fprintf(stderr, "           %s => lis      => %s", NC, YELLOW);
+				print_bool_array(config->lis.keep, NULL, state->a.len + state->b.len, GREEN);
+				fprintf(stderr, "\n            => %skeep %s%3u%s => calling ra()...\n", GREEN, YELLOW, value, NC);
+			}
 			if (!ra(state, 1))
 				return (false);
 		}
 		else
 		{
-			// fprintf(stderr, "            => %spush%s   => calling pb()...\n", RED, NC);
+			if (print_logs)
+				fprintf(stderr, "            => %spush %s%3u%s => calling pb()...\n", RED, YELLOW, value, NC);
 			if (!pb(state, 1))
 				return (false);
 			if (config->opti_median)
 			{
-				// fprintf(stderr, "            => %smedian%s => calling opti_median()...\n", GREY, NC);
+				if (print_logs)
+					fprintf(stderr, "            => %smedian%s   => calling opti_median()...\n", GREY, NC);
 				if (!opti_median(state, median, value))
 					return (false);
 			}
 			if (config->opti_swap_b)
 			{
-				// fprintf(stderr, "            => %sswap_b%s => calling opti_swap_b()...\n", GREY, NC);
+				if (print_logs)
+					fprintf(stderr, "            => %sswap_b%s   => calling opti_swap_b()...\n", GREY, NC);
 				if (!opti_swap_b(state, config))
 					return (false);
 			}
 		}
-		// if (stack_is_sorted(&state->a))
-			// fprintf(stderr, "            => stack_is_sorted(&state->a) = %strue%s\n", GREEN, NC);
-		// else
-			// fprintf(stderr, "            => stack_is_sorted(&state->a) = %sfalse%s\n", RED, NC);
-		// if (config->opti_lis_swap && config->lis.swap_count > 0)
-		// 	fprintf(stderr, "(config->opti_lis_swap && config->lis.swap_count > 0) = %strue%s\n", GREEN, NC);
-		// else
-		// 	fprintf(stderr, "(config->opti_lis_swap && config->lis.swap_count > 0) = %sfalse%s\n", RED, NC);
+		if (print_logs)
+		{
+			if (stack_is_sorted(&state->a))
+				fprintf(stderr, "            => %ssorted() => true%s\n", GREEN, NC);
+			else
+				fprintf(stderr, "            => %ssorted() => false%s\n", RED, NC);
+		}
 	}
 	return (true);
 }

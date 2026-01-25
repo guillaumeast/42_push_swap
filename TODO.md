@@ -1,5 +1,7 @@
 # TODO
 
+- `hillclimb()`:
+	- Find best chunksize
 - `opti_sort_b()`:
 	- if (config->opti_median && B[0] < median(B)):
 		- if		(next A move == RA)									=> `rr()`
@@ -12,6 +14,8 @@
 	- identifies les coups inutiles	=> [`RA`, `RRA`]	=> []
 	- merge les coups possibles		=> [`RA`, `RB`]		=> [`RR`]
 	- supprime les no_ops			=> [`NO_OP`]		=> []
+- `opti_rebuild()`:
+	- if B contains value(s) between a_last_keep and A[0] => push them to A using greedy method
 
 🧪 Tests **4 nombres** (`sort_three()` will handle it so **don't compute swaps** if stack->len <= 3)
 ✅ `0 1 2 3`			=> BEST => swaps (0)				| lis (4) = `0 1 2 3`		| 🐛
