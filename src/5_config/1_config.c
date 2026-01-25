@@ -2,6 +2,7 @@
 #include "config_priv.h"
 #include "naive.h"
 #include "chunk.h"
+#include "k_sort.h"
 #include "greedy.h"
 #include <stdlib.h>
 #include <debug.h>	// TMP: remove before submit
@@ -58,6 +59,11 @@ static void process_algos(t_config *config, uint raw_config)
 		config->algo_1 = chunk;
 		config->algo_1_name = "CHUNK";
 	}
+	else if ((raw_config & ALGO_1_MASK) == K_SORT)
+	{
+		config->algo_1 = k_sort;
+		config->algo_1_name = "CHUNK";
+	}
 	if ((raw_config & ALGO_2_MASK) == GREEDY)
 	{
 		config->algo_2 = greedy;
@@ -107,7 +113,7 @@ static void	process_sizes(t_configs *configs, const size_t *sizes, size_t len)
 	size_t		i;
 
 	initial_config = configs->data[configs->count];
-	if (initial_config.algo_1 != chunk)
+	if (initial_config.algo_1 != chunk && initial_config.algo_1 != k_sort)
 	{
 		configs->count++;
 		return ;

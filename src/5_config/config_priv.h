@@ -8,12 +8,13 @@
 /*
 * Note: to add a new algo:
 * 1. Add the corresponding binary value to the following defines
-* 2. Add the corresponding macro to the input_init() array (algos_1 or algos_2) in config_generator.c
+* 2. Add the corresponding macro to the input_init() array (algos_1 or algos_2) in raw_generator.c
 * 3. Add the corresponding logic to config_convert() in config.c
+* 3. Update the optis compatibilities macros
 * Note: to add a new opti:
 * 1. Add the corresponding bool to the following t_config struct
 * 2. Add the corresponding binary values to the above defines (OPTI + OPTI_COMPAT)
-* 3. Add the corresponding macros to the input_init() arrays (optis and optis_compat) in config_generator.c
+* 3. Add the corresponding macros to the input_init() arrays (optis and optis_compat) in raw_generator.c
 * 4. Add the corresponding logic to config_convert() in config.c
 */
 
@@ -39,15 +40,15 @@
 // OPTI macros			(bits 17-24)	=> opti identifier
 // OPTI_COMPAT macros	(bits  1-24)	=> opti compatibilities (bits 1-8: ALGO_1, bits 9-17: ALGO_2, bits 18-24: OPTI)
 # define MEDIAN				65536U		/* 00000001 00000000 00000000 */
-# define MEDIAN_COMPAT		983043U		/* 00001111 00000000 00000011 */
+# define MEDIAN_COMPAT		983047U		/* 00001111 00000000 00000111 */
 # define LIS				131072U		/* 00000010 00000000 00000000 */
-# define LIS_COMPAT			983043U		/* 00001111 00000000 00000011 */
+# define LIS_COMPAT			983047U		/* 00001111 00000000 00000111 */
 # define LIS_SWAP			262144U		/* 00000100 00000000 00000000 */
-# define LIS_SWAP_COMPAT	983043U		/* 00001111 00000000 00000011 */
+# define LIS_SWAP_COMPAT	983047U		/* 00001111 00000000 00000111 */
 # define SWAP				524288U		/* 00001000 00000000 00000000 */
-# define SWAP_COMPAT		983043U		/* 00001111 00000000 00000011 */
+# define SWAP_COMPAT		983047U		/* 00001111 00000000 00000111 */
 
-/* ---------- config_generator.c ---------- */
+/* ---------- raw_generator.c ---------- */
 
 bool	generate_raw_configs(uint **ret_list, size_t *ret_count);
 bool	get_chunk_sizes(size_t **ret, size_t *ret_size, const t_stack *stack);
