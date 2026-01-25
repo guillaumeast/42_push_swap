@@ -62,7 +62,7 @@ static void process_algos(t_config *config, uint raw_config)
 	else if ((raw_config & ALGO_1_MASK) == K_SORT)
 	{
 		config->algo_1 = k_sort;
-		config->algo_1_name = "CHUNK";
+		config->algo_1_name = "K_SORT";
 	}
 	if ((raw_config & ALGO_2_MASK) == GREEDY)
 	{

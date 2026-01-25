@@ -2,7 +2,6 @@
 
 - **checker**
 - `k-sort()`:
-	- Use chunk_size
 	- Rotate on med(window) / med(B) / treshold ?
 	- Reduce window as values are pushed to B ?
 - `hillclimb()`:

@@ -27,7 +27,8 @@ INCLUDES	:= \
 	-Isrc/6_algos/6_finish \
 	-Isrc/7_optis/1_median \
 	-Isrc/7_optis/2_lis \
-	-Isrc/7_optis/3_swap
+	-Isrc/7_optis/3_swap \
+	-Isrc/7_optis/4_moves
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

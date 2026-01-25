@@ -1,5 +1,6 @@
 #include "debug.h"
 #include "chunk.h"
+#include "k_sort.h"
 
 void	config_print_all(const t_configs *configs)
 {
@@ -18,7 +19,7 @@ void	config_print(const t_config *config, size_t index, bool print_index)
 	if (print_index)
 		fprintf(stderr, "⚙️  CONFIG[%zu] => ", index);
 	fprintf(stderr, "%s + %s%s", config->algo_1_name, config->algo_2_name, config->opti_names);
-	if (config->algo_1 == chunk)
+	if (config->algo_1 == chunk || config->algo_1 == k_sort)
 		fprintf(stderr, " (chunk_size = %zu)", config->chunk_size);
 	fprintf(stderr, "\n");
 }
