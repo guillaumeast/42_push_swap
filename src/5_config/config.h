@@ -31,5 +31,7 @@ typedef struct s_config_list
 }	t_configs;
 
 bool	config_init_list(t_configs *configs, const t_state *state);
+bool	config_dup(t_config *dst, const t_config *src, size_t values_count);
+void	config_free(t_config *config);
 
 #endif

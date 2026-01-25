@@ -2,7 +2,6 @@
 #include "stack.h"
 #include "lis_priv.h"
 #include <stdlib.h>
-# include "debug.h"
 
 typedef struct s_tail
 {

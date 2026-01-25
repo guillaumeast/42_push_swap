@@ -26,13 +26,16 @@ bool	opti_swap_b(t_state *state, const t_config *config)
 }
 
 // TODO: rename to opti_swap_a_lis()
-bool	opti_swap_lis(t_state *state, const t_config *config, uint value)
+bool	opti_swap_lis(t_state *state, t_config *config, uint value)
 {
 	uint 	first_value;
 	uint 	second_value;
 
+	if (!config->opti_lis_swap || !config->lis.swap[value])
+		return (true);
 	config->lis.swap[value] = false;
-	if (state->b.len < 2)
+	// TODO: can conflict with opti_swap_b ! (disabled waiting for investigations)
+	if (config->opti_swap_b || state->b.len < 2)
 		return (sa(state));
 	first_value = stack_get_value(&state->b, 0);
 	second_value = stack_get_value(&state->b, 1);

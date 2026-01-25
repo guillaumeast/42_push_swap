@@ -1,31 +1,19 @@
-# LIS optimization
+# TODO
 
-- Store two types of LIS:
-	- LIS without swaps => compute all LIS => Tie break = LIS with less swap_count for the same len
-	- LIS with swaps:
-		- Compute all possible swaps (values[i] > values[i + 1] && (values[i + 2] = 0 || values[i] < values[i + 2]))
-		- Compute LIS (with swapped stack)
-		- Remove useless swaps (if swap[values[i]] = true && (keep[values[i]] = false || keep[values[i + 1]] = false) => swap[values[i] = false])
-		- Tie break = LIS with less swap_count for the same len
+- `opti_sort_b()`:
+	- if (config->opti_median && B[0] < median(B)):
+		- if		(next A move == RA)									=> `rr()`
+		- else															=> `rb()`
+	- if (B[1] > B[0] > B[2]):
+		- if		(config->opti_lis_swap && config->lis.swap[A[0]])	=> `ss()` + config->lis.swap[A[0]] = false; config->lis.swap_count--
+		- else if	(A[1] < A[0] < A[2])								=> `ss()`
+		- else															=> `sb()`
+- **Optimiseur de coût** (after `finish()`):
+	- identifies les coups inutiles	=> [`RA`, `RRA`]	=> []
+	- merge les coups possibles		=> [`RA`, `RB`]		=> [`RR`]
+	- supprime les no_ops			=> [`NO_OP`]		=> []
 
-**LIS_SWAP MANAGEMENT**
-1. STACK_1 => Compute swaps except the two last indexes (they depend on indexes 0 and 1 possible swaps)
-2. If STACK_1 didn't swap 0 and didn't swap 1:
-	- Compute two last indexes swaps
-3. If STACK_1 did swap 0 or did swap 1:
-	- STACK_2 = stack_dup(STACK_1)
-	- Compute 2 last swaps from STACK_1 (with swap 0/1)
-	- Remove first swap (0 or 1) from STACK_2
-	- Compute 2 last swaps from STACK_2 (without swap 0/1)
-4. Run LIS (best = highest len => if equality => lowest swap_count wins):
-	- LIS_1 = best LIS of STACK_1
-	- LIS_2 = best LIS of STACK_2 (**only if STACK_2 exists**)
-5. Return best LIS between LIS_1 and LIS_2
-
-🧪 Tests **<= 3 nombres**
-- `sort_three()` will handle it so **don't compute swaps**
-
-🧪 Tests **4 nombres**
+🧪 Tests **4 nombres** (`sort_three()` will handle it so **don't compute swaps** if stack->len <= 3)
 ✅ `0 1 2 3`			=> BEST => swaps (0)				| lis (4) = `0 1 2 3`		| 🐛
 ✅ `0 1 3 2`			=> BEST => swaps (1) = `3`			| lis (4) = `0 1 2 3`		| 🐛
 ✅ `0 2 1 3`			=> BEST => swaps (1) = `2`			| lis (4) = `0 1 2 3`		| 🐛
