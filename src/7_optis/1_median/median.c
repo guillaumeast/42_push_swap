@@ -2,7 +2,7 @@
 #include "median.h"
 #include "moves.h"
 #include <stdlib.h>
-# include "debug.h"
+// # include "debug.h"
 
 static void	update(t_median *median);
 

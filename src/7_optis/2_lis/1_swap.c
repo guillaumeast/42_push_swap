@@ -1,7 +1,8 @@
+#include "libft.h"
 #include "lis_priv.h"
 #include "stack_ops.h"
 #include <stdlib.h>
-# include "debug.h"	// TMP: remove before submit
+// # include "debug.h"	// TMP: remove before submit
 
 # define DEBUG_DEPTH 3
 

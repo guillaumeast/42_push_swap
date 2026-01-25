@@ -5,7 +5,7 @@
 #include "lis.h"
 #include "swap.h"
 #include <stdlib.h>
-#include "debug.h"	// TMP: remove before submit
+// #include "debug.h"	// TMP: remove before submit
 
 // TODO [1]: Reduce chunk_size while A is getting smaller (hill climbing ??) ?		=> edit update_chunk()
 
