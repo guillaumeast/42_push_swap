@@ -6,6 +6,8 @@
 #define CHUNK_N_MIN 2
 #define CHUNK_N_MAX 9
 
+static bool	size_is_valid(size_t *sizes, size_t count, long value, size_t stack_len);
+
 bool	get_chunk_sizes(size_t **ret, size_t *ret_size, const t_stack *stack)
 {
 	size_t	max_size;
@@ -22,14 +24,30 @@ bool	get_chunk_sizes(size_t **ret, size_t *ret_size, const t_stack *stack)
 	while (n <= CHUNK_N_MAX)
 	{
 		size = (long)(stack->len / n);
-		if (size > 0 && size < (long)stack->len)
+		if (size_is_valid(*ret, i, size, stack->len))
 			(*ret)[i++] = (size_t)size;
 		size = (long)n * (long)square_root_rounded((int)stack->len);
-		if (size > 0 && size < (long)stack->len)
+		if (size_is_valid(*ret, i, size, stack->len))
 			(*ret)[i++] = (size_t)size;
 		n++;
 	}
 	*ret_size = i;
+	return (true);
+}
+
+static bool	size_is_valid(size_t *sizes, size_t count, long value, size_t stack_len)
+{
+	size_t	i;
+
+	if (value < 1 || value >= (long)stack_len)
+		return (false);
+	i = 0;
+	while (i < count)
+	{
+		if (sizes[i] == (size_t)value)
+			return (false);
+		i++;
+	}
 	return (true);
 }
 

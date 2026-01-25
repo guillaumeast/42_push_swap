@@ -7,7 +7,7 @@
 
 static bool	init_swaps(t_swapped *dst, const t_stack *src, bool swap_first);
 static bool	is_swappable(const t_stack *stack, size_t index, bool swap_first);
-static void	test_swap_conflicts(const t_stack *stack, bool swap_first);	// TMP: remove before submit
+// static void	test_swap_conflicts(const t_stack *stack, bool swap_first);	// TMP: remove before submit
 
 bool	swap_stack(t_swapped *dst, const t_stack *src, bool swap_first)
 {
@@ -34,17 +34,17 @@ bool	swap_stack(t_swapped *dst, const t_stack *src, bool swap_first)
 	}
 	stack_reverse_rotate(&dst->swapped, dst->swapped.offset);
 	// TMP: remove before submit
-	test_swap_conflicts(src, swap_first);
-	log_debug("swap_stack", DEBUG_DEPTH, "%sInitial stack   => ", BLUE); stack_print_line(src, NULL, BLUE); fprintf(stderr, "%s\n", NC);
-	log_debug("swap_stack", DEBUG_DEPTH, "%sSwapped stack   => ", BLUE); stack_print_line(&dst->swapped, src, BLUE); fprintf(stderr, "%s\n", NC);
-	log_debug("swap_stack", DEBUG_DEPTH, "%sRaw swaps   %3zu => [", BLUE, dst->swaps.count);
-	for (size_t j = 0; j < dst->swaps.count; j++)
-	{
-		fprintf(stderr, "%u", dst->swaps.from[j]);
-		if (j < dst->swaps.count - 1)
-			fprintf(stderr, " ");
-	}
-	fprintf(stderr, "]%s\n", NC);
+	// test_swap_conflicts(src, swap_first);
+	// log_debug("swap_stack", DEBUG_DEPTH, "%sInitial stack   => ", BLUE); stack_print_line(src, NULL, BLUE); fprintf(stderr, "%s\n", NC);
+	// log_debug("swap_stack", DEBUG_DEPTH, "%sSwapped stack   => ", BLUE); stack_print_line(&dst->swapped, src, BLUE); fprintf(stderr, "%s\n", NC);
+	// log_debug("swap_stack", DEBUG_DEPTH, "%sRaw swaps   %3zu => [", BLUE, dst->swaps.count);
+	// for (size_t j = 0; j < dst->swaps.count; j++)
+	// {
+	// 	fprintf(stderr, "%u", dst->swaps.from[j]);
+	// 	if (j < dst->swaps.count - 1)
+	// 		fprintf(stderr, " ");
+	// }
+	// fprintf(stderr, "]%s\n", NC);
 	return (true);
 }
 
@@ -105,26 +105,26 @@ void	swap_free(t_swapped *swapped)
 }
 
 // TMP: remove before submit
-static void	test_swap_conflicts(const t_stack *stack, bool swap_first)
-{
-	size_t	i;
-	size_t	swaps;
-	size_t	last_swap_index;
+// static void	test_swap_conflicts(const t_stack *stack, bool swap_first)
+// {
+// 	size_t	i;
+// 	size_t	swaps;
+// 	size_t	last_swap_index;
 
-	i = 0;
-	swaps = 0;
-	last_swap_index = 0;
-	while (i < stack->len)
-	{
-		if (is_swappable(stack, i, swap_first))
-		{
-			if (swaps > 0 && last_swap_index == i - 1)
-				fprintf(stderr, "%s‼️ Swap conflict between %s%u%s and %s%u%s\n", RED, YELLOW, stack->data[i - 1], RED, YELLOW, stack->data[i], NC);
-			if (swap_first && i == stack->len - 1)
-				fprintf(stderr, "%s‼️ Swap conflict between %s%u%s and %s%u%s\n", RED, YELLOW, stack->data[0], RED, YELLOW, stack->data[i], NC);
-			swaps++;
-			last_swap_index = i;
-		}
-		i++;
-	}
-}
+// 	i = 0;
+// 	swaps = 0;
+// 	last_swap_index = 0;
+// 	while (i < stack->len)
+// 	{
+// 		if (is_swappable(stack, i, swap_first))
+// 		{
+// 			if (swaps > 0 && last_swap_index == i - 1)
+// 				fprintf(stderr, "%s‼️ Swap conflict between %s%u%s and %s%u%s\n", RED, YELLOW, stack->data[i - 1], RED, YELLOW, stack->data[i], NC);
+// 			if (swap_first && i == stack->len - 1)
+// 				fprintf(stderr, "%s‼️ Swap conflict between %s%u%s and %s%u%s\n", RED, YELLOW, stack->data[0], RED, YELLOW, stack->data[i], NC);
+// 			swaps++;
+// 			last_swap_index = i;
+// 		}
+// 		i++;
+// 	}
+// }

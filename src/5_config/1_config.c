@@ -41,9 +41,8 @@ bool	config_init_list(t_configs *configs, const t_state *state)
 	if (!process_lis(configs, state))
 		return (free(raw_configs), free(chunk_sizes), false);
 	configs->lis_set = true;
-	fprintf(stderr, "✅ %zu configs created\n", configs->count);
 	config_print_all(configs);	// TMP: remove before submit
-	fprintf(stderr, "\n");		// TMP: remove before submit
+	fprintf(stderr, "%s✅ %zu configs created%s\n\n", GREEN, configs->count, NC);	// TMP: remove before submit
 	return (free(raw_configs), free(chunk_sizes), true);
 }
 

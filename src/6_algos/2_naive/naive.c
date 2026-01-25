@@ -33,8 +33,7 @@ static bool	push_to_b(t_state *state, t_config *config, t_median *median)
 {
 	uint	value;
 
-	size_t	i = 0, imax = 10;
-	while (i < imax && !stack_is_sorted(&state->a))
+	while (!stack_is_sorted(&state->a))
 	{
 		value = stack_get_value(&state->a, 0);
 		// fprintf(stderr, "\n%spush_to_b()%s => %s", YELLOW, NC, BLUE);
@@ -86,7 +85,6 @@ static bool	push_to_b(t_state *state, t_config *config, t_median *median)
 		// 	fprintf(stderr, "(config->opti_lis_swap && config->lis.swap_count > 0) = %strue%s\n", GREEN, NC);
 		// else
 		// 	fprintf(stderr, "(config->opti_lis_swap && config->lis.swap_count > 0) = %sfalse%s\n", RED, NC);
-		i++;
 	}
 	return (true);
 }

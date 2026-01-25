@@ -50,24 +50,29 @@ static bool	run_configs(t_state *inital_state, t_configs *configs, t_buff *best_
 	while (i < configs->count)
 	{
 		config = configs->data[i];
-		fprintf(stderr, "ℹ️  Config = \033[34m");
+		fprintf(stderr, "ℹ️  Config[%s%3zu%s] = %s", BLUE, i, NC, BLUE);
 		config_print(&config, i, false);
-		fprintf(stderr, "\033[0m");
+		fprintf(stderr, "%s", NC);
 		if (!state_dup(&state, inital_state))
 			return (abort_config(&state, best_moves, "Unable to duplicate state"));
 		if (!config.algo_1(&state, &config))
 			return (abort_config(&state, best_moves, "algo_1 failed"));
+		fprintf(stderr, "%s✹ [algo_1 finished]%s\n", GREY, NC);
+		if (!stack_is_sorted(&state.a))
+			return (abort_config(&state, best_moves, "A is not sorted after algo_1"));
 		if (!config.algo_2(&state, &config))
 			return (abort_config(&state, best_moves, "algo_2 failed"));
 		// TMP: remove before submit (4 lines)
+		fprintf(stderr, "%s✹ [algo_2 finished]%s\n", GREY, NC);
 		if (!stack_is_sorted(&state.a))
-			return (abort_config(&state, best_moves, "A is not sorted"));
+			return (abort_config(&state, best_moves, "A is not sorted after algo_2"));
 		if (state.b.len > 0)
-			return (abort_config(&state, best_moves, "B is not empty"));
+			return (abort_config(&state, best_moves, "B is not empty after algo_2"));
 		if (!finish(&state, &config))
 			return (abort_config(&state, best_moves, "Finish algo failed"));
+		fprintf(stderr, "%s✹ [finish finished]%s\n", GREY, NC);
 		if (stack_get_value(&state.a, 0) != 0)
-			return (abort_config(&state, best_moves, "A[0] != 0"));
+			return (abort_config(&state, best_moves, "A[0] != 0 after finish()"));
 		if (best_moves->cap == 0 || state.moves.len < best_moves->len)
 		{
 			// TMP: remove before submit (4 lines)

@@ -20,7 +20,7 @@ bool	median_init(t_median *median, size_t values_count)
 
 void	median_update(t_median *median, uint new_value)
 {
-	fprintf(stderr, "%smedian_update()%s => value = %s%u%s\n", YELLOW, NC, YELLOW, new_value, NC);
+	// fprintf(stderr, "%smedian_update()%s => value = %s%u%s\n", YELLOW, NC, YELLOW, new_value, NC);
 	if (median->present[new_value])
 		return ;
 	median->total_count++;
@@ -33,7 +33,7 @@ void	median_update(t_median *median, uint new_value)
 		median->left_count++;
 	median->present[new_value] = true;
 	update(median);
-	fprintf(stderr, "%smedian_update()%s updated => median = %s%u%s\n", YELLOW, NC, YELLOW, median->median, NC);
+	// fprintf(stderr, "%smedian_update()%s updated => median = %s%u%s\n", YELLOW, NC, YELLOW, median->median, NC);
 }
 
 static void	update(t_median *median)
@@ -42,7 +42,7 @@ static void	update(t_median *median)
 	{
 		median->median++;
 		median->left_count++;
-		fprintf(stderr, "%supdate()%s => accessing present[%u] (+) ...\n", YELLOW, NC, median->median);
+		// fprintf(stderr, "%supdate()%s => accessing present[%u] (+) ...\n", YELLOW, NC, median->median);
 		while (!median->present[median->median])
 			median->median++;
 	}
@@ -50,13 +50,13 @@ static void	update(t_median *median)
 	{
 		median->median--;
 		median->left_count--;
-		fprintf(stderr, "%supdate()%s => accessing present[%u] (-) ...\n", YELLOW, NC, median->median);
+		// fprintf(stderr, "%supdate()%s => accessing present[%u] (-) ...\n", YELLOW, NC, median->median);
 		while (!median->present[median->median])
 			median->median--;
 	}
-	fprintf(stderr, "%supdate()%s => median = %s%u%s, left_count = %zu, total = %zu => present = ", YELLOW, NC, YELLOW, median->median, NC, median->left_count, median->total_count);
-	print_bool_array(median->present, NULL, 5, NC);
-	fprintf(stderr, "\n");
+	// fprintf(stderr, "%supdate()%s => median = %s%u%s, left_count = %zu, total = %zu => present = ", YELLOW, NC, YELLOW, median->median, NC, median->left_count, median->total_count);
+	// print_bool_array(median->present, NULL, 5, NC);
+	// fprintf(stderr, "\n");
 }
 
 bool	opti_median(t_state *state, t_median *median, uint value)

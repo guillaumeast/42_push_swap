@@ -13,11 +13,11 @@ bool	lis_compute_both(const t_stack *stack, t_lis *lis, t_lis *lis_swap)
 {
 	if (!lis_best_index(lis, stack, NULL))
 		return (false);
-	log_debug("lis_compute_both", DEBUG_DEPTH, "%slis      %3zu => ", GREEN, lis->keep_count); print_bool_array(lis->keep, NULL, stack->len, GREEN); fprintf(stderr, "%s\n", NC);
+	fprintf(stderr, "%slis      %3zu => ", GREEN, lis->keep_count); print_bool_array(lis->keep, NULL, stack->len, GREEN); fprintf(stderr, "%s\n", NC);
 	if (!lis_best_swaps_and_index(lis_swap, stack))
 		return (lis_free(lis), false);
-	log_debug("lis_compute_both", DEBUG_DEPTH, "%slis_swap %3zu => ", GREEN, lis_swap->keep_count); print_bool_array(lis_swap->keep, lis->keep, stack->len, GREEN); fprintf(stderr, "%s\n", NC);
-	log_debug("lis_compute_both", DEBUG_DEPTH, "%sswaps    %3zu => ", GREEN, lis_swap->swap_count); print_bool_array(lis_swap->swap, NULL, stack->len, GREEN); fprintf(stderr, "%s\n", NC);
+	fprintf(stderr, "%slis_swap %3zu => ", GREEN, lis_swap->keep_count); print_bool_array(lis_swap->keep, lis->keep, stack->len, GREEN); fprintf(stderr, "%s\n", NC);
+	fprintf(stderr, "%sswaps    %3zu => ", GREEN, lis_swap->swap_count); print_bool_array(lis_swap->swap, NULL, stack->len, GREEN); fprintf(stderr, "%s\n", NC);
 	return (true);
 }
 
