@@ -15,7 +15,7 @@ typedef struct s_chunk
 	uint	min;
 	uint	max;
 	uint	median;
-	uint	*treated;
+	bool	*treated;
 	size_t	treated_count;
 }	t_chunk;
 

@@ -6,12 +6,13 @@
 
 static void	update(t_median *median);
 
-bool	median_init(t_median *median, size_t values_count)
+bool	median_init(t_median *median, size_t capacity)
 {
-	median->present = malloc(values_count * sizeof * median->present);
+	median->capacity = capacity;
+	median->present = malloc(capacity * sizeof * median->present);
 	if (!median->present)
 		return (false);
-	ft_memset(median->present, false, values_count * sizeof * median->present);
+	ft_memset(median->present, false, capacity * sizeof * median->present);
 	median->total_count = 0;
 	median->left_count = 0;
 	median->median = 0;
@@ -71,5 +72,6 @@ void	median_free(t_median *median)
 {
 	if (median->present)
 		free(median->present);
+	median->present = NULL;
 }
 

@@ -1,21 +1,40 @@
 # TODO
 
+- **checker**
+- `k-sort()`:
+	- Use chunk_size
+	- Rotate on med(window) / med(B) / treshold ?
+	- Reduce window as values are pushed to B ?
 - `hillclimb()`:
-	- Find best chunksize
+	- Find best chunksize by following the derivée
 - `opti_sort_b()`:
 	- if (config->opti_median && B[0] < median(B)):
 		- if		(next A move == RA)									=> `rr()`
 		- else															=> `rb()`
 	- if (B[1] > B[0] > B[2]):
 		- if		(config->opti_lis_swap && config->lis.swap[A[0]])	=> `ss()` + config->lis.swap[A[0]] = false; config->lis.swap_count--
-		- else if	(A[1] < A[0] < A[2])								=> `ss()`
+		- else if	(!config->opti_lis_swap &&  && A[1] < A[0] < A[2])	=> `ss()`
 		- else															=> `sb()`
 - **Optimiseur de coût** (after `finish()`):
 	- identifies les coups inutiles	=> [`RA`, `RRA`]	=> []
 	- merge les coups possibles		=> [`RA`, `RB`]		=> [`RR`]
 	- supprime les no_ops			=> [`NO_OP`]		=> []
 - `opti_rebuild()`:
-	- if B contains value(s) between a_last_keep and A[0] => push them to A using greedy method
+	- if B contains value(s) between a_last_keep and A[0] => push them to A using greedy method:
+	- if (keep[A[0] == true]):
+		- if (KEEP_LAST == NULL):
+			- KEEP_LAST = A[0]
+		- else
+			- KEEP_CURRENT = A[0]
+			- TARGET_COUNT = values in B which are > KEEP_LAST and are < KEEP_CURRENT
+			- while (TARGET_COUNT > 0)
+				- PA(greedy/highest value of B between KEEP_LAST and KEEP_CURRENT)
+				- keep[A[0]] = true
+				- TARGET_COUNT--
+			- KEEP_LAST = KEEP_CURRENT
+- `opti_reduce_window()`:
+	- Reduces chunk_size depending on stack_a->len
+- `opti_backtracking()`:
 
 🧪 Tests **4 nombres** (`sort_three()` will handle it so **don't compute swaps** if stack->len <= 3)
 ✅ `0 1 2 3`			=> BEST => swaps (0)				| lis (4) = `0 1 2 3`		| 🐛
@@ -61,46 +80,6 @@
 
 🚨 Conflict = 1 with this input
 `./push_swap 44 16 53 27 67 34 14 61 43 49 18 10 63 65 73 8 86 80 30 25 9 99 69 82 62 75 35 40 45 41 64 3 23 78 79 91 47 13 46 56 96 54 5 15 95 51 98 20 36 60 71 26 93 38 39 76 0 84 32 85 12 94 97 88 33 59 66 77 70 89 57 52 58 22 74 21 55 90 11 68 7 1 72 83 2 42 48 6 31 81 50 87 37 92 17 19 29 28 4 24`
-
-# Implement LIS vs LIS_SWAP in NAIVE and CHUNK algos
-
-(use config->lis if config->opti_lis = true || use config->lis_swap if config->opti_lis_swap = true)
-
-# Fix chunk + LIS
-
-1. Swap if lis->swap[value] = true (even if values[i] is not in chunk !) (with optis!)
-2. Rotate if lis->keep[value] || value < chunk.min || value > chunk.max
-3. Else => push (with optis!)
-
-# TODO
-
-- Use hill climbing instead of bruteforce to find the best chunksize to use
-- Add chunksize reduction to optis
-- Add moves_normalize to delete useless moves: `NO_OP`, [`PB` -> `PA`], [`RA` -> `RRA`], swap combos, etc
-
-# ALGO_1
-
-1. K_SORT
-
-# OPTI
-
-1. BACKTRACK
-2. EARLY_REINTEGRATION
-	- if (keep[A[0] == true]):
-		- if (KEEP_LAST == NULL):
-			- KEEP_LAST = A[0]
-		- else
-			- KEEP_CURRENT = A[0]
-			- TARGET_COUNT = values in B which are > KEEP_LAST and are < KEEP_CURRENT
-			- while (TARGET_COUNT > 0)
-				- PA(greedy/highest value of B between KEEP_LAST and KEEP_CURRENT)
-				- keep[A[0]] = true
-				- TARGET_COUNT--
-			- KEEP_LAST = KEEP_CURRENT
-
-# CHECKER
-
-1. Do it!
 
 ---
 

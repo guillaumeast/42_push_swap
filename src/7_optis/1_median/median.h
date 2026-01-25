@@ -11,9 +11,10 @@ typedef struct s_median
 	size_t	left_count;		// Count of values <= median
 	bool	*present;		// Array of values (1 if present, 0 otherwise)
 	uint	median;			// Median value
+	size_t	capacity;		// Size of malloc'd 'present' array
 }	t_median;
 
-bool	median_init(t_median *median, size_t values_count);
+bool	median_init(t_median *median, size_t capacity);
 void	median_update(t_median *median, uint new_value);
 bool	opti_median(t_state *state, t_median *median, uint value);
 void	median_free(t_median *median);
