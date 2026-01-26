@@ -17,7 +17,7 @@ GREY='\033[0;90m'
 # threshold = max moves allowed for OK status
 PERF_TESTS=(
 	"100:10:700"
-	"500:10:5500"
+	"500:100:5500"
 )
 
 # Worst case test file

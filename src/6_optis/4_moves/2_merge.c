@@ -1,6 +1,6 @@
 #include "libft.h"
 #include "opti_moves_priv.h"
-# include "debug.h"
+// # include "debug.h"
 
 static void	merge_pattern(t_buff *moves, size_t *index, t_pattern *pat);
 static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i);

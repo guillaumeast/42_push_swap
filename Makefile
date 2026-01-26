@@ -17,18 +17,18 @@ INCLUDES	:= \
 	-Isrc/2_stack \
 	-Isrc/3_state \
 	-Isrc/4_moves \
-	-Isrc/5_config \
-	-Isrc/6_algos \
-	-Isrc/6_algos/1_sort_three \
-	-Isrc/6_algos/2_naive \
-	-Isrc/6_algos/3_chunk \
-	-Isrc/6_algos/4_k_sort \
-	-Isrc/6_algos/5_greedy \
-	-Isrc/6_algos/6_finish \
-	-Isrc/7_optis/1_median \
-	-Isrc/7_optis/2_lis \
-	-Isrc/7_optis/3_swap \
-	-Isrc/7_optis/4_moves
+	-Isrc/7_config \
+	-Isrc/5_algos \
+	-Isrc/5_algos/1_sort_three \
+	-Isrc/5_algos/2_naive \
+	-Isrc/5_algos/3_chunk \
+	-Isrc/5_algos/4_k_sort \
+	-Isrc/5_algos/5_greedy \
+	-Isrc/5_algos/6_finish \
+	-Isrc/6_optis/1_median \
+	-Isrc/6_optis/2_lis \
+	-Isrc/6_optis/3_swap \
+	-Isrc/6_optis/4_moves
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
