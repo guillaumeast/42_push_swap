@@ -33,13 +33,11 @@ static void	prune_no_ops(t_buff *moves)
 	start_index = 0;
 	len = 0;
 	final_len = moves->len;
+	while (write_index < moves->len && moves->data[write_index] != NO_OP)	// set write on the first NO_OP
+		write_index++;
+	print_indexes(write_index, start_index, len, moves->len, final_len, 0);
 	while (write_index < moves->len)
 	{
-		while (write_index < moves->len && moves->data[write_index] != NO_OP)	// set write on the first NO_OP
-			write_index++;
-		print_indexes(write_index, start_index, len, moves->len, final_len, 0);
-		if (write_index >= moves->len)
-			break ;
 		start_index = write_index;
 		while (start_index < moves->len && moves->data[start_index] == NO_OP)	// set start on the first OP
 			start_index++;

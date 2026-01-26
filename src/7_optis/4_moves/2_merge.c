@@ -8,26 +8,20 @@ static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i);
 
 void	merge_all(t_buff *moves)
 {
-	t_pattern	pattern_ss;
-	t_pattern	pattern_rr;
-	t_pattern	pattern_rrr;
-	t_pattern	pattern_no_op;
+	t_pattern	pattern;
 	size_t		last_i;
 	size_t		i;
 
-	// 
-	pattern_init(&pattern_ss, SA, SB, SS);
-	pattern_init(&pattern_rr, RA, RB, RR);
-	pattern_init(&pattern_rrr, RRA, RRB, RRR);
-	pattern_init(&pattern_no_op, PA, PB, NO_OP);
 	i = 0;
 	last_i = 0;
 	while (i < moves->len)
 	{
-		merge_pattern(moves, &i, &pattern_ss);
-		merge_pattern(moves, &i, &pattern_rr);
-		merge_pattern(moves, &i, &pattern_rrr);
-		merge_pattern(moves, &i, &pattern_no_op);
+		pattern_init(&pattern, SA, SB, SS);
+		merge_pattern(moves, &i, &pattern);
+		pattern_init(&pattern, RA, RB, RR);
+		merge_pattern(moves, &i, &pattern);
+		pattern_init(&pattern, RRA, RRB, RRR);
+		merge_pattern(moves, &i, &pattern);
 		if (i == last_i)
 			i++;
 		last_i = i;
@@ -65,8 +59,8 @@ static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i)
 {
 	pat->cumul_new = (size_t)min((long)pat->a_count, (long)pat->b_count);
 	// fprintf(stderr, "convert_pattern() pat->a_count = %ld | pat->b_count = %ld | pat->cumul_new = %zu\n", pat->a_count, pat->b_count, pat->cumul_new);
-	fprintf(stderr, "%s✦%s merged %s%zu%s/%zu moves between [%s%3zu%s] and %s", GREEN, GREY, GREEN, pat->cumul_new, GREY, 
-		pat->cumul_count + pat->a_count + pat->b_count, YELLOW, i, GREY, NC);
+	fprintf(stderr, "%s✦%s merged %s%zu%s/%zu moves between [%s%3zu%s] and %s", GREEN, GREY, GREEN, pat->cumul_new, 
+		GREY, pat->cumul_count + pat->a_count + pat->b_count, YELLOW, i, GREY, NC);
 	pat->cumul_count += pat->cumul_new;
 	pat->a_count -= pat->cumul_new;
 	pat->b_count -= pat->cumul_new;
