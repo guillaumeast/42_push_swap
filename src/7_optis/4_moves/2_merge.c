@@ -1,5 +1,4 @@
 #include "libft.h"
-#include "moves.h"
 #include "opti_moves_priv.h"
 # include "debug.h"
 
@@ -35,7 +34,6 @@ static void	merge_pattern(t_buff *moves, size_t *index, t_pattern *pat)
 
 	i = *index;
 	set_move(&curr, moves, (long)i);
-	pattern_reset(pat);
 	while (i < moves->len && (curr == pat->a_move || curr == pat->b_move || curr == pat->cumul_move || curr == NO_OP))
 	{
 		if (curr == pat->a_move)
@@ -57,10 +55,12 @@ static void	merge_pattern(t_buff *moves, size_t *index, t_pattern *pat)
 
 static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i)
 {
+	size_t	start_index;
+
+	start_index = i;
 	pat->cumul_new = (size_t)min((long)pat->a_count, (long)pat->b_count);
 	// fprintf(stderr, "convert_pattern() pat->a_count = %ld | pat->b_count = %ld | pat->cumul_new = %zu\n", pat->a_count, pat->b_count, pat->cumul_new);
-	fprintf(stderr, "%s✦%s merged %s%zu%s/%zu moves between [%s%3zu%s] and %s", GREEN, GREY, GREEN, pat->cumul_new, 
-		GREY, pat->cumul_count + pat->a_count + pat->b_count, YELLOW, i, GREY, NC);
+	fprintf(stderr, "%s✦ merged %4zu%s => ", GREEN, pat->cumul_new, GREY);
 	pat->cumul_count += pat->cumul_new;
 	pat->a_count -= pat->cumul_new;
 	pat->b_count -= pat->cumul_new;
@@ -74,6 +74,5 @@ static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i)
 		dst->data[i++] = (char)NO_OP;
 	while (pat->no_op_count--)
 		dst->data[i++] = (char)NO_OP;
-	fprintf(stderr, "%s[%s%3zu%s]%s\n", GREY, YELLOW, i, GREY, NC);
-	moves_print(dst);
+	print_opti_moves(dst, start_index, i - 1, GREY, YELLOW, true);
 }

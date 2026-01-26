@@ -8,9 +8,11 @@
 # include <stdio.h>
 
 # define GREY "\033[0;90m"
+# define BOLD_GREY "\033[1;90m"
+# define GREEN "\033[0;32m"
 # define BOLD_GREEN "\033[1;32m"
 # define BLUE "\033[0;34m"
-# define GREEN "\033[0;32m"
+# define BOLD_BLUE "\033[1;34m"
 # define RED "\033[0;31m"
 # define BOLD_RED "\033[1;31m"
 # define YELLOW "\033[0;33m"
@@ -35,6 +37,7 @@ void	print_bool_array(const bool *arr, const bool *versus, size_t len, const cha
 /* ---------- opti_moves.c ---------- */
 
 bool	test_opti_moves(void);
+void	print_opti_moves(t_buff *moves, size_t start, size_t end, const char *color, const char *highlight, bool nl);
 
 /* ---------- LOGS ---------- */
 
