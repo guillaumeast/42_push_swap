@@ -23,27 +23,27 @@ void	moves_print(const t_buff *list)
 static void	print_move(t_move move)
 {
 	if (move == RR)
-		write(1, "RR\n", 3);
+		write(1, "rr\n", 3);
 	else if (move == RRR)
-		write(1, "RRR\n", 4);
+		write(1, "rrr\n", 4);
 	else if (move == RA)
-		write(1, "RA\n", 3);
+		write(1, "ra\n", 3);
 	else if (move == RB)
-		write(1, "RB\n", 3);
+		write(1, "rb\n", 3);
 	else if (move == RRA)
-		write(1, "RRA\n", 4);
+		write(1, "rra\n", 4);
 	else if (move == RRB)
-		write(1, "RRB\n", 4);
+		write(1, "rrb\n", 4);
 	else if (move == SS)
-		write(1, "SS\n", 3);
+		write(1, "ss\n", 3);
 	else if (move == SA)
-		write(1, "SA\n", 3);
+		write(1, "sa\n", 3);
 	else if (move == SB)
-		write(1, "SB\n", 3);
+		write(1, "sb\n", 3);
 	else if (move == PA)
-		write(1, "PA\n", 3);
+		write(1, "pa\n", 3);
 	else if (move == PB)
-		write(1, "PB\n", 3);
+		write(1, "pb\n", 3);
 	else if (move == NO_OP)
 		write(1, "NO_OP\n", 6);		// TMP: delete before submit
 	else

@@ -34,8 +34,8 @@ int	main(int argc, char **argv)
 	buff_init(&best_moves, 0);
 	if (!run_configs(&initial_state, &configs, &best_moves))
 		return (free_and_print_error(&initial_state, &configs));
-	// moves_print(&best_moves);	// TMP: uncomment before submit (It's commented to make debug outputs readable)
-	fprintf(stdout, " ");			// TMP: remove before submit (It's here for parsing tester)
+	moves_print(&best_moves);	// TMP: uncomment before submit (It's commented to make debug outputs readable)
+	// fprintf(stdout, " ");			// TMP: remove before submit (It's here for parsing tester)
 	state_free(&initial_state);
 	free(configs.data);
 	buff_free(&best_moves);
