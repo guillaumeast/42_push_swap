@@ -48,19 +48,22 @@ static void	prune_no_ops(t_buff *moves)
 		// print_indexes(write_index, start_index, len, moves->len, final_len, 2);
 		ft_memmove(moves->data + write_index, moves->data + start_index, len);
 		ft_memset(moves->data + write_index + len, (int)NO_OP, start_index - write_index);
-		fprintf(stderr, "%s↤ compressing %s=> ", YELLOW, GREY);
-		print_opti_moves(moves, write_index, start_index + len - 1, GREY, YELLOW, true);
+		// fprintf(stderr, "%s↤ compressing %s=> ", YELLOW, GREY);
+		// print_opti_moves(moves, write_index, start_index + len - 1, GREY, YELLOW, true);
 		final_len = write_index + len;
 		// print_indexes(write_index, start_index, len, moves->len, final_len, 4);
 		write_index += len;
 		// print_indexes(write_index, start_index, len, moves->len, final_len, 0);
 	}
-	fprintf(stderr, "%s✔︎ compressed  => ", BOLD_GREEN);
-	moves->len = final_len;
-	while (moves->data[moves->len - 1] == NO_OP)
-		moves->len--;
+	while (moves->data[final_len - 1] == NO_OP)
+		final_len--;
 	// print_indexes(write_index, start_index, len, moves->len, final_len, 3);
-	print_opti_moves(moves, write_index, start_index + len - 1, BOLD_GREEN, BOLD_RED, true);
+	if (final_len >= moves->len)
+		return ;
+	// fprintf(stderr, "%s✔︎        -%3zu => ", BOLD_GREEN, moves->len - final_len);
+	// print_opti_moves(moves, write_index, start_index + len - 1, BOLD_GREEN, BOLD_RED, false);
+	// fprintf(stderr, "%s✔︎ moves compressed => %3zu\n%s", BOLD_GREEN, moves->len - final_len, NC);
+	moves->len = final_len;
 }
 
 // static void	print_indexes(size_t write, size_t start, size_t len, size_t moves_len, size_t final_len, size_t highlight_index)

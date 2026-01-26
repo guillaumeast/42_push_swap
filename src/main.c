@@ -4,6 +4,7 @@
 #include "state.h"
 #include "finish.h"
 #include "config.h"
+#include "opti_moves.h"
 #include <stdlib.h>
 #include <unistd.h>
 # include "debug.h"	// TMP: remove before submit
@@ -19,8 +20,8 @@ int	main(int argc, char **argv)
 	t_configs	configs;
 	t_buff		best_moves;
 
-	if (argc == 1)					// TMP: remove before submit
-		return (test_opti_moves());	// TMP: remove before submit
+	// if (argc == 1)					// TMP: remove before submit
+	// 	return (test_opti_moves());	// TMP: remove before submit
 	if (argc < 2)
 		return (0);
 	fprintf(stderr, "\n");
@@ -75,6 +76,7 @@ static bool	run_configs(t_state *inital_state, t_configs *configs, t_buff *best_
 		// fprintf(stderr, "%s✹ [finish finished]%s\n", GREY, NC);
 		if (stack_get_value(&state.a, 0) != 0)
 			return (abort_config(&state, best_moves, "A[0] != 0 after finish()"));
+		optimize_moves(&state.moves);
 		if (best_moves->cap == 0 || state.moves.len < best_moves->len)
 		{
 			// TMP: remove before submit (4 lines)

@@ -29,7 +29,7 @@ void	print_opti_moves(t_buff *moves, size_t start, size_t end, const char *color
 
 	if (moves->len > 15)
 	{
-		fprintf(stderr, "%s[...]%s", color, NC);
+		fprintf(stderr, "%s[...]%s\n", color, NC);
 		return ;
 	}
 	fprintf(stderr, "%s[ ", color);

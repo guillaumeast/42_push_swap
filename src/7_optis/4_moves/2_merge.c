@@ -55,12 +55,12 @@ static void	merge_pattern(t_buff *moves, size_t *index, t_pattern *pat)
 
 static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i)
 {
-	size_t	start_index;
+	// size_t	start_index;
 
-	start_index = i;
+	// start_index = i;
 	pat->cumul_new = (size_t)min((long)pat->a_count, (long)pat->b_count);
 	// fprintf(stderr, "convert_pattern() pat->a_count = %ld | pat->b_count = %ld | pat->cumul_new = %zu\n", pat->a_count, pat->b_count, pat->cumul_new);
-	fprintf(stderr, "%s✦ merged %4zu%s => ", GREEN, pat->cumul_new, GREY);
+	// fprintf(stderr, "%s✦ merged %4zu%s => ", GREEN, pat->cumul_new, GREY);
 	pat->cumul_count += pat->cumul_new;
 	pat->a_count -= pat->cumul_new;
 	pat->b_count -= pat->cumul_new;
@@ -74,5 +74,5 @@ static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i)
 		dst->data[i++] = (char)NO_OP;
 	while (pat->no_op_count--)
 		dst->data[i++] = (char)NO_OP;
-	print_opti_moves(dst, start_index, i - 1, GREY, YELLOW, true);
+	// print_opti_moves(dst, start_index, i - 1, GREY, YELLOW, true);
 }
