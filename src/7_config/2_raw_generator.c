@@ -40,8 +40,8 @@ static void	input_init(t_input *input)
 	// static const uint	algos_2[] = {GREEDY};
 	static const uint	algos_1[] = {K_SORT};
 	static const uint	algos_2[] = {GREEDY};
-	static const uint	optis[] = {MEDIAN};
-	static const uint	optis_compat[] = {MEDIAN_COMPAT};
+	static const uint	optis[] = {};
+	static const uint	optis_compat[] = {};
 	// static const uint	optis[] = {MEDIAN, LIS, LIS_SWAP, SWAP};
 	// static const uint	optis_compat[] = {MEDIAN_COMPAT, LIS_COMPAT, LIS_SWAP_COMPAT, SWAP_COMPAT};
 

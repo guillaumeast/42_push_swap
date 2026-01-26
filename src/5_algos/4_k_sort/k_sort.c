@@ -102,7 +102,7 @@ static bool	exec(t_state *state, t_config *config, t_chunk *window)
 		// fprintf(stderr, "%s🅚 %s%3u %spb()%s\n", RED, YELLOW, val, RED, NC);				// TODO: tmp debug
 		if (!pb(state, 1))
 			return (false);
-		if (config->opti_median && val < window->median.median)
+		if (val < window->median.median)
 		{
 			// fprintf(stderr, "%s🅚 %s%3u %srb()%s\n", BLUE, YELLOW, val, BLUE, NC);				// TODO: tmp debug
 			if (!rb(state, 1))
