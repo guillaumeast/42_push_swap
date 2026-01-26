@@ -29,6 +29,11 @@ void	stack_print(const t_stack *a, const t_stack *b);
 void	config_print_all(const t_configs *configs);
 void	config_print(const t_config *config, size_t index, bool print_index);
 
+void	config_print_raw(const uint *configs, size_t count, const char *color, const char *item_color, bool nl);
+void	config_print_algo_1(const uint *configs, size_t count, const char *color, const char *item_color, bool nl);
+void	config_print_algo_2(const uint *configs, size_t count, const char *color, const char *item_color, bool nl);
+void	config_print_optis(const uint *configs, size_t count, const char *color, const char *item_color, bool nl);
+
 /* ---------- lis.c ---------- */
 
 void	lis_print(const t_lis *lis, size_t len);
@@ -45,5 +50,6 @@ void	log_debug(const char *func_name, size_t depth, const char *message, ...)
 	__attribute__((format(printf, 3, 4)));
 
 void	print_array_u(uint *array, size_t len, const char *array_color, const char *value_color, uint value, bool nl);
+void	print_array_zu(size_t *array, size_t len, const char *array_color, const char *value_color, size_t value, bool nl);
 
 #endif

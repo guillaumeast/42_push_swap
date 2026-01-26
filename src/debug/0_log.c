@@ -29,6 +29,30 @@ void	print_array_u(uint *array, size_t len, const char *array_color, const char 
 			fprintf(stderr, "%u", array[i]);
 		if (i < len - 1)
 			fprintf(stderr, " ");
+		i++;
+	}
+	fprintf(stderr, "]%s", NC);
+	if (nl)
+		fprintf(stderr, "\n");
+}
+
+void	print_array_zu(size_t *array, size_t len, const char *array_color, const char *value_color, size_t value, bool nl)
+{
+	size_t	current;
+	size_t	i;
+
+	fprintf(stderr, "%s[", array_color);
+	i = 0;
+	while (i < len)
+	{
+		current = array[i];
+		if (current == value)
+			fprintf(stderr, "%s%zu%s", value_color, array[i], array_color);
+		else
+			fprintf(stderr, "%zu", array[i]);
+		if (i < len - 1)
+			fprintf(stderr, " ");
+		i++;
 	}
 	fprintf(stderr, "]%s", NC);
 	if (nl)

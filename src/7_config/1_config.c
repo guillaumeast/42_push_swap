@@ -21,11 +21,16 @@ bool	config_init_list(t_configs *configs, const t_state *state)
 	size_t	chunk_sizes_count;
 	size_t	i;
 
-	fprintf(stderr, "ℹ️  Generating configs...\n");	// TMP: remove before submit
+	fprintf(stderr, "%s⏺ CONFIGS GENERATION%s\n", GREY, NC);	// TMP: remove before submit
+	fprintf(stderr, "%s╰───────────────────%s\n", GREY, NC);	// TMP: remove before submit
 	if (!generate_raw_configs(&raw_configs, &raw_configs_count))
 		return (false);
+	fprintf(stderr, "%s✔︎ %3zu%s raw configs    ⇢     ⇢ %s", GREEN, raw_configs_count, GREY, NC);	// TMP: remove before submit
+	config_print_raw(raw_configs, raw_configs_count, GREY, YELLOW, true);
 	if (!get_chunk_sizes(&chunk_sizes, &chunk_sizes_count, &state->a))
 		return (free(raw_configs), false);
+	fprintf(stderr, "%s✔︎ %3zu%s chunk sizes    ⇢     ⇢ %s", GREEN, chunk_sizes_count, GREY, NC);	// TMP: remove before submit
+	print_array_zu(chunk_sizes, chunk_sizes_count, GREY, GREY, 0, true);
 	configs->count = raw_configs_count * chunk_sizes_count;
 	configs->data = malloc(configs->count * sizeof * configs->data);
 	if (!configs->data)
@@ -43,7 +48,8 @@ bool	config_init_list(t_configs *configs, const t_state *state)
 		return (free(raw_configs), free(chunk_sizes), false);
 	configs->lis_set = true;
 	config_print_all(configs);	// TMP: remove before submit
-	fprintf(stderr, "%s✅ %zu configs created%s\n\n", GREEN, configs->count, NC);	// TMP: remove before submit
+	fprintf(stderr, "%s╭────────────────────%s\n", GREY, NC);	// TMP: remove before submit
+	fprintf(stderr, "%s✔︎ %3zu CONFIGS CREATED%s\n\n", BOLD_GREEN, configs->count, NC);	// TMP: remove before submit
 	return (free(raw_configs), free(chunk_sizes), true);
 }
 
