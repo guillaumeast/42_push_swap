@@ -32,6 +32,10 @@ void	config_print(const t_config *config, size_t index, bool print_index);
 void	lis_print(const t_lis *lis, size_t len);
 void	print_bool_array(const bool *arr, const bool *versus, size_t len, const char *color);
 
+/* ---------- opti_moves.c ---------- */
+
+bool	test_opti_moves(void);
+
 /* ---------- LOGS ---------- */
 
 void	log_debug(const char *func_name, size_t depth, const char *message, ...)

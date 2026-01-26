@@ -1,34 +1,45 @@
 #include "libft.h"
+#include "moves.h"
 #include "opti_moves_priv.h"
 # include "debug.h"
 
-static bool	merge_pattern(t_buff *dst, t_buff *src, size_t *index, t_pattern *pat);
+static void	merge_pattern(t_buff *moves, size_t *index, t_pattern *pat);
+static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i);
 
-bool	merge_all(t_buff *dst, t_buff *src, size_t *index)
+void	merge_all(t_buff *moves)
 {
-	t_pattern	pattern;
+	t_pattern	pattern_ss;
+	t_pattern	pattern_rr;
+	t_pattern	pattern_rrr;
+	t_pattern	pattern_no_op;
+	size_t		last_i;
+	size_t		i;
 
-	pattern_init(&pattern, SA, SB, SS);
-	if (!merge_pattern(dst, src, index, &pattern))
-		return (false);
-	pattern_init(&pattern, RA, RB, SS);
-	if (!merge_pattern(dst, src, index, &pattern))
-		return (false);
-	pattern_init(&pattern, RRA, RRB, SS);
-	if (!merge_pattern(dst, src, index, &pattern))
-		return (false);
-	pattern_init(&pattern, PA, PB, NO_OP);
-	if (!merge_pattern(dst, src, index, &pattern))
-		return (false);
-	return (true);
+	// 
+	pattern_init(&pattern_ss, SA, SB, SS);
+	pattern_init(&pattern_rr, RA, RB, RR);
+	pattern_init(&pattern_rrr, RRA, RRB, RRR);
+	pattern_init(&pattern_no_op, PA, PB, NO_OP);
+	i = 0;
+	last_i = 0;
+	while (i < moves->len)
+	{
+		merge_pattern(moves, &i, &pattern_rr);
+		if (i == last_i)
+			i++;
+		last_i = i;
+	}
 }
 
-static bool	merge_pattern(t_buff *dst, t_buff *src, size_t *index, t_pattern *pat)
+static void	merge_pattern(t_buff *moves, size_t *index, t_pattern *pat)
 {
 	t_move	curr;
+	size_t	i;
 
-	set_move(&curr, src, (long)index);
-	while (*index < src->len && (curr == pat->a_move || curr == pat->b_move || curr == pat->cumul_move || curr == NO_OP))
+	i = *index;
+	set_move(&curr, moves, (long)i);
+	pattern_reset(pat);
+	while (i < moves->len && (curr == pat->a_move || curr == pat->b_move || curr == pat->cumul_move || curr == NO_OP))
 	{
 		if (curr == pat->a_move)
 			pat->a_count++;
@@ -36,21 +47,34 @@ static bool	merge_pattern(t_buff *dst, t_buff *src, size_t *index, t_pattern *pa
 			pat->b_count++;
 		if (curr == pat->cumul_move)
 			pat->cumul_count++;
-		(*index)++;
-		set_move(&curr, src, (long)index);
+		if (curr == NO_OP)
+			pat->no_op_count++;
+		i++;
+		// fprintf(stderr, "🪄  %s%3zu%s (%s%i%s) a_count = %3zu | b_count = %3zu | cumul_count = %3zu%s\n", YELLOW, *index, GREY, YELLOW, curr, GREY, pat->a_count, pat->b_count, pat->cumul_count, NC);	// TODO: tmp debug
+		set_move(&curr, moves, (long)i);
 	}
+	if (pat->a_count > 0 && pat->b_count > 0)
+		convert_pattern(moves, pat, *index);
+	*index = i;
+}
+
+static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i)
+{
 	pat->cumul_new = (size_t)min((long)pat->a_count, (long)pat->b_count);
-	if (pat->cumul_new > 0)
-		fprintf(stderr, "%s✦ merging %s%3zu moves into %3zu moves (%s-%3zu%s)...%s\n", GREEN, 
-			GREY, pat->cumul_count + pat->a_count + pat->b_count,
-			pat->cumul_count + pat->a_count + pat->b_count - pat->cumul_new, 
-			GREEN, pat->cumul_new, GREY, NC);
+	// fprintf(stderr, "convert_pattern() pat->a_count = %ld | pat->b_count = %ld | pat->cumul_new = %zu\n", pat->a_count, pat->b_count, pat->cumul_new);
+	fprintf(stderr, "%s✦ merged (-%zu)...%s\n", GREEN, pat->cumul_new + pat->no_op_count, NC);
 	pat->cumul_count += pat->cumul_new;
 	pat->a_count -= pat->cumul_new;
 	pat->b_count -= pat->cumul_new;
-	if (!move_add((char)pat->cumul_move, pat->cumul_count, dst))
-		return (false);
-	if (!move_add((char)pat->a_move, pat->a_count, dst))
-		return (false);
-	return (!move_add((char)pat->b_move, pat->b_count, dst));
+	while (pat->cumul_count--)
+		dst->data[i++] = (char)pat->cumul_move;
+	while (pat->a_count--)
+		dst->data[i++] = (char)pat->a_move;
+	while (pat->b_count--)
+		dst->data[i++] = (char)pat->b_move;
+	while (pat->cumul_new--)
+		dst->data[i++] = (char)NO_OP;
+	while (pat->no_op_count--)
+		dst->data[i++] = (char)NO_OP;
+	moves_print(dst);
 }

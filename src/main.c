@@ -14,11 +14,13 @@ static int	free_and_print_error(t_state *state, t_configs *configs);
 
 int	main(int argc, char **argv)
 {
-	t_args			args;
-	t_state			initial_state;
+	t_args		args;
+	t_state		initial_state;
 	t_configs	configs;
-	t_buff			best_moves;
+	t_buff		best_moves;
 
+	if (argc == 1)					// TMP: remove before submit
+		return (test_opti_moves());	// TMP: remove before submit
 	if (argc < 2)
 		return (0);
 	fprintf(stderr, "\n");

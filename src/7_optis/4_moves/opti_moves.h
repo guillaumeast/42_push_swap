@@ -3,6 +3,6 @@
 
 # include "libft.h"
 
-bool	optimize_moves(t_buff *moves);
+void	optimize_moves(t_buff *moves);
 
 # endif

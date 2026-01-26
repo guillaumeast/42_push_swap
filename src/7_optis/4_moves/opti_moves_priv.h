@@ -12,15 +12,17 @@ typedef struct s_pattern
 	t_move	cumul_move;
 	size_t	cumul_count;
 	size_t	cumul_new;
+	size_t	no_op_count;
 }	t_pattern;
 
 /* ---------- merge.c ---------- */
 
-bool	merge_all(t_buff *dst, t_buff *src, size_t *index);
+void	merge_all(t_buff *moves);
 
 /* ---------- utils.c ---------- */
 
 void	pattern_init(t_pattern *dst, t_move a, t_move b, t_move cumul);
+void	pattern_reset(t_pattern *pattern);
 void	set_move(t_move *dst, t_buff *moves, long index);
 
 #endif
