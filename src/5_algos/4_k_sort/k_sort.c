@@ -32,7 +32,7 @@ bool	k_sort(t_state *state, const t_config *config)
 	if (!config_dup(&mutable_cfg, config, state->a.len))
 		return (false);
 	init_window(&window, state, &mutable_cfg);
-	while (!stack_is_sorted(&state->a))
+	while (state->a.len > 3 && !stack_is_sorted(&state->a))
 	{
 		index = 0;
 		// fprintf(stderr, "%s🅚     Searching...%s\n", GREY, NC);						// TODO: tmp debug

@@ -49,7 +49,7 @@ bool	chunk(t_state *state, const t_config *config)
 	chunk.treated_count = 0;
 	// stack_print_line(&state->a, NULL, YELLOW);
 	// fprintf(stderr, "\n");
-	while (!stack_is_sorted(&state->a))
+	while (state->a.len > 3 && !stack_is_sorted(&state->a))
 	{
 		if (!find(state, &cfg, &target, &chunk))
 			return (config_free(&cfg), free(chunk.treated), false);

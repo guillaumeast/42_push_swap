@@ -39,7 +39,7 @@ static bool	push_to_b(t_state *state, t_config *config, t_median *median)
 		stack_print(&state->a, &state->b);
 	// size_t i = 0;
 	// while (i < 10 && !stack_is_sorted(&state->a))
-	while (!stack_is_sorted(&state->a))
+	while (state->a.len > 3 && !stack_is_sorted(&state->a))
 	{
 		value = stack_get_value(&state->a, 0);
 		if (print_logs)
