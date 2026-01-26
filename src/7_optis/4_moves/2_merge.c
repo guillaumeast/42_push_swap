@@ -24,7 +24,10 @@ void	merge_all(t_buff *moves)
 	last_i = 0;
 	while (i < moves->len)
 	{
+		merge_pattern(moves, &i, &pattern_ss);
 		merge_pattern(moves, &i, &pattern_rr);
+		merge_pattern(moves, &i, &pattern_rrr);
+		merge_pattern(moves, &i, &pattern_no_op);
 		if (i == last_i)
 			i++;
 		last_i = i;
@@ -62,7 +65,8 @@ static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i)
 {
 	pat->cumul_new = (size_t)min((long)pat->a_count, (long)pat->b_count);
 	// fprintf(stderr, "convert_pattern() pat->a_count = %ld | pat->b_count = %ld | pat->cumul_new = %zu\n", pat->a_count, pat->b_count, pat->cumul_new);
-	fprintf(stderr, "%s✦ merged (-%zu)...%s\n", GREEN, pat->cumul_new + pat->no_op_count, NC);
+	fprintf(stderr, "%s✦%s merged %s%zu%s/%zu moves between [%s%3zu%s] and %s", GREEN, GREY, GREEN, pat->cumul_new, GREY, 
+		pat->cumul_count + pat->a_count + pat->b_count, YELLOW, i, GREY, NC);
 	pat->cumul_count += pat->cumul_new;
 	pat->a_count -= pat->cumul_new;
 	pat->b_count -= pat->cumul_new;
@@ -76,5 +80,6 @@ static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i)
 		dst->data[i++] = (char)NO_OP;
 	while (pat->no_op_count--)
 		dst->data[i++] = (char)NO_OP;
+	fprintf(stderr, "%s[%s%3zu%s]%s\n", GREY, YELLOW, i, GREY, NC);
 	moves_print(dst);
 }

@@ -6,7 +6,7 @@
 bool	test_opti_moves(void)
 {
 	t_buff			moves;
-	const t_move	pattern[] = {RA, RB, SA, SB, RRA, RRB, PA, PB, RA, RB};
+	const t_move	pattern[] = {NO_OP, RA, RB, SA, SB, NO_OP, RRA, RRB, PA, PB, NO_OP, NO_OP, RA, RA, NO_OP, NO_OP};
 
 	if (!buff_init(&moves, 64))
 		return (false);
