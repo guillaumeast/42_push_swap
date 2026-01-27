@@ -39,20 +39,9 @@ bool	generate_raw_configs(uint **ret_list, size_t *ret_count)
 		return (false);
 	*ret_count = add_couples(&input, *ret_list);
 	*ret_count += add_optis(&input, *ret_list);
-	if (should_print_as(RESULT) == LOG)
-	{
-		print_result_top(true, "%3zu raw configs%s    ⇢ ", *ret_count, GREY);
-		print_result_mid(false, "%3zu raw configs%s    ⇢ ", *ret_count, GREY);
-		config_print_raw(*ret_list, *ret_count, GREY, YELLOW, true);
-		print_result_bot(true, "%3zu raw configs%s    ⇢ ", *ret_count, GREY);
-	}
-	else
-	{
-		print_result_top(true, "%3zu raw configs", *ret_count);
-		print_result_mid(false, "%3zu raw configs", *ret_count);
-		config_print_raw(*ret_list, *ret_count, GREY, YELLOW, true);
-		print_result_bot(true, "%3zu raw configs", *ret_count);
-	}
+	print_result_mid(false, "%3zu raw configs%s    ⇢ ", *ret_count, GREY);
+	config_print_raw(*ret_list, *ret_count, GREY, YELLOW, true);
+	print_result_bot(true);
 	return (true);
 }
 

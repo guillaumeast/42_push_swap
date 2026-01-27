@@ -73,10 +73,9 @@ void	print_array_zu(t_style style, size_t *array, size_t len, const char *array_
 
 /* ---------- title.c ---------- */
 
-void	print_title(const char *fmt, ...)									__attribute__((format(printf, 1, 2)));
-void	print_title_top(bool new_line, const char *fmt, ...)				__attribute__((format(printf, 2, 3)));
-void	print_title_mid(bool new_line, const char *fmt, ...)				__attribute__((format(printf, 2, 3)));
-void	print_title_bot(bool new_line, const char *fmt, ...)				__attribute__((format(printf, 2, 3)));
+void	print_title(const char *fmt, ...);						__attribute__((format(printf, 1, 2)));
+void	print_title_top(bool new_line);
+void	print_title_mid(bool new_line, const char *fmt, ...);	__attribute__((format(printf, 2, 3)));
 
 /* ---------- log.c ---------- */
 
@@ -87,8 +86,7 @@ void	print_log_custom(bool indent, bool new_line, const char *fmt, ...);	__attri
 /* ---------- result.c ---------- */
 
 void	print_result(const char *fmt, ...)									__attribute__((format(printf, 1, 2)));
-void	print_result_top(bool new_line, const char *fmt, ...)				__attribute__((format(printf, 2, 3)));
 void	print_result_mid(bool new_line, const char *fmt, ...)				__attribute__((format(printf, 2, 3)));
-void	print_result_bot(bool new_line, const char *fmt, ...)				__attribute__((format(printf, 2, 3)));
+void	print_result_bot(bool new_line);
 
 #endif

@@ -6,18 +6,22 @@ void	print_link(long len, const char *color, bool new_line)
 {
 	if (len == 0)
 		return ;
-	if (len < 0)
+	else if (len == 1)
+		fprintf(stderr, "%s\\%s", color, NC);
+	else if (len == -1)
+		fprintf(stderr, "%s/%s", color, NC);
+	else if (len > 0)
+	{
+		fprintf(stderr, "%s╰", color);
+		_print_padding("─", len - 2);
+		fprintf(stderr, "╮%s", NC);
+	}
+	else if (len < 0)
 	{
 		len *= -1;
 		fprintf(stderr, "%s╭", color);
 		_print_padding("─", len - 2);
 		fprintf(stderr, "╯%s", NC);
-	}
-	else
-	{
-		fprintf(stderr, "%s╰", color);
-		_print_padding("─", len - 2);
-		fprintf(stderr, "╮%s", NC);
 	}
 	if (new_line)
 		fprintf(stderr, "\n");
