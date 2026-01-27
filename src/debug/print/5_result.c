@@ -95,6 +95,8 @@ void	print_result_bot(bool new_line, const char *fmt, ...)
 
 static void	_print_result_top(bool new_line, size_t len)
 {
+	if (DEPTH > 0)
+		_print_padding(DEFAULT_PAD, PADDING_LEN);
 	print_link((long)len + 4, RESULT_COLOR, new_line);
 }
 
@@ -121,5 +123,6 @@ static void	_print_result_bot(bool new_line, size_t len)
 		_print_padding(DEFAULT_PAD, PADDING_LEN_OF((DEPTH - 1)));
 		print_link(-((long)len + 4 + PADDING_LEN_OF(1)), RESULT_COLOR, new_line);
 	}
-	print_link(-((long)len + 4), RESULT_COLOR, new_line);
+	else
+		print_link(-((long)len + 4), RESULT_COLOR, new_line);
 }

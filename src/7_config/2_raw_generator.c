@@ -28,6 +28,11 @@ bool	generate_raw_configs(uint **ret_list, size_t *ret_count)
 	t_input	input;
 
 	print_title("generating raw configs");
+	print_log("⏺ log");
+	print_title("Nested Section");
+	print_log("⏺ Nested log");
+	print_result("Nested done");
+	print_log("⏺ log");
 	input_init(&input);
 	*ret_list = malloc(input.configs_count * sizeof ** ret_list);
 	if (!*ret_list)
