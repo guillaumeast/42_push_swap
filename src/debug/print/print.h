@@ -52,6 +52,7 @@ extern t_depth	g_depth;
 # define DEPTH					DEPTH_OF(g_depth.curr, g_depth.min)
 # define PADDING_LEN_OF(depth)	(depth * PADDING_SIZE)
 # define PADDING_LEN			PADDING_LEN_OF(DEPTH)
+# define LINK_LEN_OF(depth)		(PADDING_LEN_OF(depth) + 1)
 
 /* ---------- check.c ---------- */
 
@@ -66,16 +67,21 @@ void	print_stop(void);
 
 /* ---------- blocks.c ---------- */
 
+void	print_as(t_style style, const char *fmt, ...);						__attribute__((format(printf, 2, 3)));
 void	print_link(long len, const char *color, bool new_line);
 void	print_padding(t_style style, const char *pad, long padding_len);
 void	print_array_u(t_style style, uint *array, size_t len, const char *array_color, const char *value_color, uint value, bool nl);
 void	print_array_zu(t_style style, size_t *array, size_t len, const char *array_color, const char *value_color, size_t value, bool nl);
 
+/* ---------- error.c ---------- */
+
+void	print_error(bool condition, const char *fmt, ...)					__attribute__((format(printf, 2, 3)));
+
 /* ---------- title.c ---------- */
 
-void	print_title(const char *fmt, ...);						__attribute__((format(printf, 1, 2)));
+void	print_title(const char *fmt, ...);									__attribute__((format(printf, 1, 2)));
 void	print_title_top(bool new_line);
-void	print_title_mid(bool new_line, const char *fmt, ...);	__attribute__((format(printf, 2, 3)));
+void	print_title_mid(bool new_line, const char *fmt, ...);				__attribute__((format(printf, 2, 3)));
 
 /* ---------- log.c ---------- */
 

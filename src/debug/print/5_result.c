@@ -13,22 +13,20 @@ void	print_result(const char *fmt, ...)
 
 	if (!should_print(RESULT))
 		return ;
-	else if (should_print_as(RESULT) == LOG)
+	va_start(args, fmt);
+	if (should_print_as(RESULT) == LOG)
 	{
-		_print_padding(DEFAULT_PAD, PADDING_LEN);
+		_print_padding(DEFAULT_PAD, PADDING_LEN_OF((DEPTH - 1)));
 		fprintf(stderr, "%s✔︎ ", GREEN);
-		va_start(args, fmt);
 		_print_log_custom(false, true, fmt, args);
-		va_end(args);
 		fprintf(stderr, "%s", NC);
 	}
 	else
 	{
-		va_start(args, fmt);
 		_print_result_mid(true, fmt, args);
-		va_end(args);
 		_print_result_bot(true);
 	}
+	va_end(args);
 	g_depth.curr--;
 }
 
@@ -38,21 +36,19 @@ void	print_result_mid(bool new_line, const char *fmt, ...)
 
 	if (!should_print(RESULT))
 		return ;
-	else if (should_print_as(RESULT) == LOG)
+	va_start(args, fmt);
+	if (should_print_as(RESULT) == LOG)
 	{
-		_print_padding(DEFAULT_PAD, PADDING_LEN);
+		_print_padding(DEFAULT_PAD, PADDING_LEN_OF((DEPTH - 1)));
 		fprintf(stderr, "%s✔︎ ", GREEN);
-		va_start(args, fmt);
 		_print_log_custom(false, new_line, fmt, args);
-		va_end(args);
 		fprintf(stderr, "%s", NC);
 	}
 	else
 	{
-		va_start(args, fmt);
 		_print_result_mid(new_line, fmt, args);
-		va_end(args);
 	}
+	va_end(args);
 }
 
 void	print_result_bot(bool new_line)
@@ -89,5 +85,5 @@ static void	_print_result_bot(bool new_line)
 	if (DEPTH <= 0)
 		return ;
 	_print_padding(DEFAULT_PAD, PADDING_LEN_OF((DEPTH - 1)));
-	print_link(-(PADDING_LEN_OF(1)), RESULT_COLOR, new_line);
+	print_link(-(PADDING_LEN_OF(1) + 1), RESULT_COLOR, new_line);
 }

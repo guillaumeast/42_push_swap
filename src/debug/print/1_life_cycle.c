@@ -27,7 +27,6 @@ void	print_start(size_t layers_count)
 	print_log("%s⌽%s LOGS STARTED%s", GREEN, YELLOW, NC);
 }
 
-
 void	print_reset(void)
 {
 	long	future_display_depth;

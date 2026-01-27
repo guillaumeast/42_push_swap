@@ -2,6 +2,17 @@
 #include "print_priv.h"
 #include <stdio.h>
 
+void	print_as(t_style style, const char *fmt, ...)
+{
+	va_list	args;
+
+	if (!should_print(style))
+		return ;
+	va_start(args, fmt);
+	vfprintf(stderr, fmt, args);
+	va_end(args);
+}
+
 void	print_link(long len, const char *color, bool new_line)
 {
 	if (len == 0)

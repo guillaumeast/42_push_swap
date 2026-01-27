@@ -26,36 +26,26 @@ bool	config_init_list(t_configs *configs, const t_state *state)
 		return (false);
 	if (!get_chunk_sizes(&chunk_sizes, &chunk_sizes_count, &state->a))
 		return (free(raw_configs), false);
-	// fprintf(stderr, "%s✔︎ %3zu%s chunk sizes    ⇢ %s", GREEN, chunk_sizes_count, GREY, NC);	// TMP: remove before submit
-	// print_array_zu(LOG, chunk_sizes, chunk_sizes_count, GREY, GREY, 0, true);
 	configs->count = raw_configs_count * chunk_sizes_count;
 	configs->data = malloc(configs->count * sizeof * configs->data);
 	if (!configs->data)
 		return (free(raw_configs), free(chunk_sizes), false);
 	i = 0;
 	configs->count = 0;
-	// fprintf(stderr, "%s╰──────────────────────────────╮%s\n", BOLD_BLUE, NC);	// TMP: remove before submit
-	// fprintf(stderr, "%s      ⏺ PROCESSING RAW CONFIGS │%s\n", BOLD_BLUE, NC);	// TMP: remove before submit
-	// fprintf(stderr, "%s      ╭────────────────────────╯%s\n", BOLD_BLUE, NC);	// TMP: remove before submit
+	print_title("processing raw configs");
 	while (i < raw_configs_count)
 	{
-		// fprintf(stderr, "%s      ⏺ Processing             %s%3zu%s ⇢ ", GREY, YELLOW, i, GREY);
 		process_algos(&configs->data[configs->count], raw_configs[i]);
 		process_optis(&configs->data[configs->count], raw_configs[i]);
-		// fprintf(stderr, "%s\n", NC);	// TMP: remove before submit
 		process_sizes(configs, chunk_sizes, chunk_sizes_count);
 		i++;
 	}
-	// fprintf(stderr, "%s      ╰───────────────────────────╮%s\n", BOLD_GREEN, NC);	// TMP: remove before submit
-	// fprintf(stderr, "%s      ✔︎ %3zu RAW CONFIGS PROCESSED │%s\n", BOLD_GREEN, i, NC);	// TMP: remove before submit
-	// fprintf(stderr, "%s╭─────────────────────────────────╯%s\n", BOLD_GREEN, NC);	// TMP: remove before submit
+	print_result("raw configs processed    ⇢ %3zu", i);
 	if (!process_lis(configs, state))
 		return (free(raw_configs), free(chunk_sizes), false);
 	configs->lis_set = true;
+	print_result("configs generated        ⇢ %3zu", configs->count);
 	// config_print_all(configs);	// TMP: remove before submit
-	// fprintf(stderr, "%s╰─────────────────────╮%s\n", BOLD_GREEN, NC);	// TMP: remove before submit
-	// fprintf(stderr, "%s✔︎ %3zu CONFIGS CREATED │%s\n", BOLD_GREEN, configs->count, NC);	// TMP: remove before submit
-	// fprintf(stderr, "%s╭─────────────────────╯%s\n\n", BOLD_GREEN, NC);	// TMP: remove before submit
 	return (free(raw_configs), free(chunk_sizes), true);
 }
 
