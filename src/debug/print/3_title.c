@@ -41,9 +41,11 @@ void	print_title_mid(bool new_line, const char *fmt, ...)
 
 static void	_print_title_top(bool new_line)
 {
+	if (DEPTH < 1)
+		return ;
 	if (DEPTH > 0)
 		_print_padding(DEFAULT_PAD, PADDING_LEN_OF((DEPTH - 1)));
-	print_link(PADDING_LEN_OF(1), TITLE_COLOR, new_line);
+	print_link(PADDING_LEN_OF(1) + 1, TITLE_COLOR, new_line);
 }
 
 static void	_print_title_mid(bool new_line, const char *fmt, va_list args)
