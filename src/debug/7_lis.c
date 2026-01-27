@@ -1,6 +1,7 @@
 #include "debug.h"
 #include "lis.h"
 #include <stdio.h>
+# include <print.h>	// TMP: remove before submit
 
 void	lis_print(const t_lis *lis, size_t len)
 {

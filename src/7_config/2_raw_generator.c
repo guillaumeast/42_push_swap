@@ -1,6 +1,8 @@
 #include "config_priv.h"
 #include <stdbool.h>
 #include <stdlib.h>
+# include "debug.h"
+#include <print.h>	// TMP: remove before submit
 
 typedef struct s_input
 {
@@ -19,18 +21,33 @@ typedef struct s_input
 static void		input_init(t_input *input);
 static size_t	add_couples(t_input *input, uint *configs);
 static size_t	add_optis(t_input *input, uint *configs);
-static bool		opti_is_valid(uint opti_compatibilities, uint config);
+static bool	opti_is_valid(uint opti, uint compatibilities, uint config);
 
 bool	generate_raw_configs(uint **ret_list, size_t *ret_count)
 {
 	t_input	input;
 
+	print_title("generating raw configs");
 	input_init(&input);
 	*ret_list = malloc(input.configs_count * sizeof ** ret_list);
 	if (!*ret_list)
 		return (false);
 	*ret_count = add_couples(&input, *ret_list);
 	*ret_count += add_optis(&input, *ret_list);
+	if (should_print_as(RESULT) == LOG)
+	{
+		print_result_top(true, "%3zu raw configs%s    ⇢ ", *ret_count, GREY);
+		print_result_mid(false, "%3zu raw configs%s    ⇢ ", *ret_count, GREY);
+		config_print_raw(*ret_list, *ret_count, GREY, YELLOW, true);
+		print_result_bot(true, "%3zu raw configs%s    ⇢ ", *ret_count, GREY);
+	}
+	else
+	{
+		print_result_top(true, "%3zu raw configs", *ret_count);
+		print_result_mid(false, "%3zu raw configs", *ret_count);
+		config_print_raw(*ret_list, *ret_count, GREY, YELLOW, true);
+		print_result_bot(true, "%3zu raw configs", *ret_count);
+	}
 	return (true);
 }
 
@@ -108,14 +125,20 @@ static size_t	add_optis(t_input *input, uint *configs)
 			{
 				if ((combined_optis & input->optis[opti_index]) != 0)
 				{
-					if (!opti_is_valid(input->optis_compat[opti_index], config))
+					if (!opti_is_valid(input->optis[opti_index], input->optis_compat[opti_index], config))
 						break ;
 					config |= input->optis[opti_index];
 				}
 				opti_index++;
 			}
 			if (opti_index == input->optis_count)
-				configs[target_index++] = config;
+			{
+				configs[target_index] = config;
+				print_log_custom(true, false, "%s✔︎ %sraw_config[%3zu] ⇢ %s", GREEN, GREY, target_index, NC);
+				if (should_print(LOG))
+					config_print_raw(&configs[target_index], 1, GREY, GREY, true);
+				target_index++;
+			}
 			combined_optis += (1U << OPTI_OFFSET);
 		}
 		couples_index++;
@@ -127,19 +150,22 @@ static size_t	add_optis(t_input *input, uint *configs)
 * at least one algo must be compatible with this opti
 * all optis already enabled must be compatible with this opti
 */
-static bool	opti_is_valid(uint opti_compatibilities, uint config)
+static bool	opti_is_valid(uint opti, uint compatibilities, uint config)
 {
 	uint	algos_mask;
 	uint	algos;
 	uint	opti_list;
-	uint	compatibilities;
+	uint	compat;
 
+	// Si lis_swap => lis obligatoire
 	algos_mask = (ALGO_1_MASK | ALGO_2_MASK);
 	algos = (config & algos_mask);
-	compatibilities = (opti_compatibilities & algos_mask);
-	if ((algos & compatibilities) == 0)
+	compat = (compatibilities & algos_mask);
+	if ((algos & compat) == 0)
 		return (false);
 	opti_list = (config & OPTI_MASK);
-	compatibilities = (opti_compatibilities & OPTI_MASK);
+	if (opti == LIS_SWAP && (opti_list & LIS) == 0)
+		return (false);
+	compat = (compatibilities & OPTI_MASK);
 	return ((opti_list & compatibilities) == opti_list);
 }

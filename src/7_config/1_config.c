@@ -5,7 +5,7 @@
 #include "k_sort.h"
 #include "greedy.h"
 #include <stdlib.h>
-#include <debug.h>	// TMP: remove before submit
+#include <print.h>	// TMP: remove before submit
 
 static void	process_algos(t_config *config, uint raw_config);
 static void	process_optis(t_config *config, uint raw_config);
@@ -21,35 +21,41 @@ bool	config_init_list(t_configs *configs, const t_state *state)
 	size_t	chunk_sizes_count;
 	size_t	i;
 
-	fprintf(stderr, "%s⏺ CONFIGS GENERATION%s\n", GREY, NC);	// TMP: remove before submit
-	fprintf(stderr, "%s╰───────────────────%s\n", GREY, NC);	// TMP: remove before submit
+	print_title("GENERATING CONFIGS");
 	if (!generate_raw_configs(&raw_configs, &raw_configs_count))
 		return (false);
-	fprintf(stderr, "%s✔︎ %3zu%s raw configs    ⇢     ⇢ %s", GREEN, raw_configs_count, GREY, NC);	// TMP: remove before submit
-	config_print_raw(raw_configs, raw_configs_count, GREY, YELLOW, true);
 	if (!get_chunk_sizes(&chunk_sizes, &chunk_sizes_count, &state->a))
 		return (free(raw_configs), false);
-	fprintf(stderr, "%s✔︎ %3zu%s chunk sizes    ⇢     ⇢ %s", GREEN, chunk_sizes_count, GREY, NC);	// TMP: remove before submit
-	print_array_zu(chunk_sizes, chunk_sizes_count, GREY, GREY, 0, true);
+	// fprintf(stderr, "%s✔︎ %3zu%s chunk sizes    ⇢ %s", GREEN, chunk_sizes_count, GREY, NC);	// TMP: remove before submit
+	// print_array_zu(LOG, chunk_sizes, chunk_sizes_count, GREY, GREY, 0, true);
 	configs->count = raw_configs_count * chunk_sizes_count;
 	configs->data = malloc(configs->count * sizeof * configs->data);
 	if (!configs->data)
 		return (free(raw_configs), free(chunk_sizes), false);
 	i = 0;
 	configs->count = 0;
+	// fprintf(stderr, "%s╰──────────────────────────────╮%s\n", BOLD_BLUE, NC);	// TMP: remove before submit
+	// fprintf(stderr, "%s      ⏺ PROCESSING RAW CONFIGS │%s\n", BOLD_BLUE, NC);	// TMP: remove before submit
+	// fprintf(stderr, "%s      ╭────────────────────────╯%s\n", BOLD_BLUE, NC);	// TMP: remove before submit
 	while (i < raw_configs_count)
 	{
+		// fprintf(stderr, "%s      ⏺ Processing             %s%3zu%s ⇢ ", GREY, YELLOW, i, GREY);
 		process_algos(&configs->data[configs->count], raw_configs[i]);
 		process_optis(&configs->data[configs->count], raw_configs[i]);
+		// fprintf(stderr, "%s\n", NC);	// TMP: remove before submit
 		process_sizes(configs, chunk_sizes, chunk_sizes_count);
 		i++;
 	}
+	// fprintf(stderr, "%s      ╰───────────────────────────╮%s\n", BOLD_GREEN, NC);	// TMP: remove before submit
+	// fprintf(stderr, "%s      ✔︎ %3zu RAW CONFIGS PROCESSED │%s\n", BOLD_GREEN, i, NC);	// TMP: remove before submit
+	// fprintf(stderr, "%s╭─────────────────────────────────╯%s\n", BOLD_GREEN, NC);	// TMP: remove before submit
 	if (!process_lis(configs, state))
 		return (free(raw_configs), free(chunk_sizes), false);
 	configs->lis_set = true;
-	config_print_all(configs);	// TMP: remove before submit
-	fprintf(stderr, "%s╭────────────────────%s\n", GREY, NC);	// TMP: remove before submit
-	fprintf(stderr, "%s✔︎ %3zu CONFIGS CREATED%s\n\n", BOLD_GREEN, configs->count, NC);	// TMP: remove before submit
+	// config_print_all(configs);	// TMP: remove before submit
+	// fprintf(stderr, "%s╰─────────────────────╮%s\n", BOLD_GREEN, NC);	// TMP: remove before submit
+	// fprintf(stderr, "%s✔︎ %3zu CONFIGS CREATED │%s\n", BOLD_GREEN, configs->count, NC);	// TMP: remove before submit
+	// fprintf(stderr, "%s╭─────────────────────╯%s\n\n", BOLD_GREEN, NC);	// TMP: remove before submit
 	return (free(raw_configs), free(chunk_sizes), true);
 }
 
@@ -68,13 +74,21 @@ static void process_algos(t_config *config, uint raw_config)
 	else if ((raw_config & ALGO_1_MASK) == K_SORT)
 	{
 		config->algo_1 = k_sort;
-		config->algo_1_name = "K_SORT";
+		config->algo_1_name = "KSORT";
 	}
 	if ((raw_config & ALGO_2_MASK) == GREEDY)
 	{
 		config->algo_2 = greedy;
 		config->algo_2_name = "GREEDY";
 	}
+	// if (config->algo_1_name && config->algo_2_name)
+	// 	fprintf(stderr, "[%s] x [%s]", config->algo_1_name, config->algo_2_name);
+	// else if (config->algo_1_name)
+	// 	fprintf(stderr, "[%s] x [%sUNKNOWN%s]", config->algo_1_name, BOLD_RED, GREY);
+	// else if (config->algo_2_name)
+	// 	fprintf(stderr, "[%sUNKNOWN%s] x [%s]", BOLD_RED, GREY, config->algo_2_name);
+	// else
+	// 	fprintf(stderr, "[%sUNKNOWN%s] x [%sUNKNOWN%s]", BOLD_RED, GREY, BOLD_RED, GREY);
 }
 
 static void	process_optis(t_config *config, uint raw_config)
@@ -111,12 +125,14 @@ static void	process_optis(t_config *config, uint raw_config)
 		config->opti_names = " + SWAP_B";
 	else
 		config->opti_names = "";
+	// fprintf(stderr, "%s", config->opti_names);
 }
 
 static void	process_sizes(t_configs *configs, const size_t *sizes, size_t len)
 {
 	t_config	initial_config;
 	size_t		i;
+	// size_t		added_count;
 
 	initial_config = configs->data[configs->count];
 	if (initial_config.algo_1 != chunk && initial_config.algo_1 != k_sort)
@@ -124,14 +140,23 @@ static void	process_sizes(t_configs *configs, const size_t *sizes, size_t len)
 		configs->count++;
 		return ;
 	}
+	// fprintf(stderr, "%s      ╰────────────────────────╮%s\n", BOLD_BLUE, NC);	// TMP: remove before submit
+	// fprintf(stderr, "%s            ⏺ PROCESSING SIZES │%s\n", BOLD_BLUE, NC);	// TMP: remove before submit
+	// fprintf(stderr, "%s            ╭──────────────────╯%s\n", BOLD_BLUE, NC);	// TMP: remove before submit
 	i = 0;
+	// added_count = 0;
 	while (i < len)
 	{
 		configs->data[configs->count] = initial_config;
 		configs->data[configs->count].chunk_size = sizes[i];
 		configs->count++;
+		// added_count++;
+		// fprintf(stderr, "%s            ✔︎%s Processed        %s%3zu%s ⇢ size = %3zu | count = %3zu | added = %3zu ⇢ %s%3zu\n", GREEN, GREY, YELLOW, i, GREY, configs->data[configs->count - 1].chunk_size, configs->count, added_count, YELLOW, configs->count - 1);
 		i++;
 	}
+	// fprintf(stderr, "%s            ╰───────────────────╮%s\n", BOLD_GREEN, NC);	// TMP: remove before submit
+	// fprintf(stderr, "%s            ✔︎ %3zu CONFIGS ADDED │%s\n", BOLD_GREEN, added_count, NC);	// TMP: remove before submit
+	// fprintf(stderr, "%s      ╭─────────────────────────╯%s\n", BOLD_GREEN, NC);	// TMP: remove before submit
 }
 
 static bool	process_lis(t_configs *configs, const t_state *state)

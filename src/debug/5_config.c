@@ -2,6 +2,7 @@
 #include "config_priv.h"
 #include "chunk.h"
 #include "k_sort.h"
+# include <print.h>	// TMP: remove before submit
 
 void	config_print_all(const t_configs *configs)
 {
@@ -111,7 +112,8 @@ void	config_print_algo_2(const uint *configs, size_t count, const char *color, c
 void	config_print_optis(const uint *configs, size_t count, const char *color, const char *item_color, bool nl)
 {
 	size_t	i;
-	uint	opti;
+	uint	current;
+	uint	optis;
 	uint	seen;
 	bool	is_first;
 
@@ -121,24 +123,40 @@ void	config_print_optis(const uint *configs, size_t count, const char *color, co
 	is_first = true;
 	while (i < count)
 	{
-		opti = (configs[i] & OPTI_MASK);
-		if (opti != 0 && (opti & seen) == 0)
+		optis = ((configs[i] & OPTI_MASK) & ~seen);
+		while (optis != 0)
 		{
 			if (is_first)
 				is_first = false;
 			else
 				fprintf(stderr, "%s ⊗ ", color);
-			if (opti == MEDIAN)
+			if ((optis & MEDIAN) != 0)
+			{
 				fprintf(stderr, "%sMEDIAN%s", item_color, NC);
-			else if (opti == LIS)
+				current = MEDIAN;
+			}
+			else if ((optis & LIS) != 0)
+			{
 				fprintf(stderr, "%sLIS%s", item_color, NC);
-			else if (opti == LIS_SWAP)
+				current = LIS;
+			}
+			else if ((optis & LIS_SWAP) != 0)
+			{
 				fprintf(stderr, "%sLIS_SWAP%s", item_color, NC);
-			else if (opti == SWAP)
+				current = LIS_SWAP;
+			}
+			else if ((optis & SWAP) != 0)
+			{
 				fprintf(stderr, "%sSWAP%s", item_color, NC);
+				current = SWAP;
+			}
 			else
-				fprintf(stderr, "%s%5u%s", BOLD_RED, opti, color);
-			seen |= opti;
+			{
+				fprintf(stderr, "%s%5u%s", BOLD_RED, optis, color);
+				current = optis;
+			}
+			optis &= ~current;
+			seen |= current;
 		}
 		i++;
 	}

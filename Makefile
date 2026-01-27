@@ -9,7 +9,7 @@ SRCS		:= \
 	$(wildcard src/*.c) \
 	$(wildcard src/*/*.c) \
 	$(wildcard src/*/*/*.c)
-# TMP: remove before submit (line "-Isrc/debug")
+# TMP: remove before submit (lines "-Isrc/debug" ...)
 INCLUDES	:= \
 	-I$(LIBFT_DIR) \
 	-Isrc/debug \
@@ -17,7 +17,6 @@ INCLUDES	:= \
 	-Isrc/2_stack \
 	-Isrc/3_state \
 	-Isrc/4_moves \
-	-Isrc/7_config \
 	-Isrc/5_algos \
 	-Isrc/5_algos/1_sort_three \
 	-Isrc/5_algos/2_naive \
@@ -28,7 +27,10 @@ INCLUDES	:= \
 	-Isrc/6_optis/1_median \
 	-Isrc/6_optis/2_lis \
 	-Isrc/6_optis/3_swap \
-	-Isrc/6_optis/4_moves
+	-Isrc/6_optis/4_moves \
+	-Isrc/7_config \
+	-Isrc/debug \
+	-Isrc/debug/print
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

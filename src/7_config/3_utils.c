@@ -2,6 +2,7 @@
 #include "config.h"
 #include "stack.h"
 #include <stdlib.h>
+#include <print.h>	// TMP: remove before submit
 
 #define CHUNK_N_MIN 2
 #define CHUNK_N_MAX 9
@@ -15,6 +16,7 @@ bool	get_chunk_sizes(size_t **ret, size_t *ret_size, const t_stack *stack)
 	size_t	i;
 	size_t	n;
 
+	print_title("generating chunk sizes");
 	max_size = (CHUNK_N_MAX - CHUNK_N_MIN + 1) * 2;
 	*ret = malloc(max_size * sizeof ** ret);
 	if (!*ret)
@@ -25,13 +27,20 @@ bool	get_chunk_sizes(size_t **ret, size_t *ret_size, const t_stack *stack)
 	{
 		size = (long)(stack->len / n);
 		if (size_is_valid(*ret, i, size, stack->len))
+		{
+			print_log("%s✔︎ %schunk_size[%3zu] ⇢ %3ld%s", GREEN, GREY, i, size, NC);
 			(*ret)[i++] = (size_t)size;
+		}
 		size = (long)n * (long)square_root_rounded((int)stack->len);
 		if (size_is_valid(*ret, i, size, stack->len))
+		{
+			print_log("%s✔︎ %schunk_size[%3zu] ⇢ %3ld%s", GREEN, GREY, i, size, NC);
 			(*ret)[i++] = (size_t)size;
+		}
 		n++;
 	}
 	*ret_size = i;
+	print_result("%3zu chunk sizes", *ret_size);
 	return (true);
 }
 

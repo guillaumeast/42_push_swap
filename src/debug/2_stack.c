@@ -1,6 +1,7 @@
 #include "stack.h"
 #include <stdio.h>
 # include "debug.h"	// TMP: remove before submit
+# include <print.h>	// TMP: remove before submit
 
 static int	get_idx_len(size_t max_size);
 static void	print_line(const t_stack *a, const t_stack *b, size_t i, int len, int idx_len);

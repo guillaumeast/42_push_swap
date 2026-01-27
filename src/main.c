@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 # include "debug.h"	// TMP: remove before submit
+# include "print.h"	// TMP: remove before submit
 
 static bool	run_configs(t_state *inital_state, t_configs *configs, t_buff *best_moves);
 static bool	abort_config(t_state *state, t_buff *moves, const char *error);
