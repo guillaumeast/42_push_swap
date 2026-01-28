@@ -1,10 +1,12 @@
 #include "libft.h"
 #include "stack.h"
 #include <stdlib.h>
+#include "print.h"
 
 // Caller must free stack->data
 bool	stack_init(t_stack *a, t_stack *b, uint *values, size_t count)
 {
+	print_title("stack_init()");
 	a->data = values;
 	a->offset = 0;
 	a->len = count;
@@ -15,6 +17,9 @@ bool	stack_init(t_stack *a, t_stack *b, uint *values, size_t count)
 	b->offset = 0;
 	b->len = 0;
 	b->cap = count;
+	print_result_mid(true, "stack a initialized      ⇢ %3zu", a->len);
+	print_result_mid(true, "stack b initialized      ⇢ %3zu", b->len);
+	print_result_bot(true);
 	return (true);
 }
 

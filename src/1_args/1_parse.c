@@ -12,6 +12,7 @@ bool	args_parse(int argc, char **argv, t_args *args)
 	int		*raw_args;
 	size_t	i;
 
+	// print_start(1, "args_parse()");
 	print_title("args_parse()");
 	argc--;
 	argv++;

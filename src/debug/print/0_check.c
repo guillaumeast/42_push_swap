@@ -1,6 +1,6 @@
 #include "print.h"
 
-t_depth	g_depth = {-1, DEFAULT_DEPTH_MIN, DEFAULT_DEPTH_MAX};
+t_depth	g_depth = {DEFAULT_DEPTH_CURR, DEFAULT_DEPTH_MIN, DEFAULT_DEPTH_MAX};
 
 bool	should_print(t_style style)
 {

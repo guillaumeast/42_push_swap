@@ -90,7 +90,7 @@ bool	config_dup(t_config *dst, const t_config *src, size_t values_count)
 	dst->lis.swap = malloc(values_count * sizeof * dst->lis.swap);
 	if (!dst->lis.keep || !dst->lis.swap)
 	{
-		print_error(true, "config_dup() ⇢ OOM\n");
+		print_error("config_dup() ⇢ OOM\n");
 		return (free(dst->lis.keep), free(dst->lis.swap), false);
 	}
 	ft_memcpy(dst->lis.keep, src->lis.keep, values_count * sizeof * dst->lis.keep);

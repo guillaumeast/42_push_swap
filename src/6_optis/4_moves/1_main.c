@@ -63,7 +63,7 @@ static void	prune_no_ops(t_buff *moves)
 		return ;
 	// fprintf(stderr, "%s✔︎        -%3zu => ", BOLD_GREEN, moves->len - final_len);
 	// print_opti_moves(moves, write_index, start_index + len - 1, BOLD_GREEN, BOLD_RED, false);
-	fprintf(stderr, "%s✔︎ moves compressed => %3zu\n%s", BOLD_GREEN, moves->len - final_len, NC);
+	// fprintf(stderr, "%s✔︎ moves compressed => %3zu\n%s", BOLD_GREEN, moves->len - final_len, NC);
 	moves->len = final_len;
 }
 

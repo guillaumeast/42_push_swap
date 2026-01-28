@@ -76,7 +76,7 @@ static bool	lis_best_index(t_lis *lis, const t_stack *stack, t_swaps *swaps)
 	print_title("lis_best_index()");
 	if (!get_lis(lis, stack, 0, swaps))
 	{
-		print_error(true, "Unable to compute lis for index 0\n");
+		print_error("Unable to compute lis for index 0\n");
 		return (false);
 	}
 	i = 1;
@@ -84,7 +84,7 @@ static bool	lis_best_index(t_lis *lis, const t_stack *stack, t_swaps *swaps)
 	{
 		if (!get_lis(&current_lis, stack, i, swaps))
 		{
-			print_error(true, "Unable to compute lis for index %zu\n", i);
+			print_error("Unable to compute lis for index %zu\n", i);
 			return (lis_free(lis), false);
 		}
 		keep_best_lis(lis, lis, &current_lis);

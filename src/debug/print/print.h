@@ -47,6 +47,7 @@ extern t_depth	g_depth;
 
 /* ---------- SETTINGS ---------- */
 
+# define DEFAULT_DEPTH_CURR	-1
 # define DEFAULT_DEPTH_MIN	0
 # define DEFAULT_DEPTH_MAX	0
 # define DEFAULT_PAD		" "
@@ -91,7 +92,7 @@ void	print_array_zu(t_style style, size_t *array, size_t len, const char *array_
 
 /* ---------- error.c ---------- */
 
-void	print_error(bool condition, const char *fmt, ...)									__attribute__((format(printf, 2, 3)));
+void	print_error(const char *fmt, ...)													__attribute__((format(printf, 1, 2)));
 
 /* ---------- title.c ---------- */
 
