@@ -23,9 +23,8 @@ void	print_title(const char *fmt, ...)
 void	print_title_top(bool new_line)
 {
 	g_depth.curr++;
-	if (!should_print(TITLE))
-		return ;
-	_print_title_top(new_line);
+	if (should_print(TITLE))
+		_print_title_top(new_line);
 }
 
 void	print_title_mid(bool new_line, const char *fmt, ...)
@@ -41,11 +40,14 @@ void	print_title_mid(bool new_line, const char *fmt, ...)
 
 static void	_print_title_top(bool new_line)
 {
-	if (DEPTH < 1)
+	if (DEPTH < 0)
 		return ;
-	if (DEPTH > 0)
+	if (DEPTH == 0)
+		fprintf(stderr, "%s│%s\n", TITLE_COLOR, NC);
+	else if (DEPTH > 1)
 		_print_padding(DEFAULT_PAD, PADDING_LEN_OF((DEPTH - 1)));
-	print_link(PADDING_LEN_OF(1) + 1, TITLE_COLOR, new_line);
+	if (DEPTH > 0)
+		print_link(PADDING_LEN_OF(1) + 1, TITLE_COLOR, new_line);
 }
 
 static void	_print_title_mid(bool new_line, const char *fmt, va_list args)

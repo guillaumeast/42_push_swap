@@ -21,11 +21,8 @@ int	main(int argc, char **argv)
 	t_configs	configs;
 	t_buff		best_moves;
 
-	// if (argc == 1)					// TMP: remove before submit
-	// 	return (test_opti_moves());	// TMP: remove before submit
 	if (argc < 2)
 		return (0);
-	fprintf(stderr, "\n");
 	if (!args_parse(argc, argv, &args))
 		return (free_and_print_error(NULL, NULL));
 	if (!state_init(&initial_state, args.values, args.count))
@@ -36,7 +33,6 @@ int	main(int argc, char **argv)
 	if (!run_configs(&initial_state, &configs, &best_moves))
 		return (free_and_print_error(&initial_state, &configs));
 	moves_print(&best_moves);	// TMP: uncomment before submit (It's commented to make debug outputs readable)
-	// fprintf(stdout, " ");			// TMP: remove before submit (It's here for parsing tester)
 	state_free(&initial_state);
 	free(configs.data);
 	buff_free(&best_moves);
@@ -111,7 +107,7 @@ static bool	abort_config(t_state *state, t_buff *moves, const char *error)
 	stack_print(&state->a, &state->b);
 	state_free(state);
 	buff_free(moves);
-	fprintf(stderr, "‼️ %s, stopping\n", error);	// TMP: remove before submit
+	print_error(true, "‼️ %s, stopping\n", error);	// TMP: remove before submit
 	return (false);
 }
 

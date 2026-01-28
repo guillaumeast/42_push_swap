@@ -75,7 +75,7 @@ static void	_print_result_mid(bool new_line, const char *fmt, va_list args)
 		i++;
 	}
 	_print_padding(DEFAULT_PAD, PADDING_LEN);
-	fprintf(stderr, "%s✔︎ %s%s", RESULT_COLOR, formatted, NC);
+	fprintf(stderr, "%s⍟ %s%s", RESULT_COLOR, formatted, NC);
 	free(formatted);
 	if (new_line)
 		fprintf(stderr, "\n");

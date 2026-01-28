@@ -23,7 +23,18 @@ bool	lis_compute_both(const t_stack *stack, t_lis *lis, t_lis *lis_swap)
 		print_bool_array(lis_swap->swap, NULL, stack->len, GREY);
 		fprintf(stderr, "%s\n", NC);
 	}
-	print_result("lis optimized with swaps ⇢ %3zu ⇢ %zu", lis->keep_count, lis_swap->keep_count);
+	if (should_print_as(RESULT) == LOG)
+	{
+		if (lis_swap->keep_count > lis->keep_count)
+			print_result_mid(false, "lis optimized with swaps ⇢ %3zu ⇢ ", lis_swap->keep_count);
+		else
+			print_result_mid(false, "lis optimized with swaps ⇢ %3zu ⇢ ", lis_swap->keep_count);
+		print_bool_array(lis_swap->keep, NULL, stack->len, GREY);
+		fprintf(stderr, "%s\n", NC);
+		print_result_bot(true);
+	}
+	else
+		print_result("lis optimized with swaps ⇢ %3zu ⇢ %zu", lis->keep_count, lis_swap->keep_count);
 	return (true);
 }
 

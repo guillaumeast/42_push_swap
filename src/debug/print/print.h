@@ -48,7 +48,7 @@ extern t_depth	g_depth;
 /* ---------- SETTINGS ---------- */
 
 # define DEFAULT_DEPTH_MIN	0
-# define DEFAULT_DEPTH_MAX	1
+# define DEFAULT_DEPTH_MAX	0
 # define DEFAULT_PAD		" "
 # define PADDING_SIZE		6
 # define TITLE_COLOR		BOLD_BLUE

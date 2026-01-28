@@ -2,6 +2,7 @@
 #include "args.h"
 #include "args_priv.h"
 #include <stdlib.h>
+# include "print.h"
 
 static bool	convert_arg(char *arg, int *args, size_t *args_count);
 static bool	check_arg(char *arg, int *ret, int *args_array, size_t size);
@@ -11,6 +12,7 @@ bool	args_parse(int argc, char **argv, t_args *args)
 	int		*raw_args;
 	size_t	i;
 
+	print_title("args_parse()");
 	argc--;
 	argv++;
 	i = 0;
@@ -28,8 +30,10 @@ bool	args_parse(int argc, char **argv, t_args *args)
 			return (free(raw_args), false);
 		i++;
 	}
+	print_pass("Parsed as integers       ⇢ %3zu\n", i);
 	args->values = normalize(raw_args, args->count);
 	free(raw_args);
+	print_result("arguments parsed         ⇢ %3zu", args->count);
 	if (!args->values)
 		return (false);
 	return (true);
