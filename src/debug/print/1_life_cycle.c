@@ -2,12 +2,14 @@
 #include "print_priv.h"
 
 # include <stdio.h>
-void	print_start(size_t layers_count)
+void	print_start(size_t layers_count, const char *optional_title)
 {
 	long	future_min;
 	long	future_display_depth;
 
-	if (g_depth.min < 0 || g_depth.min > g_depth.curr)
+	if (g_depth.curr < 0)
+		g_depth.curr = 0;
+	if (g_depth.min <= 0 || g_depth.min > g_depth.curr)
 		future_min = g_depth.curr;
 	else
 		future_min = g_depth.min;
@@ -24,14 +26,17 @@ void	print_start(size_t layers_count)
 	}
 	g_depth.min = future_min;
 	g_depth.max = g_depth.curr + ((long)layers_count - 1);
-	print_log("%s⌽%s LOGS STARTED%s", GREEN, YELLOW, NC);
+	if (optional_title)
+		print_log("%s⌽%s LOGS STARTED ⇢ %s%s\n", GREEN, YELLOW, optional_title, NC);
+	else
+		print_log("%s⌽%s LOGS STARTED\n", GREEN, YELLOW);
 }
 
 void	print_reset(void)
 {
 	long	future_display_depth;
 
-	print_log("%s⍟ LOGS RESETED%s", YELLOW, NC);
+	print_log("%s⍟ LOGS RESETED%s\n", YELLOW, NC);
 	if (g_depth.curr >= DEFAULT_DEPTH_MIN && g_depth.curr <= DEFAULT_DEPTH_MAX)
 		return ;
 	future_display_depth = DEPTH_OF(g_depth.curr, DEFAULT_DEPTH_MIN);
@@ -45,7 +50,7 @@ void	print_reset(void)
 
 void	print_stop(void)
 {
-	print_log("%s⍉%s LOGS STOPPED%s", RED, YELLOW, NC);
+	print_log("%s⍉%s LOGS STOPPED%s\n", RED, YELLOW, NC);
 	if (DEPTH > 0)
 		print_link(-(PADDING_LEN + 1), GREY, true);
 	g_depth.min = -1;

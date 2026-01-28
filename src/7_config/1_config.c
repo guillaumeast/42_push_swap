@@ -21,7 +21,7 @@ bool	config_init_list(t_configs *configs, const t_state *state)
 	size_t	chunk_sizes_count;
 	size_t	i;
 
-	print_title("GENERATING CONFIGS");
+	print_title("config_init_list()");
 	if (!generate_raw_configs(&raw_configs, &raw_configs_count))
 		return (false);
 	if (!get_chunk_sizes(&chunk_sizes, &chunk_sizes_count, &state->a))
@@ -32,7 +32,6 @@ bool	config_init_list(t_configs *configs, const t_state *state)
 		return (free(raw_configs), free(chunk_sizes), false);
 	i = 0;
 	configs->count = 0;
-	print_title("processing raw configs");
 	while (i < raw_configs_count)
 	{
 		process_algos(&configs->data[configs->count], raw_configs[i]);
@@ -40,7 +39,7 @@ bool	config_init_list(t_configs *configs, const t_state *state)
 		process_sizes(configs, chunk_sizes, chunk_sizes_count);
 		i++;
 	}
-	print_result("raw configs processed    ⇢ %3zu", i);
+	print_pass("configs converted        ⇢ %3zu\n", i);
 	if (!process_lis(configs, state))
 		return (free(raw_configs), free(chunk_sizes), false);
 	configs->lis_set = true;

@@ -2,7 +2,7 @@
 #include "lis_priv.h"
 #include "stack_ops.h"
 #include <stdlib.h>
-// # include "debug.h"	// TMP: remove before submit
+# include "print.h"	// TMP: remove before submit
 
 # define DEBUG_DEPTH 3
 
@@ -14,6 +14,8 @@ bool	swap_stack(t_swapped *dst, const t_stack *src, bool swap_first)
 {
 	size_t	i;
 
+	print_title("swap_stack()");
+	print_warn("swap_first = %s%s\n", YELLOW, swap_first ? "true" : "false");
 	if (!init_swaps(dst, src, swap_first))
 		return (false);
 	i = 0;
@@ -22,6 +24,7 @@ bool	swap_stack(t_swapped *dst, const t_stack *src, bool swap_first)
 	{
 		if (is_swappable(src, i, swap_first))
 		{
+			print_pass("is swappable             ⇢ %s%3zu\n", GREEN, stack_get_value(src, (long)i));
 			dst->swaps.from[dst->swaps.count] = stack_get_value(src, (long)i);
 			dst->swaps.to[dst->swaps.count] = stack_get_value(src, (long)i + 1);
 			dst->swaps.count++;
@@ -30,22 +33,18 @@ bool	swap_stack(t_swapped *dst, const t_stack *src, bool swap_first)
 			i++;
 		}
 		else
+		{
+			print_info("is not swappable         ⇢ %3zu\n", stack_get_value(src, (long)i));
 			stack_rotate(&dst->swapped, 1);
+		}
 		i++;
 	}
 	stack_reverse_rotate(&dst->swapped, dst->swapped.offset);
-	// TMP: remove before submit
 	// test_swap_conflicts(src, swap_first);
 	// log_debug("swap_stack", DEBUG_DEPTH, "%sInitial stack   => ", BLUE); stack_print_line(src, NULL, BLUE); fprintf(stderr, "%s\n", NC);
 	// log_debug("swap_stack", DEBUG_DEPTH, "%sSwapped stack   => ", BLUE); stack_print_line(&dst->swapped, src, BLUE); fprintf(stderr, "%s\n", NC);
-	// log_debug("swap_stack", DEBUG_DEPTH, "%sRaw swaps   %3zu => [", BLUE, dst->swaps.count);
-	// for (size_t j = 0; j < dst->swaps.count; j++)
-	// {
-	// 	fprintf(stderr, "%u", dst->swaps.from[j]);
-	// 	if (j < dst->swaps.count - 1)
-	// 		fprintf(stderr, " ");
-	// }
-	// fprintf(stderr, "]%s\n", NC);
+	print_result_mid(false, "raw swaps                ⇢ %3zu ⇢ ", dst->swaps.count); print_array_u(RESULT, dst->swaps.from, dst->swaps.count, GREY, GREY, 0, true);
+	print_result_bot(true);
 	return (true);
 }
 

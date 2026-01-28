@@ -2,15 +2,24 @@
 #include "print_priv.h"
 #include <stdio.h>
 
-void	print_as(t_style style, const char *fmt, ...)
+void	print_as(t_style style, bool padding, bool new_line, const char *fmt, ...)
 {
 	va_list	args;
 
 	if (!should_print(style))
 		return ;
+	if (padding)
+	{
+		if (style == RESULT && should_print_as(style) == LOG)
+			_print_padding(DEFAULT_PAD, PADDING_LEN_OF(DEPTH - 1));
+		else
+			_print_padding(DEFAULT_PAD, PADDING_LEN);
+	}
 	va_start(args, fmt);
 	vfprintf(stderr, fmt, args);
 	va_end(args);
+	if (new_line)
+		fprintf(stderr, "\n");
 }
 
 void	print_link(long len, const char *color, bool new_line)

@@ -27,14 +27,14 @@ bool	generate_raw_configs(uint **ret_list, size_t *ret_count)
 {
 	t_input	input;
 
-	print_title("generating raw configs");
+	print_title("generate_raw_configs()");
 	input_init(&input);
 	*ret_list = malloc(input.configs_count * sizeof ** ret_list);
 	if (!*ret_list)
 		return (false);
 	*ret_count = add_couples(&input, *ret_list);
 	*ret_count += add_optis(&input, *ret_list);
-	print_result_mid(false, "raw configs              %s⇢%s %3zu %s⇢ ", GREY, GREEN, *ret_count, GREY);
+	print_result_mid(false, "raw configs              ⇢ %3zu ⇢ ", *ret_count);
 	if (should_print(RESULT))
 		config_print_raw(*ret_list, *ret_count, GREY, YELLOW, true);
 	print_result_bot(true);
@@ -124,7 +124,7 @@ static size_t	add_optis(t_input *input, uint *configs)
 			if (opti_index == input->optis_count)
 			{
 				configs[target_index] = config;
-				print_log_custom(true, false, "%s✔︎ %sraw_config[%3zu]          ⇢ %s", GREEN, GREY, target_index, NC);
+				print_pass("raw_config[%3zu]          ⇢ %s", target_index, NC);
 				if (should_print(LOG))
 					config_print_raw(&configs[target_index], 1, GREY, GREY, true);
 				target_index++;

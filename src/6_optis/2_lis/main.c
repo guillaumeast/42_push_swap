@@ -12,14 +12,18 @@ static void	keep_best_lis(t_lis *dst, t_lis *a, t_lis *b);
 
 bool	lis_compute_both(const t_stack *stack, t_lis *lis, t_lis *lis_swap)
 {
+	print_title("lis_compute_both()");
 	if (!lis_best_index(lis, stack, NULL))
 		return (false);
-	fprintf(stderr, "%s✔︎ %3zu%s lis            ⇢ %s", GREEN, lis->keep_count, GREY, NC); print_bool_array(lis->keep, NULL, stack->len, GREY); fprintf(stderr, "%s\n", NC);
 	if (!lis_best_swaps_and_index(lis_swap, stack))
 		return (lis_free(lis), false);
-	fprintf(stderr, "%s✔︎ %3zu%s lis with swaps ⇢ %s", GREEN, lis_swap->keep_count, GREY, NC); print_bool_array(lis_swap->keep, lis->keep, stack->len, GREY); fprintf(stderr, "%s\n", NC);
-
-	fprintf(stderr, "%s✔︎ %3zu%s swaps          ⇢ %s", GREEN, lis_swap->swap_count, GREY, NC); print_bool_array(lis_swap->swap, NULL, stack->len, GREY); fprintf(stderr, "%s\n", NC);
+	print_pass("swaps                    ⇢ %3zu ⇢ ", lis_swap->swap_count);
+	if (should_print(LOG))
+	{
+		print_bool_array(lis_swap->swap, NULL, stack->len, GREY);
+		fprintf(stderr, "%s\n", NC);
+	}
+	print_result("lis optimized with swaps ⇢ %3zu ⇢ %zu", lis->keep_count, lis_swap->keep_count);
 	return (true);
 }
 
@@ -31,6 +35,7 @@ static bool	lis_best_swaps_and_index(t_lis *lis, const t_stack *stack)
 	t_lis		lis_2;
 	bool		success;
 
+	print_title("lis_best_swaps_and_index()");
 	if (!swap_stack(&swapped_0_off, stack, false))
 		return (false);
 	if (!swap_stack(&swapped_0_on, stack, true))
@@ -42,6 +47,13 @@ static bool	lis_best_swaps_and_index(t_lis *lis, const t_stack *stack)
 		keep_best_lis(lis, &lis_1, &lis_2);
 	swap_free(&swapped_0_off);
 	swap_free(&swapped_0_on);
+	print_result_mid(false, "Best swapped lis (i %3zu) ⇢ %3zu ⇢ ", lis->start_index, lis->keep_count);
+	if (should_print(RESULT))
+	{
+		print_bool_array(lis->keep, NULL, stack->len, GREY);
+		fprintf(stderr, "%s\n", NC);
+	}
+	print_result_bot(true);
 	return (true);
 }
 
@@ -50,21 +62,36 @@ static bool	lis_best_index(t_lis *lis, const t_stack *stack, t_swaps *swaps)
 	t_lis	current_lis;
 	size_t	i;
 
+	print_title("lis_best_index()");
 	if (!get_lis(lis, stack, 0, swaps))
+	{
+		print_error(true, "Unable to compute lis for index 0\n");
 		return (false);
+	}
 	i = 1;
 	while (i < stack->len)
 	{
 		if (!get_lis(&current_lis, stack, i, swaps))
+		{
+			print_error(true, "Unable to compute lis for index %zu\n", i);
 			return (lis_free(lis), false);
+		}
 		keep_best_lis(lis, lis, &current_lis);
 		i++;
 	}
+	print_result_mid(false, "Best lis (index %3zu)     ⇢ %3zu ⇢ ", lis->start_index, lis->keep_count);
+	if (should_print(RESULT))
+	{
+		print_bool_array(lis->keep, NULL, stack->len, GREY);
+		fprintf(stderr, "%s\n", NC);
+	}
+	print_result_bot(true);
 	return (true);
 }
 
 static void	keep_best_lis(t_lis *dst, t_lis *a, t_lis *b)
 {
+	print_title("keep_best_lis()");
 	if (a->keep_count > b->keep_count
 		||	(a->keep_count == b->keep_count && a->swap_count < b->swap_count)
 	)
@@ -77,5 +104,6 @@ static void	keep_best_lis(t_lis *dst, t_lis *a, t_lis *b)
 		lis_free(a);
 		*dst = *b;
 	}
+	print_result("best lis kept            ⇢ %3zu", dst->keep_count);
 }
 

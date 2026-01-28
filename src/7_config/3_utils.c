@@ -16,7 +16,7 @@ bool	get_chunk_sizes(size_t **ret, size_t *ret_size, const t_stack *stack)
 	size_t	i;
 	size_t	n;
 
-	print_title("generating chunk sizes");
+	print_title("get_chunk_sizes()");
 	max_size = (CHUNK_N_MAX - CHUNK_N_MIN + 1) * 2;
 	*ret = malloc(max_size * sizeof ** ret);
 	if (!*ret)
@@ -27,20 +27,14 @@ bool	get_chunk_sizes(size_t **ret, size_t *ret_size, const t_stack *stack)
 	{
 		size = (long)(stack->len / n);
 		if (size_is_valid(*ret, i, size, stack->len))
-		{
-			print_log("%s✔︎ %schunk_size[%3zu]          ⇢ %3ld%s", GREEN, GREY, i, size, NC);
 			(*ret)[i++] = (size_t)size;
-		}
 		size = (long)n * (long)square_root_rounded((int)stack->len);
 		if (size_is_valid(*ret, i, size, stack->len))
-		{
-			print_log("%s✔︎ %schunk_size[%3zu]          ⇢ %3ld%s", GREEN, GREY, i, size, NC);
 			(*ret)[i++] = (size_t)size;
-		}
 		n++;
 	}
 	*ret_size = i;
-	print_result_mid(false, "chunk sizes              %s⇢%s %3zu %s⇢ ", GREY, GREEN, *ret_size, GREY);
+	print_result_mid(false, "chunk sizes              ⇢ %3zu ⇢ ", *ret_size);
 	print_array_zu(RESULT, *ret, *ret_size, GREY, GREY, 0, true);
 	print_result_bot(true);
 	return (true);
@@ -51,14 +45,21 @@ static bool	size_is_valid(size_t *sizes, size_t count, long value, size_t stack_
 	size_t	i;
 
 	if (value < 1 || value >= (long)stack_len)
+	{
+		print_info("size is not valid        ⇢ %3ld\n", value);
 		return (false);
+	}
 	i = 0;
 	while (i < count)
 	{
 		if (sizes[i] == (size_t)value)
+		{
+			print_info("size is not valid        ⇢ %3ld\n", value);
 			return (false);
+		}
 		i++;
 	}
+	print_pass("size is valid            ⇢ %s%3ld\n", GREEN, value);
 	return (true);
 }
 
@@ -77,7 +78,10 @@ bool	config_dup(t_config *dst, const t_config *src, size_t values_count)
 	dst->lis.keep = NULL;
 	dst->lis.swap = NULL;
 	if (!dst->opti_lis)
+	{
+		print_pass("config duplicated\n");
 		return (true);
+	}
 	dst->lis.start_index = src->lis.start_index;
 	dst->lis.keep = src->lis.keep;
 	dst->lis.keep_count = src->lis.keep_count;
@@ -85,9 +89,13 @@ bool	config_dup(t_config *dst, const t_config *src, size_t values_count)
 	dst->lis.keep = malloc(values_count * sizeof * dst->lis.keep);
 	dst->lis.swap = malloc(values_count * sizeof * dst->lis.swap);
 	if (!dst->lis.keep || !dst->lis.swap)
+	{
+		print_error(true, "config_dup() ⇢ OOM\n");
 		return (free(dst->lis.keep), free(dst->lis.swap), false);
+	}
 	ft_memcpy(dst->lis.keep, src->lis.keep, values_count * sizeof * dst->lis.keep);
 	ft_memcpy(dst->lis.swap, src->lis.swap, values_count * sizeof * dst->lis.swap);
+	print_pass("config duplicated\n");
 	return (true);
 }
 

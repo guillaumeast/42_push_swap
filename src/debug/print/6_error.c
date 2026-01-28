@@ -16,7 +16,6 @@ void	print_error(bool condition, const char *fmt, ...)
 		print_ahead(fmt, args);
 	else
 		print_here(fmt, args);
-	fprintf(stderr, "\n");
 	va_end(args);
 }
 
