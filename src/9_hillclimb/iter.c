@@ -1,0 +1,79 @@
+#include "run.h"
+#include "iter.h"
+
+# include "print.h"
+
+#define DEFAULT_TARGET(input_count)	input_count / 4
+
+static void	iter_update(t_iter *iter);
+
+bool	iter_init(t_iter *iter, const t_run *src, long target, long gap)
+{
+	if (target < 0 || gap < 0 || target - gap < 0)
+		return (false);
+	if (!run_dup(&iter->run1, src))
+		return (false);
+	if (!run_dup(&iter->run2, src))
+		return (run_free(&iter->run1), false);
+	if (!run_dup(&iter->run3, src))
+		return (run_free(&iter->run1), run_free(&iter->run2), false);
+	iter->run_src = src;
+	iter->target = target;
+	iter->gap = gap;
+	iter->run1.config.chunk_size = (size_t)(target - gap);
+	iter->run2.config.chunk_size = (size_t)target;
+	iter->run1.config.chunk_size = (size_t)(target + gap);
+	iter->best = -1;
+	iter->end_reach = false;
+	return (true);
+}
+
+bool	iter_exec(t_iter *iter)
+{
+	print_title("iter_exec()");
+	if (!run_run(&iter->run1) || !run_run(&iter->run2) || !run_run(&iter->run3))
+		return (false);
+	if (iter->run1.state.moves.len <= iter->run2.state.moves.len)
+	{
+		if (iter->run3.state.moves.len < iter->run1.state.moves.len)
+			iter->best = 3;
+		else
+			iter->best = 1;
+	}
+	else if (iter->run2.state.moves.len < iter->run3.state.moves.len)
+		iter->best = 2;
+	else
+		iter->best = 3;
+	iter_update(iter);
+	print_result("1 = %3zu | 2 = %3zu | 3 = %3zu => best = %i", iter->run1.state.moves.len, iter->run2.state.moves.len, iter->run3.state.moves.len, iter->best);
+	return (true);
+}
+
+static void	iter_update(t_iter *iter)
+{
+	long	new_target;
+	long	new_gap;
+
+	new_target = iter->target;
+	new_gap = iter->gap;
+	if (iter->best == 1)
+		new_target = iter->target - (iter->gap * 2);
+	else if (iter->best == 3)
+		new_target = iter->target + (iter->gap * 2);
+	else if (iter->best == 2)
+		new_gap = iter->gap / 2;
+	if (new_target < 0)
+		new_target = 0;
+	if (new_gap > 0 && new_target - new_gap < 0)
+		new_gap = new_target;
+	if (new_gap <= 0)
+		iter->end_reach = true;
+	print_info("new_target = %3ld | new_gap = %3ld | end_reach = %s", new_target, new_gap, iter->end_reach ? "true" : "false");
+}
+
+void	iter_free(t_iter *iter)
+{
+	run_free(&iter->run1);
+	run_free(&iter->run2);
+	run_free(&iter->run3);
+}

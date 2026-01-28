@@ -29,6 +29,8 @@ INCLUDES	:= \
 	-Isrc/6_optis/3_swap \
 	-Isrc/6_optis/4_moves \
 	-Isrc/7_config \
+	-Isrc/8_run \
+	-Isrc/9_hillclimb \
 	-Isrc/debug \
 	-Isrc/debug/print
 

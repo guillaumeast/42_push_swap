@@ -20,6 +20,8 @@
 		"-I${workspaceFolder}/src/6_optis/3_swap",
 		"-I${workspaceFolder}/src/6_optis/4_moves",
 		"-I${workspaceFolder}/src/7_config",
+		"-I${workspaceFolder}/src/8_run",
+		"-I${workspaceFolder}/src/9_hillclimb",
 		"-I${workspaceFolder}/src/debug",
 		"-I${workspaceFolder}/src/debug/print"
 	]
