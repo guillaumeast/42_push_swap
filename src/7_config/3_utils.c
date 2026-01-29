@@ -79,7 +79,7 @@ bool	config_dup(t_config *dst, const t_config *src, size_t values_count)
 	dst->lis.swap = NULL;
 	if (!dst->opti_lis)
 	{
-		print_pass("config duplicated\n");
+		// print_pass("config duplicated\n");
 		return (true);
 	}
 	dst->lis.start_index = src->lis.start_index;
@@ -95,7 +95,7 @@ bool	config_dup(t_config *dst, const t_config *src, size_t values_count)
 	}
 	ft_memcpy(dst->lis.keep, src->lis.keep, values_count * sizeof * dst->lis.keep);
 	ft_memcpy(dst->lis.swap, src->lis.swap, values_count * sizeof * dst->lis.swap);
-	print_pass("config duplicated\n");
+	// print_pass("config duplicated\n");
 	return (true);
 }
 

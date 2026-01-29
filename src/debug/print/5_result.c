@@ -42,7 +42,6 @@ void	print_result_mid(bool new_line, const char *fmt, ...)
 	{
 		_print_padding(DEFAULT_PAD, PADDING_LEN_OF((DEPTH - 1)));
 		_print_log_custom(PASS, false, new_line, fmt, args);
-		fprintf(stderr, "%s", NC);
 	}
 	else
 	{
@@ -75,7 +74,7 @@ static void	_print_result_mid(bool new_line, const char *fmt, va_list args)
 		i++;
 	}
 	_print_padding(DEFAULT_PAD, PADDING_LEN);
-	fprintf(stderr, "%s⍟ %s%s", RESULT_COLOR, formatted, NC);
+	fprintf(stderr, "%s⍟ %s", RESULT_COLOR, formatted);
 	free(formatted);
 	if (new_line)
 		fprintf(stderr, "\n");

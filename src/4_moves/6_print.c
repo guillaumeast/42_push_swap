@@ -18,7 +18,7 @@ void	moves_print(const t_buff *list)
 		move = (t_move)list->data[printed_bytes++];
 		print_move(move);
 	}
-	print_result("moves printed            ⇢%4zu", list->len);
+	print_result("moves printed            ⇢ %zu", list->len);
 }
 
 static void	print_move(t_move move)

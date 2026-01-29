@@ -10,9 +10,10 @@ typedef struct s_run
 	t_config	config;
 }	t_run;
 
-void	run_init(t_run *dst, t_state *state, t_config *config);
+bool	run_all(t_run *dst, const t_state *state, const t_configs *configs);
+bool	run_run(t_run *dst, const t_state *state, const t_config *config);
+bool	run_init(t_run *dst, const t_state *state, const t_config *config);
 bool	run_dup(t_run *dst, const t_run *src);
-bool	run_run(t_run *run);
 void	run_free(t_run *run);
 
 #endif
