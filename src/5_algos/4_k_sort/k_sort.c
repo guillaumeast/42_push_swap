@@ -5,7 +5,6 @@
 #include "swap.h"
 #include "sort_three.h"
 #include <stdlib.h>
-# include "debug.h"
 
 typedef struct s_chunk
 {
@@ -23,12 +22,14 @@ static bool	is_in_range(uint value, t_chunk *window);
 static bool	exec(t_state *state, t_config *config, t_chunk *window);
 static void	update_window(uint value, const t_config *config, t_chunk *window);
 
+// TODO: take a run as input instead of state and config (and don't take it as const !)
 bool	k_sort(t_state *state, const t_config *config)
 {
 	t_chunk		window;
 	size_t		index;
 	t_config	mutable_cfg;
 
+	// TODO: do not dup config anymore
 	if (!config_dup(&mutable_cfg, config, state->a.len))
 		return (false);
 	init_window(&window, state, &mutable_cfg);

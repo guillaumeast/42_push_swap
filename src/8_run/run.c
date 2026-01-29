@@ -71,7 +71,7 @@ bool	run_all(t_run *dst, const t_state *state, const t_configs *configs)
 		i++;
 	}
 
-	print_result_mid(false, "best moves               ⇢ %3zu ⇢ ", state->moves.len);
+	print_result_mid(false, "best moves               ⇢ %3zu ⇢ ", dst->state.moves.len);
 	fprintf(stderr, "%s", YELLOW);
 	if (should_print(RESULT))
 		config_print(&dst->config, 0, false);
