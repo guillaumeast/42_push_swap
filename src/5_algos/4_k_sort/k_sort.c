@@ -49,7 +49,8 @@ bool	k_sort(t_state *state, const t_config *config)
 			if (!rra(state, state->a.len - index))
 				return (false);
 		print_info("Executing...\n");
-		exec(state, &mutable_cfg, &window);
+		if (!exec(state, &mutable_cfg, &window))
+			return (print_error("exec() failed"), false);
 	}
 	config_free(&mutable_cfg);
 	free(window.treated);

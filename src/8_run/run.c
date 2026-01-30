@@ -91,7 +91,7 @@ bool	run_run(t_run *dst, const t_state *state, const t_config *config)
 		fprintf(stderr, "%s", NC);
 	}
 	if (!run_init(dst, state, config))
-		return (false);
+		return (print_error("run initialization failed"), false);
 	if (!dst->config.algo_1(&dst->state, &dst->config))
 		return (print_error("algo_1 failed"), run_free(dst), false);
 	if (!algo_1_check(dst))	// TMP: remove before submit
