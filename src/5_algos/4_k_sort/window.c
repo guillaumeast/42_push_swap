@@ -6,8 +6,6 @@
 # include "print.h"
 static void	print_window(t_style style, t_window *window, bool new_line);
 
-static void	update_size(t_window *window, size_t stack_len);
-
 bool	window_init(t_window *window, t_state *state, const t_config *config)
 {
 	print_title("window_init()");
@@ -28,12 +26,33 @@ bool	window_init(t_window *window, t_state *state, const t_config *config)
 	return (true);
 }
 
-// static void update_v1(uint value, const t_config *config, t_window *window, size_t stack_len);
-static void update_v2(uint value, const t_config *config, t_window *window, size_t stack_len);
 void	window_update(uint value, const t_config *config, t_window *window, size_t stack_len)
 {
-	// update_v1(value, config, window);
-	update_v2(value, config, window, stack_len);
+	print_title("window_update()");
+	if (window->treated[value])
+		return ;
+	window->treated[value] = true;
+	window->treated_count++;
+	// Best so far : 3 487 - 3 751 - 3 872
+	// if (window->treated_count > stack_len && window->size > stack_len / 3 && window->size > 5)
+	// if (window->size > stack_len / 4 && window->size > 50)
+	if (window->treated_count > stack_len && window->size > stack_len / 6 && window->size > 50)
+	{
+		print_warn("window slide freezed ❄️ ⇢ ");
+		print_window(LOG, window, true);
+		window->size--;
+	}
+	else
+		window->max++;
+	if (config->opti_median)
+		median_update(&window->median, value);	// version: median(window)
+	// else if (window->treated_count > stack_len && window->treated_count % 2 == 0)
+	// 	window->median.median += 2;									// version: treshold
+	else
+		window->median.median++;									// version: treshold
+	print_result_mid(false, "window updated %s⇢ ", GREY);
+	print_window(RESULT, window, true);
+	print_result_bot(true);
 }
 
 static void	print_window(t_style style, t_window *window, bool new_line)
@@ -44,55 +63,3 @@ static void	print_window(t_style style, t_window *window, bool new_line)
 	if (new_line)
 		fprintf(stderr, "\n");
 }
-
-// static void update_v1(uint value, const t_config *config, t_window *window)
-// {
-// 	print_title("window_update()");
-// 	if (window->treated[value])
-// 		return ;
-// 	window->treated[value] = true;
-// 	window->treated_count++;
-// 	window->size++;
-// 	window->max++;
-// 	if (config->opti_median)
-// 		median_update(&window->median, value);	// version: median(window)
-// 	else
-// 		window->median.median++;									// version: treshold
-// 	print_result_mid(false, "window updated %s⇢ ", GREY);
-// 	print_window(RESULT, window, true);
-// 	print_result_bot(true);
-// }
-
-static void update_v2(uint value, const t_config *config, t_window *window, size_t stack_len)
-{
-	print_title("update_window_v2()");
-	if (window->treated[value])
-		return ;
-	window->treated[value] = true;
-	window->treated_count++;
-	update_size(window, stack_len);
-	if (config->opti_median)
-		median_update(&window->median, value);	// version: median(window)
-	else
-		window->median.median++;									// version: treshold
-	print_result_mid(false, "window updated %s⇢ ", GREY);
-	print_window(RESULT, window, true);
-	print_result_bot(true);
-}
-
-static void	update_size(t_window *window, size_t stack_len)
-{
-	// Best so far : 3 487 - 3 751 - 3 872
-	if (window->treated_count > stack_len && window->size > stack_len / 3 && window->size > 5)
-	{
-		print_warn("window slide freezed ❄️ ⇢ ");
-		print_window(LOG, window, true);
-		window->size--;
-		return ;
-	}
-	window->max++;
-	// Passer au chunk suivant si le max a été atteint !
-}
-
-// Keep size while treated < size_len
-// Reduce size after

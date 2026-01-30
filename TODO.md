@@ -1,11 +1,13 @@
 # TODO
 
 - **checker**
-- `k-sort()`:
-	- Rotate on med(window) / med(B) / treshold ?
-	- Reduce window as values are pushed to B ?
-- `hillclimb()`:
-	- Find best chunksize by following the derivée
+- ⚠️ PARSING TEST FAILED
+- `opti_sort_b()`:
+	- if (config->opti_median && B[0] < median(B)):						=> `rb()`
+	- if (B[1] > B[0] > B[2]):
+		- if		(config->opti_lis_swap && config->lis.swap[A[0]])	=> `ss()` + config->lis.swap[A[0]] = false; config->lis.swap_count--
+		- else if	(!config->opti_lis_swap && A[1] < A[0] < A[2])		=> `ss()`
+		- else															=> `sb()`
 - `opti_rebuild()`:
 	- if B contains value(s) between a_last_keep and A[0] => push them to A using greedy method:
 	- if (keep[A[0] == true]):
@@ -19,15 +21,7 @@
 				- keep[A[0]] = true
 				- TARGET_COUNT--
 			- KEEP_LAST = KEEP_CURRENT
-- `opti_sort_b()`:
-	- if (config->opti_median && B[0] < median(B)):
-		- if		(next A move == RA)									=> `rr()`
-		- else															=> `rb()`
-	- if (B[1] > B[0] > B[2]):
-		- if		(config->opti_lis_swap && config->lis.swap[A[0]])	=> `ss()` + config->lis.swap[A[0]] = false; config->lis.swap_count--
-		- else if	(!config->opti_lis_swap &&  && A[1] < A[0] < A[2])	=> `ss()`
-		- else															=> `sb()`
-- `opti_backtracking()`:
+- `opti_backtracking()`: branch and bound
 
 🧪 Tests **4 nombres** (`sort_three()` will handle it so **don't compute swaps** if stack->len <= 3)
 ✅ `0 1 2 3`			=> BEST => swaps (0)				| lis (4) = `0 1 2 3`		| 🐛

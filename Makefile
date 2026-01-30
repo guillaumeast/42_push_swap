@@ -77,8 +77,8 @@ bonus: $(BONUS_OBJS) $(LIBFT)
 test: re
 # 	@$(MY_TESTER)
 	@$(MAKE) -C $(TESTER_DIR) fr
-	@echo "\n----------"
-	@./$(TESTER_BIN) $(TEST_OPT) $(TEST1_ARGC) $(TEST_ITER) $(TEST1_MAX) || true
+# 	@echo "\n----------"
+# 	@./$(TESTER_BIN) $(TEST_OPT) $(TEST1_ARGC) $(TEST_ITER) $(TEST1_MAX) || true
 	@echo "\n----------"
 	@./$(TESTER_BIN) $(TEST_OPT) $(TEST2_ARGC) $(TEST_ITER) $(TEST2_MAX)
 

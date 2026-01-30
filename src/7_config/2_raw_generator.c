@@ -1,8 +1,9 @@
 #include "config_priv.h"
 #include <stdbool.h>
 #include <stdlib.h>
+
 # include "debug.h"
-#include <print.h>	// TMP: remove before submit
+# include <print.h>	// TMP: remove before submit
 
 typedef struct s_input
 {
@@ -49,6 +50,8 @@ static void	input_init(t_input *input)
 	static const uint	algos_2[] = {GREEDY};
 	static const uint	optis[] = {};
 	static const uint	optis_compat[] = {};
+	// static const uint	optis[] = {MEDIAN, LIS, SWAP};
+	// static const uint	optis_compat[] = {MEDIAN_COMPAT, LIS_COMPAT, SWAP_COMPAT};
 	// static const uint	optis[] = {MEDIAN, LIS, LIS_SWAP, SWAP};
 	// static const uint	optis_compat[] = {MEDIAN_COMPAT, LIS_COMPAT, LIS_SWAP_COMPAT, SWAP_COMPAT};
 

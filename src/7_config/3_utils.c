@@ -9,7 +9,7 @@
 // #define CHUNK_N_MAX 9
 
 // (len / 6) and (len / 5) are the best
-#define CHUNK_SIZE_MIN(len)		(len / 7)	// len / 7 or len / 6
+#define CHUNK_SIZE_MIN(len)		(len / 6)	// len / 7 or len / 6
 #define CHUNK_SIZE_MAX(len)		(len / 5)	// len / 6 or len / 5
 #define CHUNK_SIZE_COUNT(len)	(CHUNK_SIZE_MAX(len) - CHUNK_SIZE_MIN(len) + 1)
 

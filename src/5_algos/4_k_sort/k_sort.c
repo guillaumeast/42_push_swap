@@ -91,7 +91,7 @@ static bool	exec(t_state *state, t_config *config, t_window *window)
 		print_info("pushing    %s%3u\n", YELLOW, val);
 		if (!pb(state, 1))
 			return (false);
-		if (val < window->median.median)
+		if (val <= window->median.median)
 		{
 			print_info("rotating B %s%3u\n", YELLOW, val);
 			if (!rb(state, 1))
