@@ -1,7 +1,7 @@
 #include "moves.h"
 #include "moves_priv.h"
 #include <unistd.h>
-
+# include "print.h"
 // TODO[2]: build the final buffer and print it at once to avoid several write() calls!
 
 static void	print_move(t_move move);
@@ -11,12 +11,14 @@ void	moves_print(const t_buff *list)
 	size_t	printed_bytes;
 	t_move	move;
 
+	print_title("print_moves()");
 	printed_bytes = 0;
 	while (printed_bytes < list->len)
 	{
 		move = (t_move)list->data[printed_bytes++];
 		print_move(move);
 	}
+	print_result("moves printed            ⇢ %zu", list->len);
 }
 
 static void	print_move(t_move move)

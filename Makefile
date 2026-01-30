@@ -6,33 +6,23 @@ LIBFT_DIR	:= libft
 LIBFT		:= $(LIBFT_DIR)/libft.a
 
 SRCS		:= \
+	$(wildcard logs/*.c) \
 	$(wildcard src/*.c) \
 	$(wildcard src/*/*.c) \
 	$(wildcard src/*/*/*.c)
 # TMP: remove before submit (lines "-Isrc/debug" ...)
 INCLUDES	:= \
 	-I$(LIBFT_DIR) \
-	-Isrc/debug \
+	-Ilogs \
 	-Isrc/1_args \
 	-Isrc/2_stack \
 	-Isrc/3_state \
 	-Isrc/4_moves \
-	-Isrc/5_algos \
-	-Isrc/5_algos/1_sort_three \
-	-Isrc/5_algos/2_naive \
-	-Isrc/5_algos/3_chunk \
-	-Isrc/5_algos/4_k_sort \
-	-Isrc/5_algos/5_greedy \
-	-Isrc/5_algos/6_finish \
-	-Isrc/6_optis/1_median \
-	-Isrc/6_optis/2_lis \
-	-Isrc/6_optis/3_swap \
-	-Isrc/6_optis/4_moves \
-	-Isrc/7_config \
-	-Isrc/8_run \
-	-Isrc/9_hillclimb \
-	-Isrc/debug \
-	-Isrc/debug/print
+	-Isrc/4_moves/optimize \
+	-Isrc/5_sort_three \
+	-Isrc/6_k_sort \
+	-Isrc/7_greedy \
+	-Isrc/8_finish
 
 OBJ_DIR		:= obj
 OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)

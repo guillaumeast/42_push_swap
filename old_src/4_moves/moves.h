@@ -27,10 +27,6 @@ bool	sb(t_state *state);
 bool	pa(t_state *state, size_t count);
 bool	pb(t_state *state, size_t count);
 
-/* --- optimize/main.c --- */
-
-void	optimize_moves(t_buff *moves);
-
 /* --- print.c --- */
 
 void	moves_print(const t_buff *list);

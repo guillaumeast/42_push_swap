@@ -1,5 +1,6 @@
 #include "libft.h"
 #include <stdlib.h>
+# include "print.h"
 
 typedef struct s_sort_data
 {
@@ -18,12 +19,15 @@ uint	*normalize(int *array, size_t size)
 	uint	*res;
 	size_t	i;
 
+	print_title("normalize()");
 	sorted = malloc(size * sizeof * sorted);
 	if (!sorted)
 		return (NULL);
 	ft_memcpy(sorted, array, size * sizeof * array);
+	print_pass("copied integers          ⇢ %3zu\n", size);
 	if (!sort(sorted, size))
 		return (free(sorted), NULL);
+	print_pass("sorted integers          ⇢ %3zu\n", size);
 	res = malloc(size * sizeof * res);
 	if (!res)
 		return (free(sorted), NULL);
@@ -35,6 +39,7 @@ uint	*normalize(int *array, size_t size)
 		i++;
 	}
 	free(sorted);
+	print_result("replaced by sorted index ⇢ %3zu", i);
 	return (res);
 }
 

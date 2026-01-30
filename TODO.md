@@ -1,4 +1,8 @@
-# TODO
+# NEW_TODO
+
+- Implement **bufferization** into `moves_print()`
+
+# OLD_TODO
 
 - **checker**
 - ⚠️ PARSING TEST FAILED
