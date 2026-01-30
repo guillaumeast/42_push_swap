@@ -102,7 +102,6 @@ static bool	lis_best_index(t_lis *lis, const t_stack *stack, t_swaps *swaps)
 
 static void	keep_best_lis(t_lis *dst, t_lis *a, t_lis *b)
 {
-	print_title("keep_best_lis()");
 	if (a->keep_count > b->keep_count
 		||	(a->keep_count == b->keep_count && a->swap_count < b->swap_count)
 	)
@@ -115,6 +114,6 @@ static void	keep_best_lis(t_lis *dst, t_lis *a, t_lis *b)
 		lis_free(a);
 		*dst = *b;
 	}
-	print_result("best lis kept            ⇢ %3zu", dst->keep_count);
+	print_pass("best lis kept            ⇢ %3zu\n", dst->keep_count);
 }
 

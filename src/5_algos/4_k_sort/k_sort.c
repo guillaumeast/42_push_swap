@@ -1,45 +1,45 @@
 #include "state.h"
 #include "config.h"
-#include "median.h"
+#include "window.h"
 #include "moves.h"
 #include "swap.h"
 #include "sort_three.h"
 #include <stdlib.h>
 
-typedef struct s_chunk
-{
-	size_t		size;
-	size_t		capacity;
-	uint		min;
-	uint		max;
-	bool		*treated;
-	size_t		treated_count;
-	t_median	median;
-}	t_chunk;
+# include "debug.h"
+# include "print.h"
 
-static bool	init_window(t_chunk *window, t_state *state, const t_config *config);
-static bool	is_in_range(uint value, t_chunk *window);
-static bool	exec(t_state *state, t_config *config, t_chunk *window);
-static void	update_window(uint value, const t_config *config, t_chunk *window);
+static bool	is_in_range(uint value, t_window *window);
+static bool	exec(t_state *state, t_config *config, t_window *window);
 
 // TODO: take a run as input instead of state and config (and don't take it as const !)
 bool	k_sort(t_state *state, const t_config *config)
 {
-	t_chunk		window;
+	t_window	window;
 	size_t		index;
 	t_config	mutable_cfg;
 
 	// TODO: do not dup config anymore
+	print_title("k_sort()");
+	print_info("Initial stack      ⇢ ");
+	if (should_print(LOG))
+	{
+		stack_print_line(&state->a, NULL, GREY);
+		fprintf(stderr, "\n");
+	}
 	if (!config_dup(&mutable_cfg, config, state->a.len))
 		return (false);
-	init_window(&window, state, &mutable_cfg);
+	print_pass("Config initialized ⇢ ");
+	if (should_print(LOG))
+		config_print(&mutable_cfg, 0, false);
+	window_init(&window, state, &mutable_cfg);
 	while (state->a.len > 3 && !stack_is_sorted(&state->a))
 	{
 		index = 0;
-		// fprintf(stderr, "%s🅚     Searching...%s\n", GREY, NC);						// TODO: tmp debug
+		print_info("Searching...\n");
 		while (!is_in_range(stack_get_value(&state->a, (long)index), &window))
 			index++;
-		// fprintf(stderr, "%s🅚     Rotating...%s\n", GREY, NC);						// TODO: tmp debug
+		print_info("Rotating...\n");
 		if (index <= state->a.len / 2)
 		{
 			if (!ra(state, index))
@@ -48,92 +48,64 @@ bool	k_sort(t_state *state, const t_config *config)
 		else
 			if (!rra(state, state->a.len - index))
 				return (false);
+		print_info("Executing...\n");
 		exec(state, &mutable_cfg, &window);
 	}
 	config_free(&mutable_cfg);
 	free(window.treated);
+	print_result("k_sort done in %3zu moves", state->moves.len);
 	return (sort_three(state, config));
 }
 
-static bool	init_window(t_chunk *window, t_state *state, const t_config *config)
-{
-	window->capacity = state->a.len;
-	window->size = config->chunk_size;
-	window->min = 0;
-	window->max = (uint)window->size;
-	window->treated_count = 0;
-	if (!median_init(&window->median, window->capacity))
-		return (false);
-	window->treated = malloc(window->capacity * sizeof * window->treated);
-	if (!window->treated)
-		return (median_free(&window->median), false);
-	ft_memset(window->treated, false, state->a.len * sizeof * window->treated);
-	return (true);
-}
-
-static bool	is_in_range(uint value, t_chunk *window)
+static bool	is_in_range(uint value, t_window *window)
 {
 	// if (value >= window->min && value < window->max)
 	// 	fprintf(stderr, "%s🅚     is_in_range(%s%u%s, [%u - %u]) = %strue%s\n", GREY, YELLOW, value, GREY, window->min, window->max, GREEN, NC);						// TODO: tmp debug
 	// else
 	// 	fprintf(stderr, "%s🅚     is_in_range(%s%u%s, [%u - %u]) = %sfalse%s\n", GREY, YELLOW, value, GREY, window->min, window->max, RED, NC);						// TODO: tmp debug
+	// print_info("Checking %3u in range ⇢ ");
+	// print_window(LOG, window, true);
 	return (value >= window->min && value < window->max);
 }
 
-static bool	exec(t_state *state, t_config *config, t_chunk *window)
+static bool	exec(t_state *state, t_config *config, t_window *window)
 {
 	uint	val;
 
+	print_title("exec()");
 	val = stack_get_value(&state->a, 0);
-	// fprintf(stderr, "%s🅚 %s%3u%s Processing...%s\n", GREY, YELLOW, val, GREY, NC);						// TODO: tmp debug
 	if (config->opti_lis_swap && config->lis.swap[val])
 	{
-		// fprintf(stderr, "%s🅚 %s%3u %sopti_swap_lis()%s\n", BLUE, YELLOW, val, BLUE, NC);				// TODO: tmp debug
+		print_info("swapping   %s%3u\n", YELLOW, val);
 		if (!opti_swap_lis(state, config, val))
 			return (false);
 	}
 	else if (config->opti_lis && config->lis.keep[val])
 	{
-		// fprintf(stderr, "%s🅚 %s%3u %sra()%s\n", GREEN, YELLOW, val, GREEN, NC);				// TODO: tmp debug
+		print_info("rotating A %s%3u\n", YELLOW, val);
 		if (!ra(state, 1))
 			return (false);
 	}
 	else
 	{
-		// fprintf(stderr, "%s🅚 %s%3u %spb()%s\n", RED, YELLOW, val, RED, NC);				// TODO: tmp debug
+		print_info("pushing    %s%3u\n", YELLOW, val);
 		if (!pb(state, 1))
 			return (false);
 		if (val < window->median.median)
 		{
-			// fprintf(stderr, "%s🅚 %s%3u %srb()%s\n", BLUE, YELLOW, val, BLUE, NC);				// TODO: tmp debug
+			print_info("rotating B %s%3u\n", YELLOW, val);
 			if (!rb(state, 1))
 				return (false);
 		}
 		if (config->opti_swap_b)
 		{
-			// fprintf(stderr, "%s🅚 %s%3u %sopti_swap_b()%s\n", BLUE, YELLOW, val, BLUE, NC);				// TODO: tmp debug
+			print_info("Calling opti_swap_b()\n");
 			if (!opti_swap_b(state, config))
 				return (false);
 		}
 	}
-	update_window(val, config, window);
-	// fprintf(stderr, "\n");
+	window_update(val, config, window, state->a.len);
+	print_result("executed");
 	return (true);
 }
 
-static void	update_window(uint value, const t_config *config, t_chunk *window)
-{
-	if (window->treated[value])
-		return ;
-	window->treated[value] = true;
-	window->treated_count++;
-	window->size++;
-	window->max++;
-	if (config->opti_median)
-		median_update(&window->median, value);	// version: median(window)
-	else
-		window->median.median++;									// version: treshold
-	// TODO: minimize window sometimes...
-	// fprintf(stderr, "%s🅚 %s%3u%s => window = min %u | med = %u | max = %u | treated = %zu / %zu%s\n", 
-	// 	GREY, YELLOW, value, GREY, window->min, window->median.median, window->max, window->treated_count, window->size, NC);	// TODO: tmp debug
-}

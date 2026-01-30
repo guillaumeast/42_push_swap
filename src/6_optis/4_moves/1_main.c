@@ -56,7 +56,7 @@ static void	prune_no_ops(t_buff *moves)
 		write_index += len;
 		// print_indexes(write_index, start_index, len, moves->len, final_len, 0);
 	}
-	while (moves->data[final_len - 1] == NO_OP)
+	while (final_len > 0 && moves->data[final_len - 1] == NO_OP)
 		final_len--;
 	// print_indexes(write_index, start_index, len, moves->len, final_len, 3);
 	if (final_len >= moves->len)

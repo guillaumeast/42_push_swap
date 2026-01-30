@@ -5,19 +5,6 @@
 #include "lis.h"
 #include "swap.h"
 #include <stdlib.h>
-// #include "debug.h"	// TMP: remove before submit
-
-// TODO [1]: Reduce chunk_size while A is getting smaller (hill climbing ??) ?		=> edit update_chunk()
-
-typedef struct s_chunk
-{
-	size_t	size;
-	uint	min;
-	uint	max;
-	uint	median;
-	bool	*treated;
-	size_t	treated_count;
-}	t_chunk;
 
 typedef struct s_target
 {

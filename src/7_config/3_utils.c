@@ -4,64 +4,72 @@
 #include <stdlib.h>
 #include <print.h>	// TMP: remove before submit
 
-#define CHUNK_N_MIN 2
-#define CHUNK_N_MAX 9
+// First version => from n = 2 to n = 9 => [size = len / n] && [size = n * square_root_rounded(len)]
+// #define CHUNK_N_MIN 2
+// #define CHUNK_N_MAX 9
 
-static bool	size_is_valid(size_t *sizes, size_t count, long value, size_t stack_len);
+// (len / 6) and (len / 5) are the best
+#define CHUNK_SIZE_MIN(len)		(len / 7)	// len / 7 or len / 6
+#define CHUNK_SIZE_MAX(len)		(len / 5)	// len / 6 or len / 5
+#define CHUNK_SIZE_COUNT(len)	(CHUNK_SIZE_MAX(len) - CHUNK_SIZE_MIN(len) + 1)
+
+// static bool	size_is_valid(size_t *sizes, size_t count, long value, size_t stack_len);
 
 bool	get_chunk_sizes(size_t **ret, size_t *ret_size, const t_stack *stack)
 {
-	size_t	max_size;
-	long	size;
+	// size_t	max_size;
+	// long	size;
 	size_t	i;
 	size_t	n;
 
 	print_title("get_chunk_sizes()");
-	max_size = (CHUNK_N_MAX - CHUNK_N_MIN + 1) * 2;
-	*ret = malloc(max_size * sizeof ** ret);
+	*ret = malloc(CHUNK_SIZE_COUNT(stack->len) * sizeof ** ret);
 	if (!*ret)
 		return (false);
 	i = 0;
-	n = CHUNK_N_MIN;
-	while (n <= CHUNK_N_MAX)
+	n = CHUNK_SIZE_MIN(stack->len);
+	while (n <= CHUNK_SIZE_MAX(stack->len))
 	{
-		size = (long)(stack->len / n);
-		if (size_is_valid(*ret, i, size, stack->len))
-			(*ret)[i++] = (size_t)size;
-		size = (long)n * (long)square_root_rounded((int)stack->len);
-		if (size_is_valid(*ret, i, size, stack->len))
-			(*ret)[i++] = (size_t)size;
+		(*ret)[i] = n;
+		i++;
+		// size = (long)(stack->len / n);
+		// if (size_is_valid(*ret, i, size, stack->len))
+		// 	(*ret)[i++] = (size_t)size;
+		// size = (long)n * (long)square_root_rounded((int)stack->len);
+		// if (size_is_valid(*ret, i, size, stack->len))
+		// 	(*ret)[i++] = (size_t)size;
 		n++;
 	}
 	*ret_size = i;
 	print_result_mid(false, "chunk sizes              ⇢ %3zu ⇢ ", *ret_size);
 	print_array_zu(RESULT, *ret, *ret_size, GREY, GREY, 0, true);
 	print_result_bot(true);
+	(void)stack;
 	return (true);
 }
 
-static bool	size_is_valid(size_t *sizes, size_t count, long value, size_t stack_len)
-{
-	size_t	i;
+// static bool	size_is_valid(size_t *sizes, size_t count, long value, size_t stack_len)
+// {
+// 	size_t	i;
 
-	if (value < 1 || value >= (long)stack_len)
-	{
-		print_info("size is not valid        ⇢ %3ld\n", value);
-		return (false);
-	}
-	i = 0;
-	while (i < count)
-	{
-		if (sizes[i] == (size_t)value)
-		{
-			print_info("size is not valid        ⇢ %3ld\n", value);
-			return (false);
-		}
-		i++;
-	}
-	print_pass("size is valid            ⇢ %s%3ld\n", GREEN, value);
-	return (true);
-}
+// 	if (value < 1 || value >= (long)stack_len)
+// 	{
+// 		print_info("size is not valid        ⇢ %3ld\n", value);
+// 		return (false);
+// 	}
+// 	i = 0;
+// 	while (i < count)
+// 	{
+// 		if (sizes[i] == (size_t)value)
+// 		{
+// 			print_info("size is not valid        ⇢ %3ld\n", value);
+// 			return (false);
+// 		}
+// 		i++;
+// 	}
+// 	print_pass("size is valid            ⇢ %s%3ld\n", GREEN, value);
+// 	return (true);
+// }
 
 bool	config_dup(t_config *dst, const t_config *src, size_t values_count)
 {

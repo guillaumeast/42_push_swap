@@ -54,10 +54,10 @@ bool	run_all(t_run *dst, const t_state *state, const t_configs *configs)
 
 	if (!run_run(dst, state, &configs->data[0]))
 		return (false);
-	i = 0;
+	i = 1;
 	while (i < configs->count)
 	{
-		print_title(false, "Comparing 2 runs...");
+		print_title("Comparing 2 runs...");
 		if (!run_run(&curr, state, &configs->data[i]))
 			return (run_free(dst), false);
 		print_run_result(&curr, (long)dst->state.moves.len);
@@ -82,7 +82,8 @@ bool	run_all(t_run *dst, const t_state *state, const t_configs *configs)
 
 bool	run_run(t_run *dst, const t_state *state, const t_config *config)
 {
-	print_title(false, "run_run()");
+	print_title_top(true);
+	print_title_mid(false,  "run_run() ⇢ ");
 	if (should_print(TITLE))
 	{
 		fprintf(stderr, "%s", GREY);

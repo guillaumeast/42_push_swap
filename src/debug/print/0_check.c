@@ -9,6 +9,8 @@ bool	should_print(t_style style)
 
 t_style	should_print_as(t_style style)
 {
+	if (style == FORCED)
+		return (style);
 	if (g_depth.min < 0 || g_depth.max < 0)
 		return (HIDDEN);
 	if (g_depth.curr >= g_depth.min && g_depth.curr <= g_depth.max)
