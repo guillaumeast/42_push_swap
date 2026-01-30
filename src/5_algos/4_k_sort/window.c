@@ -82,7 +82,8 @@ static void update_v2(uint value, const t_config *config, t_window *window, size
 
 static void	update_size(t_window *window, size_t stack_len)
 {
-	if (window->treated_count > stack_len && window->size > 1 && window->size > stack_len / 2)
+	// Best so far : 3 487 - 3 751 - 3 872
+	if (window->treated_count > stack_len && window->size > stack_len / 3 && window->size > 5)
 	{
 		print_warn("window slide freezed ❄️ ⇢ ");
 		print_window(LOG, window, true);
