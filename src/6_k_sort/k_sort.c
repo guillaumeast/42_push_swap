@@ -19,7 +19,7 @@ bool	k_sort(t_state *state)
 	t_target	target;
 
 	window_init(&window, state->a.len, state->a.len / 6);
-	while (state->a.len > 3 && !stack_is_sorted(&state->a))	// TODO: remove sorted check ?
+	while (state->a.len > 3 && !stack_is_sorted(&state->a))
 	{
 		find(state, &window, &target);
 		if (!rotate(state, target.index))

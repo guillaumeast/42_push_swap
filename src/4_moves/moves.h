@@ -33,6 +33,6 @@ void	optimize_moves(t_buff *moves);
 
 /* --- print.c --- */
 
-void	moves_print(const t_buff *list);
+bool	moves_print(const t_buff *list);
 
 #endif

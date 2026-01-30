@@ -8,8 +8,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-# include "logs.h"
-
 static bool	run_algos(t_state *state);
 static int	free_and_print_error(t_state *state);
 
@@ -18,20 +16,19 @@ int	main(int argc, char **argv)
 	t_args		args;
 	t_state		state;
 
-	// print_start(99, "main()");
 	if (argc < 2)
 		return (0);
 	if (!args_parse(argc, argv, &args))
 		return (free_and_print_error(NULL));
 	if (!state_init(&state, args.values, args.count))
 		return (free(args.values), free_and_print_error(NULL));
-	print_pass("state initialized\n");
 	if (!run_algos(&state))
 		return (free_and_print_error(&state));
-	// TODO: check validity
-	moves_print(&state.moves);
+	if (!stack_is_sorted(&state.a) || stack_get_value(&state.a, 0) != 0)
+		return (free_and_print_error(&state));
+	if (!moves_print(&state.moves))
+		return (free_and_print_error(&state));
 	state_free(&state);
-	print_result("Done!");
 	return (0);
 }
 
@@ -44,18 +41,13 @@ static bool	run_algos(t_state *state)
 	}
 	else if (!k_sort(state))
 		return (false);
-	print_pass("step 1 done\n");
 	if (!sort_three(state))
 		return (false);
-	print_pass("sort_three done\n");
 	if (!greedy(state))
 		return (false);
-	print_pass("greedy done\n");
 	if (!finish(state))
 		return (false);
-	print_pass("finish done\n");
 	optimize_moves(&state->moves);
-	print_pass("moves optimized\n");
 	return (true);
 }
 

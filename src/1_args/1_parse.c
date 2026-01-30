@@ -3,8 +3,6 @@
 #include "args_priv.h"
 #include <stdlib.h>
 
-# include "logs.h"
-
 static bool	convert_arg(char *arg, int *args, size_t *args_count);
 static bool	check_arg(char *arg, int *ret, int *args_array, size_t size);
 
@@ -13,7 +11,6 @@ bool	args_parse(int argc, char **argv, t_args *args)
 	int		*raw_args;
 	size_t	i;
 
-	print_title("args_parse()");
 	argc--;
 	argv++;
 	i = 0;
@@ -23,7 +20,6 @@ bool	args_parse(int argc, char **argv, t_args *args)
 	raw_args = malloc(args->count * sizeof * raw_args);
 	if (!raw_args)
 		return (false);
-	print_pass("args malloc'd\n");
 	i = 0;
 	args->count = 0;
 	while (i < (size_t)argc)
@@ -32,13 +28,10 @@ bool	args_parse(int argc, char **argv, t_args *args)
 			return (free(raw_args), false);
 		i++;
 	}
-	print_pass("args converted\n");
 	args->values = normalize(raw_args, args->count);
-	print_pass("args normalized\n");
 	free(raw_args);
 	if (!args->values)
 		return (false);
-	print_result("args parsed");
 	return (true);
 }
 
