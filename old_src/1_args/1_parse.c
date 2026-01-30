@@ -2,7 +2,7 @@
 #include "args.h"
 #include "args_priv.h"
 #include <stdlib.h>
-# include "print.h"
+# include "logs.h"
 
 static bool	convert_arg(char *arg, int *args, size_t *args_count);
 static bool	check_arg(char *arg, int *ret, int *args_array, size_t size);

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 # include "debug.h"
-# include <print.h>	// TMP: remove before submit
+# include <logs.h>	// TMP: remove before submit
 
 typedef struct s_input
 {

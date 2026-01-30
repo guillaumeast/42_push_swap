@@ -7,7 +7,7 @@
 #include <stdlib.h>
 
 # include "debug.h"
-# include "print.h"
+# include "logs.h"
 
 static bool	is_in_range(uint value, t_window *window);
 static bool	exec(t_state *state, t_config *config, t_window *window);

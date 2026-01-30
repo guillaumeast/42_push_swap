@@ -1,7 +1,7 @@
 #include "run.h"
 #include "iter.h"
 
-# include "print.h"
+# include "logs.h"
 
 #define DEF_TARGET_DIV	4
 #define DEF_GAP_DIV		8

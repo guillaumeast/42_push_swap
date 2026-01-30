@@ -1,7 +1,7 @@
 #include "moves.h"
 #include "moves_priv.h"
 #include <unistd.h>
-# include "print.h"
+# include "logs.h"
 // TODO[2]: build the final buffer and print it at once to avoid several write() calls!
 
 static void	print_move(t_move move);

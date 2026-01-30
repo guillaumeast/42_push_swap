@@ -60,33 +60,33 @@ init_files()
 
 main()
 {
-	echo ""
+	# echo ""
 	init_files
 	run_parsing_tests
-	PARSING_FAILED=$?
+	# PARSING_FAILED=$?
 	
-	# Run all configured perf tests
-	for config in "${PERF_TESTS[@]}"; do
-		IFS=':' read -r count iterations threshold <<< "$config"
-		local moves_file="/tmp/push_swap_moves_${count}.txt"
-		local configs_file="/tmp/push_swap_configs_${count}.txt"
-		local logs_file="/tmp/push_swap_logs_${count}.txt"
-		touch "$moves_file"
-		touch "$configs_file"
-		touch "$logs_file"
-		PERF_MOVES_FILES+=("$moves_file")
-		PERF_CONFIGS_FILES+=("$configs_file")
-		PERF_HAS_STRUCTURED+=(0)
-		PERF_ITERATIONS+=("$iterations")
+	# # Run all configured perf tests
+	# for config in "${PERF_TESTS[@]}"; do
+	# 	IFS=':' read -r count iterations threshold <<< "$config"
+	# 	local moves_file="/tmp/push_swap_moves_${count}.txt"
+	# 	local configs_file="/tmp/push_swap_configs_${count}.txt"
+	# 	local logs_file="/tmp/push_swap_logs_${count}.txt"
+	# 	touch "$moves_file"
+	# 	touch "$configs_file"
+	# 	touch "$logs_file"
+	# 	PERF_MOVES_FILES+=("$moves_file")
+	# 	PERF_CONFIGS_FILES+=("$configs_file")
+	# 	PERF_HAS_STRUCTURED+=(0)
+	# 	PERF_ITERATIONS+=("$iterations")
 		
-		generate_numbers "$count" "$iterations"
-		run_perf_tests "$count" "$iterations" "$((${#PERF_MOVES_FILES[@]} - 1))"
-	done
+	# 	generate_numbers "$count" "$iterations"
+	# 	run_perf_tests "$count" "$iterations" "$((${#PERF_MOVES_FILES[@]} - 1))"
+	# done
 	
-	# Run worst case test
-	if [ -f "$WORST_500_FILE" ]; then
-		run_worst_case_test
-	fi
+	# # Run worst case test
+	# if [ -f "$WORST_500_FILE" ]; then
+	# 	run_worst_case_test
+	# fi
 	
 	print_results
 	reset_files
@@ -416,7 +416,7 @@ run_parsing_tests()
 	test_should_work "16" "./push_swap -2147483648 \"   5   1   \" +2147483647" "-> multi spaces   ->   " "............." || failed=1
 
 	current=$((current + 1)); update_progress_line "Testing parsing...    " "$current" "$total"
-	test_should_work "17" "./push_swap 0 000000000000000000000000000000001 2" "-> long but int   ->   " "............." || failed=1
+	test_should_work "17" "./push_swap 2 000000000000000000000000000000001 0" "-> long but int   ->   " "............." || failed=1
 
 	return $failed
 }

@@ -1,6 +1,6 @@
 #include "state.h"
 #include <stdlib.h>
-# include "print.h"
+# include "logs.h"
 
 // Caller must free dst (use state_free())
 bool	state_init(t_state *dst, uint *values, size_t values_size)

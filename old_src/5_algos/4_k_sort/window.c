@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 // TMP: remove before submit
-# include "print.h"
+# include "logs.h"
 static void	print_window(t_style style, t_window *window, bool new_line);
 
 bool	window_init(t_window *window, t_state *state, const t_config *config)

@@ -2,7 +2,7 @@
 #include "config.h"
 #include "stack.h"
 #include <stdlib.h>
-#include <print.h>	// TMP: remove before submit
+#include <logs.h>	// TMP: remove before submit
 
 // First version => from n = 2 to n = 9 => [size = len / n] && [size = n * square_root_rounded(len)]
 // #define CHUNK_N_MIN 2

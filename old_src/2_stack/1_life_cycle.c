@@ -1,7 +1,7 @@
 #include "libft.h"
 #include "stack.h"
 #include <stdlib.h>
-#include "print.h"
+#include "logs.h"
 
 // Caller must free stack->data
 bool	stack_init(t_stack *a, t_stack *b, uint *values, size_t count)

@@ -5,7 +5,7 @@
 #include "k_sort.h"
 #include "greedy.h"
 #include <stdlib.h>
-#include <print.h>	// TMP: remove before submit
+#include <logs.h>	// TMP: remove before submit
 
 static void	process_algos(t_config *config, uint raw_config);
 static void	process_optis(t_config *config, uint raw_config);

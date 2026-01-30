@@ -2,7 +2,7 @@
 #include "lis_priv.h"
 #include "stack_ops.h"
 #include <stdlib.h>
-# include "print.h"	// TMP: remove before submit
+# include "logs.h"	// TMP: remove before submit
 
 # define DEBUG_DEPTH 3
 

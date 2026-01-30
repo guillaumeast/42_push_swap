@@ -1,7 +1,7 @@
 #include "run.h"
 #include "iter.h"
 
-# include "print.h"
+# include "logs.h"
 
 #define DEFAULT_TARGET(input_count)	input_count / 4
 

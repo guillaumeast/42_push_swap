@@ -1,7 +1,7 @@
 #include "libft.h"
 #include "opti_moves_priv.h"
 # include "debug.h"
-# include <print.h>	// TMP: remove before submit
+# include <logs.h>	// TMP: remove before submit
 
 static void	prune_no_ops(t_buff *moves);
 // static void	print_indexes(size_t write, size_t start, size_t len, size_t moves_len, size_t final_len, size_t highlight_index);

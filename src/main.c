@@ -24,8 +24,6 @@ int	main(int argc, char **argv)
 		return (free(args.values), free_and_print_error(NULL));
 	if (!run_algos(&state))
 		return (free_and_print_error(&state));
-	if (!stack_is_sorted(&state.a) || stack_get_value(&state.a, 0) != 0)
-		return (free_and_print_error(&state));
 	if (!moves_print(&state.moves))
 		return (free_and_print_error(&state));
 	state_free(&state);

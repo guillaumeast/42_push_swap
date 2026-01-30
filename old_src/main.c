@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "run.h"
-# include "print.h"
+# include "logs.h"
 
 static int	free_and_print_error(t_state *state, t_configs *configs);
 

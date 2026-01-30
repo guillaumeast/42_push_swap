@@ -29,10 +29,9 @@ OBJS		:= $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
 BONUS_NAME	:= checker
 BONUS_SRCS	:= \
-	$(wildcard bonus/*.c) \
-	$(wildcard src/init/*.c) \
-	$(wildcard src/moves/*.c) \
-	src/debug_print.c
+	bonus/main.c \
+	$(wildcard src/*/*.c) \
+	$(wildcard src/*/*/*.c)
 BONUS_OBJS	:= $(BONUS_SRCS:%.c=$(OBJ_DIR)/%.o)
 
 MY_TESTER	:= ./tests/test.sh
@@ -81,6 +80,7 @@ clean:
 fclean: clean
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 	rm -f $(NAME)
+	rm -f $(BONUS_NAME)
 
 re: fclean all
 

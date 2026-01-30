@@ -3,7 +3,7 @@
 #include "opti_moves.h"
 
 # include "debug.h"
-# include "print.h"
+# include "logs.h"
 
 // bool	run_configs(t_state *state, t_configs *configs)
 // {

@@ -2,7 +2,7 @@
 #include "config_priv.h"
 #include "chunk.h"
 #include "k_sort.h"
-# include <print.h>	// TMP: remove before submit
+# include <logs.h>	// TMP: remove before submit
 
 void	config_print_all(const t_configs *configs)
 {

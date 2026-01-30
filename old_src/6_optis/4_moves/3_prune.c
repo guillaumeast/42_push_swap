@@ -1,7 +1,7 @@
 #include "libft.h"
 #include "opti_moves_priv.h"
 # include "debug.h"
-# include <print.h>	// TMP: remove before submit
+# include <logs.h>	// TMP: remove before submit
 
 static void	prune_pattern(t_buff *moves, size_t *index, t_pattern *pat);
 static void	prune_doublon(t_buff *moves, size_t *index, t_move move);
