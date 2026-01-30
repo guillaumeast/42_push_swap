@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   finish.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/30 20:09:31 by gastesan          #+#    #+#             */
+/*   Updated: 2026/01/30 20:09:46 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FINISH_H
 # define FINISH_H
 
 # include "state.h"
 
-bool finish(t_state *state);
+bool	finish(t_state *state);
 
 #endif

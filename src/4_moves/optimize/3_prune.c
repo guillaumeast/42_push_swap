@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   3_prune.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/30 19:54:54 by gastesan          #+#    #+#             */
+/*   Updated: 2026/01/30 20:02:03 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "optimize_priv.h"
 
@@ -39,7 +51,8 @@ static void	prune_pattern(t_buff *moves, size_t *index, t_pattern *pat)
 
 	i = *index;
 	set_move(&curr, moves, (long)i);
-	while (i < moves->len && (curr == pat->a_move || curr == pat->b_move || curr == pat->cumul_move))
+	while (i < moves->len && (curr == pat->a_move
+			|| curr == pat->b_move || curr == pat->cumul_move))
 	{
 		if (curr == pat->a_move)
 			pat->a_count++;
@@ -52,9 +65,9 @@ static void	prune_pattern(t_buff *moves, size_t *index, t_pattern *pat)
 	}
 	if (pat->a_count > 0 && pat->b_count > 0)
 	{
-		pat->cumul_new = (size_t)min((long)pat->a_count, (long)pat->b_count) * 2;
-		pat->a_count -= pat->cumul_new / 2;
-		pat->b_count -= pat->cumul_new / 2;
+		pat->cumulnew = (size_t)min((long)pat->a_count, (long)pat->b_count) * 2;
+		pat->a_count -= pat->cumulnew / 2;
+		pat->b_count -= pat->cumulnew / 2;
 		convert_pattern(moves, pat, *index);
 	}
 	*index = i;
@@ -80,13 +93,12 @@ static void	prune_doublon(t_buff *moves, size_t *index, t_move move)
 	}
 	if (pattern.a_count > 1)
 	{
-		pattern.cumul_new = pattern.a_count - (pattern.a_count % 2);
+		pattern.cumulnew = pattern.a_count - (pattern.a_count % 2);
 		pattern.a_count = pattern.a_count % 2;
 		convert_pattern(moves, &pattern, *index);
 	}
 	*index = i;
 }
-
 
 static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i)
 {
@@ -94,7 +106,7 @@ static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i)
 		dst->data[i++] = (char)pat->a_move;
 	while (pat->b_count--)
 		dst->data[i++] = (char)pat->b_move;
-	while (pat->cumul_new--)
+	while (pat->cumulnew--)
 		dst->data[i++] = (char)NO_OP;
 	while (pat->cumul_count--)
 		dst->data[i++] = (char)pat->cumul_move;

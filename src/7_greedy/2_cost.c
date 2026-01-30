@@ -1,17 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_cost.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/30 20:09:08 by gastesan          #+#    #+#             */
+/*   Updated: 2026/01/30 20:09:09 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "greedy_priv.h"
-
-typedef struct s_raw_cost
-{
-	size_t	rotate;
-	size_t	reverse;
-}	t_raw_cost;
-
-typedef struct s_choice
-{
-	t_raw_cost	opti;
-	t_raw_cost	bad;
-}	t_choice;
 
 static void	compute_raw(t_choice *cost, size_t stack_len, size_t idx);
 static void	compute_tot(const t_raw_cost *a, const t_raw_cost *b, t_total *res);

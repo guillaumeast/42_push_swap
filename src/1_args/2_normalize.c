@@ -1,11 +1,18 @@
-#include "libft.h"
-#include <stdlib.h>
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_normalize.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/30 19:52:30 by gastesan          #+#    #+#             */
+/*   Updated: 2026/01/30 19:53:12 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-typedef struct s_sort_data
-{
-	int		*array;
-	int		*tmp;
-}	t_sort_data;
+#include "libft.h"
+#include "args_priv.h"
+#include <stdlib.h>
 
 static bool	sort(int *array, size_t size);
 static void	merge_sort(t_sort_data *data, size_t left, size_t right);

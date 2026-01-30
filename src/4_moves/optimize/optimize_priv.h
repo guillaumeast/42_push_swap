@@ -1,7 +1,19 @@
-#ifndef OPTI_MOVES_PRIV_H
-# define OPTI_MOVES_PRIV_H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   optimize_priv.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/30 19:54:59 by gastesan          #+#    #+#             */
+/*   Updated: 2026/01/30 20:02:03 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include "moves_priv.h"
+#ifndef OPTIMIZE_PRIV_H
+# define OPTIMIZE_PRIV_H
+
+# include "moves_priv.h"
 
 typedef struct s_pattern
 {
@@ -11,7 +23,7 @@ typedef struct s_pattern
 	size_t	b_count;
 	t_move	cumul_move;
 	size_t	cumul_count;
-	size_t	cumul_new;
+	size_t	cumulnew;
 	size_t	no_op_count;
 }	t_pattern;
 

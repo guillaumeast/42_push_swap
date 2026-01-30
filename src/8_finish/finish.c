@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   finish.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/30 20:09:28 by gastesan          #+#    #+#             */
+/*   Updated: 2026/01/30 20:09:55 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "state.h"
 #include "moves.h"
 
 static bool	get_target_index(const t_stack *stack, size_t *ret);
 
-bool finish(t_state *state)
+bool	finish(t_state *state)
 {
 	size_t	target_index;
 

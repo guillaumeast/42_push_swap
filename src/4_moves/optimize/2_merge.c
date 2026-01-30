@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   2_merge.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/30 19:54:52 by gastesan          #+#    #+#             */
+/*   Updated: 2026/01/30 20:02:03 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "optimize_priv.h"
 
@@ -33,7 +45,8 @@ static void	merge_pattern(t_buff *moves, size_t *index, t_pattern *pat)
 
 	i = *index;
 	set_move(&curr, moves, (long)i);
-	while (i < moves->len && (curr == pat->a_move || curr == pat->b_move || curr == pat->cumul_move || curr == NO_OP))
+	while (i < moves->len && (curr == pat->a_move || curr == pat->b_move
+			|| curr == pat->cumul_move || curr == NO_OP))
 	{
 		if (curr == pat->a_move)
 			pat->a_count++;
@@ -44,7 +57,6 @@ static void	merge_pattern(t_buff *moves, size_t *index, t_pattern *pat)
 		if (curr == NO_OP)
 			pat->no_op_count++;
 		i++;
-		// fprintf(stderr, "🪄  %s%3zu%s (%s%i%s) a_count = %3zu | b_count = %3zu | cumul_count = %3zu%s\n", YELLOW, *index, GREY, YELLOW, curr, GREY, pat->a_count, pat->b_count, pat->cumul_count, NC);	// TODO: tmp debug
 		set_move(&curr, moves, (long)i);
 	}
 	if (pat->a_count > 0 && pat->b_count > 0)
@@ -54,24 +66,18 @@ static void	merge_pattern(t_buff *moves, size_t *index, t_pattern *pat)
 
 static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i)
 {
-	// size_t	start_index;
-
-	// start_index = i;
-	pat->cumul_new = (size_t)min((long)pat->a_count, (long)pat->b_count);
-	// fprintf(stderr, "convert_pattern() pat->a_count = %ld | pat->b_count = %ld | pat->cumul_new = %zu\n", pat->a_count, pat->b_count, pat->cumul_new);
-	// fprintf(stderr, "%s✦ merged %4zu%s => ", GREEN, pat->cumul_new, GREY);
-	pat->cumul_count += pat->cumul_new;
-	pat->a_count -= pat->cumul_new;
-	pat->b_count -= pat->cumul_new;
+	pat->cumulnew = (size_t)min((long)pat->a_count, (long)pat->b_count);
+	pat->cumul_count += pat->cumulnew;
+	pat->a_count -= pat->cumulnew;
+	pat->b_count -= pat->cumulnew;
 	while (pat->cumul_count--)
 		dst->data[i++] = (char)pat->cumul_move;
 	while (pat->a_count--)
 		dst->data[i++] = (char)pat->a_move;
 	while (pat->b_count--)
 		dst->data[i++] = (char)pat->b_move;
-	while (pat->cumul_new--)
+	while (pat->cumulnew--)
 		dst->data[i++] = (char)NO_OP;
 	while (pat->no_op_count--)
 		dst->data[i++] = (char)NO_OP;
-	// print_opti_moves(dst, start_index, i - 1, GREY, YELLOW, true);
 }

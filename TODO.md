@@ -1,11 +1,5 @@
-# NEW_TODO
+# TODO
 
-- Implement **bufferization** into `moves_print()`
-
-# OLD_TODO
-
-- **checker**
-- ⚠️ PARSING TEST FAILED
 - `opti_sort_b()`:
 	- if (config->opti_median && B[0] < median(B)):						=> `rb()`
 	- if (B[1] > B[0] > B[2]):

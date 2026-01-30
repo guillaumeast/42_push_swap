@@ -55,10 +55,10 @@ static void	prune_pattern(t_buff *moves, size_t *index, t_pattern *pat)
 	}
 	if (pat->a_count > 0 && pat->b_count > 0)
 	{
-		pat->cumul_new = (size_t)min((long)pat->a_count, (long)pat->b_count) * 2;
-		pat->a_count -= pat->cumul_new / 2;
-		pat->b_count -= pat->cumul_new / 2;
-		// fprintf(stderr, "%s✗ pruned %4zu%s => ", GREEN, pat->cumul_new, GREY);
+		pat->cumulnew = (size_t)min((long)pat->a_count, (long)pat->b_count) * 2;
+		pat->a_count -= pat->cumulnew / 2;
+		pat->b_count -= pat->cumulnew / 2;
+		// fprintf(stderr, "%s✗ pruned %4zu%s => ", GREEN, pat->cumulnew, GREY);
 		convert_pattern(moves, pat, *index);
 	}
 	*index = i;
@@ -85,9 +85,9 @@ static void	prune_doublon(t_buff *moves, size_t *index, t_move move)
 	}
 	if (pattern.a_count > 1)
 	{
-		pattern.cumul_new = pattern.a_count - (pattern.a_count % 2);
+		pattern.cumulnew = pattern.a_count - (pattern.a_count % 2);
 		pattern.a_count = pattern.a_count % 2;
-		fprintf(stderr, "%s✗ pruned %4zu%s => ", GREEN, pattern.cumul_new, GREY);
+		fprintf(stderr, "%s✗ pruned %4zu%s => ", GREEN, pattern.cumulnew, GREY);
 		convert_pattern(moves, &pattern, *index);
 	}
 	*index = i;
@@ -100,12 +100,12 @@ static void	convert_pattern(t_buff *dst, t_pattern *pat, size_t i)
 	// size_t	end_index;
 
 	// start_index = i;
-	// fprintf(stderr, "convert_pattern() pat->a_count = %ld | pat->b_count = %ld | pat->cumul_new = %zu\n", pat->a_count, pat->b_count, pat->cumul_new);
+	// fprintf(stderr, "convert_pattern() pat->a_count = %ld | pat->b_count = %ld | pat->cumulnew = %zu\n", pat->a_count, pat->b_count, pat->cumulnew);
 	while (pat->a_count--)
 		dst->data[i++] = (char)pat->a_move;
 	while (pat->b_count--)
 		dst->data[i++] = (char)pat->b_move;
-	while (pat->cumul_new--)
+	while (pat->cumulnew--)
 		dst->data[i++] = (char)NO_OP;
 	// end_index = i;
 	while (pat->cumul_count--)

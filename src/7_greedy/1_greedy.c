@@ -1,14 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   1_greedy.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/30 20:08:26 by gastesan          #+#    #+#             */
+/*   Updated: 2026/01/30 20:08:27 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include "moves.h"
 #include "greedy.h"
 #include "greedy_priv.h"
-
-typedef struct s_insert
-{
-	size_t	from_index;
-	size_t	target_index;
-	t_total	cost;
-}	t_insert;
 
 static t_insert	get_next_insert(const t_stack *from, const t_stack *to);
 

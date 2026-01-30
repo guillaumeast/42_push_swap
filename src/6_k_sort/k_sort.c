@@ -1,13 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   k_sort.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/30 20:04:40 by gastesan          #+#    #+#             */
+/*   Updated: 2026/01/30 20:06:51 by gastesan         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "state.h"
-#include "window.h"
+#include "k_sort_priv.h"
 #include "moves.h"
 #include <stdlib.h>
-
-typedef struct s_target
-{
-	size_t	index;
-	uint	value;
-}	t_target;
 
 static void	find(t_state *state, t_window *window, t_target *ret_target);
 static bool	rotate(t_state *state, size_t index);
@@ -60,4 +66,3 @@ static bool	exec(t_state *state, t_window *window, uint value)
 		return (rb(state, 1));
 	return (true);
 }
-

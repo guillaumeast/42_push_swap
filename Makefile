@@ -10,7 +10,6 @@ SRCS		:= \
 	$(wildcard src/*.c) \
 	$(wildcard src/*/*.c) \
 	$(wildcard src/*/*/*.c)
-# TMP: remove before submit (lines "-Isrc/debug" ...)
 INCLUDES	:= \
 	-I$(LIBFT_DIR) \
 	-Ilogs \

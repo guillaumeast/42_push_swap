@@ -9,7 +9,7 @@ void	pattern_init(t_pattern *dst, t_move a, t_move b, t_move cumul)
 	dst->a_count = 0;
 	dst->b_count = 0;
 	dst->cumul_count = 0;
-	dst->cumul_new = 0;
+	dst->cumulnew = 0;
 	dst->no_op_count = 0;
 }
 

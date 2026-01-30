@@ -11,7 +11,7 @@ typedef struct s_pattern
 	size_t	b_count;
 	t_move	cumul_move;
 	size_t	cumul_count;
-	size_t	cumul_new;
+	size_t	cumulnew;
 	size_t	no_op_count;
 }	t_pattern;
 
