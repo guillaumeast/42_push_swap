@@ -11,8 +11,8 @@ GRAY='\033[0;90m'
 NC='\033[0m'
 GREY='\033[0;90m'
 
-COL1_WIDTH=55
-COL2_WIDTH=22
+COL1_WIDTH=49
+COL2_WIDTH=26
 
 main()
 {
@@ -24,6 +24,8 @@ main()
 	if [ $checker_exists -eq 0 ]; then
 		run_parsing_tests "$CHECKER"
 		run_checker_instruction_tests
+		run_checker_validation_tests
+		run_combined_random_tests
 	fi
 }
 
@@ -108,6 +110,72 @@ run_checker_instruction_tests()
 	return $failed
 }
 
+############# CHECKER VALIDATION TESTS #############
+
+run_checker_validation_tests()
+{
+	local failed=0
+
+	echo ""
+	echo -e "${GREY}--- $CHECKER validation tests ---${NC}\n"
+	test_checker_should_print_ok " 1" "3 1 0 2" $'pb\nsa\npa\nra\n' 'pb\nsa\npa\nra\n' "correct sort" || failed=1
+	test_checker_should_print_ok " 2" "3 1 0 2" $'ra\nsa\n' 'ra\nsa\n' "correct sort (alt)" || failed=1
+	test_checker_should_print_ok " 3" "0 1 2 3" '' '' "already sorted" || failed=1
+	test_checker_should_print_ko " 4" "3 0 1 2" $'pb\n' 'pb\n' "B is not empty" || failed=1
+	test_checker_should_print_ko " 5" "3 2 0 1" $'sa\n' 'sa\n' "min is not at the top of A" || failed=1
+	test_checker_should_print_ko " 6" "0 2 3 1" '' '' "A is not sorted" || failed=1
+
+	return $failed
+}
+
+############# COMBINED RANDOM TESTS #############
+
+run_combined_random_tests()
+{
+	local failed=0
+
+	echo ""
+	echo -e "${GREY}--- push_swap + checker combined tests (500 random numbers) ---${NC}\n"
+	
+	for i in $(seq 1 10); do
+		test_num=$(printf "%2d" "$i")
+		test_combined_random "$test_num" || failed=1
+	done
+
+	return $failed
+}
+
+test_combined_random()
+{
+	local test_num="$1"
+	
+	# Generate random stack
+	local stack=$(shuf --input-range=0-2147483647 -n 500 | tr '\n' ' ')
+	
+	# Run push_swap | checker
+	stdout=$(eval "$PUSH_SWAP $stack" | eval "$CHECKER $stack" 2>/dev/null)
+	stderr=$(eval "$PUSH_SWAP $stack" | eval "$CHECKER $stack" 2>&1 >/dev/null)
+	ret=$?
+	
+	# Count moves
+	local moves=$(eval "$PUSH_SWAP $stack" 2>/dev/null | wc -l | tr -d ' ')
+	
+	local col1=$(printf "%-${COL1_WIDTH}s" "$PUSH_SWAP [500 random] | $CHECKER [500 random]")
+	local col2=$(printf "%-${COL2_WIDTH}s" "moves: $moves")
+	local msg="should print 'OK\\n' to stdout and return 0"
+	
+	if [ "$stdout" = "OK" ] && [ -z "$stderr" ] && [ $ret -eq 0 ]; then
+		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}........${NC} ${GREEN}✔${NC}\n" "$test_num" "$col1" "$col2" "$msg"
+		return 0
+	else
+		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}........${NC} ${RED}✖${NC}\n" "$test_num" "$col1" "$col2" "$msg"
+		echo -e "    ${RED}Stdout: '$stdout'${NC}"
+		echo -e "    ${RED}Stderr: '$stderr'${NC}"
+		echo -e "    ${RED}Return code: $ret${NC}"
+		return 1
+	fi
+}
+
 ############# TEST FUNCTIONS #############
 
 test_should_do_nothing()
@@ -124,10 +192,10 @@ test_should_do_nothing()
 	local msg="should print nothing and return 0"
 	
 	if [ -z "$stdout" ] && [ -z "$stderr" ] && [ $ret -eq 0 ]; then
-		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} -> ${col2} -> ${msg} ${GRAY}...............${NC} ${GREEN}✔${NC}"
+		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} ⇢ ${col2} ⇢ ${msg} ${GRAY}.................${NC} ${GREEN}✔${NC}"
 		return 0
 	else
-		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} -> ${col2} -> ${msg} ${GRAY}...............${NC} ${RED}✖${NC}"
+		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} ⇢ ${col2} ⇢ ${msg} ${GRAY}.................${NC} ${RED}✖${NC}"
 		echo -e "    ${RED}Stdout: '$stdout'${NC}"
 		echo -e "    ${RED}Stderr: '$stderr'${NC}"
 		echo -e "    ${RED}Return code: $ret${NC}"
@@ -148,13 +216,13 @@ test_should_throw_error()
 	
 	local col1=$(printf "%-${COL1_WIDTH}s" "$program $args")
 	local col2=$(printf "%-${COL2_WIDTH}s" "$description")
-	local msg="should print 'Error' to stderr and return > 0"
+	local msg="should print 'Error\\\n' to stderr and return > 0"
 	
 	if [ "$stderr" = "Error" ] && [ -z "$stdout" ] && [ $ret -ne 0 ]; then
-		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} -> ${col2} -> ${msg} ${GRAY}...${NC} ${GREEN}✔${NC}"
+		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} ⇢ ${col2} ⇢ ${msg} ${GRAY}...${NC} ${GREEN}✔${NC}"
 		return 0
 	else
-		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} -> ${col2} -> ${msg} ${GRAY}...${NC} ${RED}✖${NC}"
+		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} ⇢ ${col2} ⇢ ${msg} ${GRAY}...${NC} ${RED}✖${NC}"
 		echo -e "    ${RED}Stdout: '$stdout'${NC}"
 		echo -e "    ${RED}Stderr: '$stderr'${NC}"
 		echo -e "    ${RED}Return code: $ret${NC}"
@@ -178,10 +246,10 @@ test_should_work()
 	local msg="should print to stdout and return 0"
 	
 	if [ -n "$stdout" ] && [ $ret -eq 0 ]; then
-		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} -> ${col2} -> ${msg} ${GRAY}.............${NC} ${GREEN}✔${NC}"
+		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} ⇢ ${col2} ⇢ ${msg} ${GRAY}...............${NC} ${GREEN}✔${NC}"
 		return 0
 	else
-		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} -> ${col2} -> ${msg} ${GRAY}.............${NC} ${RED}✖${NC}"
+		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} ⇢ ${col2} ⇢ ${msg} ${GRAY}...............${NC} ${RED}✖${NC}"
 		echo -e "    ${RED}Stdout: '$stdout'${NC}"
 		echo -e "    ${RED}Stderr: '$stderr'${NC}"
 		echo -e "    ${RED}Return code: $ret${NC}"
@@ -203,13 +271,69 @@ test_checker_invalid_instruction()
 	
 	local col1=$(printf "%-${COL1_WIDTH}s" "$CHECKER $args << \"${display_stdin}\"")
 	local col2=$(printf "%-${COL2_WIDTH}s" "$description")
-	local msg="should print 'Error' to stderr and return > 0"
+	local msg="should print 'Error\\n' to stderr and return > 0"
 	
 	if [ "$stderr" = "Error" ] && [ -z "$stdout" ] && [ $ret -ne 0 ]; then
-		printf "Test %s: ${BLUE}%s${NC} -> %s -> %s ${GRAY}...${NC} ${GREEN}✔${NC}\n" "$test_num" "$col1" "$col2" "$msg"
+		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}...${NC} ${GREEN}✔${NC}\n" "$test_num" "$col1" "$col2" "$msg"
 		return 0
 	else
-		printf "Test %s: ${BLUE}%s${NC} -> %s -> %s ${GRAY}...${NC} ${RED}✖${NC}\n" "$test_num" "$col1" "$col2" "$msg"
+		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}...${NC} ${RED}✖${NC}\n" "$test_num" "$col1" "$col2" "$msg"
+		echo -e "    ${RED}Stdout: '$stdout'${NC}"
+		echo -e "    ${RED}Stderr: '$stderr'${NC}"
+		echo -e "    ${RED}Return code: $ret${NC}"
+		return 1
+	fi
+}
+
+test_checker_should_print_ok()
+{
+	local test_num="$1"
+	local args="$2"
+	local stdin_input="$3"
+	local display_stdin="$4"
+	local description="$5"
+	
+	stdout=$(printf '%s' "$stdin_input" | eval "$CHECKER $args" 2>/dev/null)
+	stderr=$(printf '%s' "$stdin_input" | eval "$CHECKER $args" 2>&1 >/dev/null)
+	ret=$?
+	
+	local col1=$(printf "%-${COL1_WIDTH}s" "$CHECKER $args << \"${display_stdin}\"")
+	local col2=$(printf "%-${COL2_WIDTH}s" "$description")
+	local msg="should print 'OK\\n' to stdout and return 0"
+	
+	if [ "$stdout" = "OK" ] && [ -z "$stderr" ] && [ $ret -eq 0 ]; then
+		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}........${NC} ${GREEN}✔${NC}\n" "$test_num" "$col1" "$col2" "$msg"
+		return 0
+	else
+		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}........${NC} ${RED}✖${NC}\n" "$test_num" "$col1" "$col2" "$msg"
+		echo -e "    ${RED}Stdout: '$stdout'${NC}"
+		echo -e "    ${RED}Stderr: '$stderr'${NC}"
+		echo -e "    ${RED}Return code: $ret${NC}"
+		return 1
+	fi
+}
+
+test_checker_should_print_ko()
+{
+	local test_num="$1"
+	local args="$2"
+	local stdin_input="$3"
+	local display_stdin="$4"
+	local description="$5"
+	
+	stdout=$(printf '%s' "$stdin_input" | eval "$CHECKER $args" 2>/dev/null)
+	stderr=$(printf '%s' "$stdin_input" | eval "$CHECKER $args" 2>&1 >/dev/null)
+	ret=$?
+	
+	local col1=$(printf "%-${COL1_WIDTH}s" "$CHECKER $args << \"${display_stdin}\"")
+	local col2=$(printf "%-${COL2_WIDTH}s" "$description")
+	local msg="should print 'KO\\n' to stdout and return 0"
+	
+	if [ "$stdout" = "KO" ] && [ -z "$stderr" ] && [ $ret -eq 0 ]; then
+		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}........${NC} ${GREEN}✔${NC}\n" "$test_num" "$col1" "$col2" "$msg"
+		return 0
+	else
+		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}........${NC} ${RED}✖${NC}\n" "$test_num" "$col1" "$col2" "$msg"
 		echo -e "    ${RED}Stdout: '$stdout'${NC}"
 		echo -e "    ${RED}Stderr: '$stderr'${NC}"
 		echo -e "    ${RED}Return code: $ret${NC}"
