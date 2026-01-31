@@ -14,6 +14,18 @@ GREY='\033[0;90m'
 COL1_WIDTH=49
 COL2_WIDTH=26
 
+STDOUT_GOT=$(mktemp)
+STDERR_GOT=$(mktemp)
+STDOUT_EXP=$(mktemp)
+STDERR_EXP=$(mktemp)
+
+cleanup()
+{
+	rm -f "$STDOUT_GOT" "$STDERR_GOT" "$STDOUT_EXP" "$STDERR_EXP"
+}
+
+trap cleanup EXIT
+
 main()
 {
 	check_program_exists "$PUSH_SWAP" 1
@@ -67,17 +79,17 @@ run_parsing_tests()
 	echo ""
 	echo -e "${GREY}--- $program parsing tests ---${NC}\n"
 	test_should_do_nothing "$program" " 1" || failed=1
-	test_should_throw_error "$program" " 2" "1 2 3 1" "duplicate" || failed=1
-	test_should_throw_error "$program" " 3" "\"\"" "single empty" || failed=1
-	test_should_throw_error "$program" " 4" "1 \"\" 3 4" "empty arg" || failed=1
-	test_should_throw_error "$program" " 5" "1 + 3 4" "invalid '+'" || failed=1
-	test_should_throw_error "$program" " 6" "1 - 3 4" "invalid '-'" || failed=1
-	test_should_throw_error "$program" " 7" "1 2a 4" "invalid '2a'" || failed=1
-	test_should_throw_error "$program" " 8" "1 2 -2147483649" "int underflow" || failed=1
-	test_should_throw_error "$program" " 9" "1 2 2147483648" "int overflow" || failed=1
-	test_should_throw_error "$program" "10" "1 2 +2147483648" "int overflow" || failed=1
-	test_should_throw_error "$program" "11" "1 a2 3" "invalid start" || failed=1
-	test_should_throw_error "$program" "12" "\"\" \"\" \"\" \"\"" "all empty args" || failed=1
+	test_should_throw_error "$program" " 2" "\"\"" "single empty" || failed=1
+	test_should_throw_error "$program" " 3" "\"\" \"\" \"\" \"\"" "all empty args" || failed=1
+	test_should_throw_error "$program" " 4" "1 2 3 1" "duplicate" || failed=1
+	test_should_throw_error "$program" " 5" "1 \"\" 3 4" "empty arg" || failed=1
+	test_should_throw_error "$program" " 6" "1 + 3 4" "invalid '+'" || failed=1
+	test_should_throw_error "$program" " 7" "1 - 3 4" "invalid '-'" || failed=1
+	test_should_throw_error "$program" " 8" "1 2a 4" "invalid '2a'" || failed=1
+	test_should_throw_error "$program" " 9" "1 a2 3" "invalid 'a2'" || failed=1
+	test_should_throw_error "$program" "10" "1 2 -2147483649" "int underflow" || failed=1
+	test_should_throw_error "$program" "11" "1 2 2147483648" "int overflow" || failed=1
+	test_should_throw_error "$program" "12" "1 2 +2147483648" "int overflow with sign" || failed=1
 	test_should_work "$program" "13" "-2147483648 \"5 1\" +2147483647" "space" || failed=1
 	test_should_work "$program" "14" "-2147483648 \" 5 1\" +2147483647" "leading space" || failed=1
 	test_should_work "$program" "15" "-2147483648 \"5 1 \" +2147483647" "trailing space" || failed=1
@@ -153,9 +165,16 @@ test_combined_random()
 	local stack=$(shuf --input-range=0-2147483647 -n 500 | tr '\n' ' ')
 	
 	# Run push_swap | checker
-	stdout=$(eval "$PUSH_SWAP $stack" | eval "$CHECKER $stack" 2>/dev/null)
-	stderr=$(eval "$PUSH_SWAP $stack" | eval "$CHECKER $stack" 2>&1 >/dev/null)
-	ret=$?
+	eval "$PUSH_SWAP $stack" | eval "$CHECKER $stack" > "$STDOUT_GOT" 2> "$STDERR_GOT"
+	local ret=$?
+	
+	local stdout_got=$(cat -e "$STDOUT_GOT")
+	local stderr_got=$(cat -e "$STDERR_GOT")
+	
+	printf "%b" "OK\n" > "$STDOUT_EXP"
+	local stdout_exp=$(cat -e "$STDOUT_EXP")
+	printf "%b" "" > "$STDERR_EXP"
+	local stderr_exp=$(cat -e "$STDERR_EXP")
 	
 	# Count moves
 	local moves=$(eval "$PUSH_SWAP $stack" 2>/dev/null | wc -l | tr -d ' ')
@@ -164,13 +183,15 @@ test_combined_random()
 	local col2=$(printf "%-${COL2_WIDTH}s" "moves: $moves")
 	local msg="should print 'OK\\n' to stdout and return 0"
 	
-	if [ "$stdout" = "OK" ] && [ -z "$stderr" ] && [ $ret -eq 0 ]; then
+	if [ "$stdout_got" = "$stdout_exp" ] && [ "$stderr_got" = "$stderr_exp" ] && [ $ret -eq 0 ]; then
 		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}........${NC} ${GREEN}✔${NC}\n" "$test_num" "$col1" "$col2" "$msg"
 		return 0
 	else
 		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}........${NC} ${RED}✖${NC}\n" "$test_num" "$col1" "$col2" "$msg"
-		echo -e "    ${RED}Stdout: '$stdout'${NC}"
-		echo -e "    ${RED}Stderr: '$stderr'${NC}"
+		echo -e "    ${RED}Stdout got: '$stdout_got'${NC}"
+		echo -e "    ${RED}Stdout exp: '$stdout_exp'${NC}"
+		echo -e "    ${RED}Stderr got: '$stderr_got'${NC}"
+		echo -e "    ${RED}Stderr exp: '$stderr_exp'${NC}"
 		echo -e "    ${RED}Return code: $ret${NC}"
 		return 1
 	fi
@@ -183,21 +204,30 @@ test_should_do_nothing()
 	local program="$1"
 	local test_num="$2"
 	
-	stdout=$($program < /dev/null 2>/dev/null)
-	stderr=$($program < /dev/null 2>&1 >/dev/null)
-	ret=$?
+	$program < /dev/null > "$STDOUT_GOT" 2> "$STDERR_GOT"
+	local ret=$?
+	
+	local stdout_got=$(cat -e "$STDOUT_GOT")
+	local stderr_got=$(cat -e "$STDERR_GOT")
+	
+	printf "%b" "" > "$STDOUT_EXP"
+	local stdout_exp=$(cat -e "$STDOUT_EXP")
+	printf "%b" "" > "$STDERR_EXP"
+	local stderr_exp=$(cat -e "$STDERR_EXP")
 	
 	local col1=$(printf "%-${COL1_WIDTH}s" "$program")
 	local col2=$(printf "%-${COL2_WIDTH}s" "no arg")
 	local msg="should print nothing and return 0"
 	
-	if [ -z "$stdout" ] && [ -z "$stderr" ] && [ $ret -eq 0 ]; then
+	if [ "$stdout_got" = "$stdout_exp" ] && [ "$stderr_got" = "$stderr_exp" ] && [ $ret -eq 0 ]; then
 		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} ⇢ ${col2} ⇢ ${msg} ${GRAY}.................${NC} ${GREEN}✔${NC}"
 		return 0
 	else
 		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} ⇢ ${col2} ⇢ ${msg} ${GRAY}.................${NC} ${RED}✖${NC}"
-		echo -e "    ${RED}Stdout: '$stdout'${NC}"
-		echo -e "    ${RED}Stderr: '$stderr'${NC}"
+		echo -e "    ${RED}Stdout got: '$stdout_got'${NC}"
+		echo -e "    ${RED}Stdout exp: '$stdout_exp'${NC}"
+		echo -e "    ${RED}Stderr got: '$stderr_got'${NC}"
+		echo -e "    ${RED}Stderr exp: '$stderr_exp'${NC}"
 		echo -e "    ${RED}Return code: $ret${NC}"
 		return 1
 	fi
@@ -210,21 +240,30 @@ test_should_throw_error()
 	local args="$3"
 	local description="$4"
 	
-	stdout=$(eval "$program $args" < /dev/null 2>/dev/null)
-	stderr=$(eval "$program $args" < /dev/null 2>&1 >/dev/null)
-	ret=$?
+	eval "$program $args" < /dev/null > "$STDOUT_GOT" 2> "$STDERR_GOT"
+	local ret=$?
+	
+	local stdout_got=$(cat -e "$STDOUT_GOT")
+	local stderr_got=$(cat -e "$STDERR_GOT")
+	
+	printf "%b" "" > "$STDOUT_EXP"
+	local stdout_exp=$(cat -e "$STDOUT_EXP")
+	printf "%b" "Error\n" > "$STDERR_EXP"
+	local stderr_exp=$(cat -e "$STDERR_EXP")
 	
 	local col1=$(printf "%-${COL1_WIDTH}s" "$program $args")
 	local col2=$(printf "%-${COL2_WIDTH}s" "$description")
 	local msg="should print 'Error\\\n' to stderr and return > 0"
 	
-	if [ "$stderr" = "Error" ] && [ -z "$stdout" ] && [ $ret -ne 0 ]; then
+	if [ "$stderr_got" = "$stderr_exp" ] && [ "$stdout_got" = "$stdout_exp" ] && [ $ret -ne 0 ]; then
 		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} ⇢ ${col2} ⇢ ${msg} ${GRAY}...${NC} ${GREEN}✔${NC}"
 		return 0
 	else
 		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} ⇢ ${col2} ⇢ ${msg} ${GRAY}...${NC} ${RED}✖${NC}"
-		echo -e "    ${RED}Stdout: '$stdout'${NC}"
-		echo -e "    ${RED}Stderr: '$stderr'${NC}"
+		echo -e "    ${RED}Stdout got: '$stdout_got'${NC}"
+		echo -e "    ${RED}Stdout exp: '$stdout_exp'${NC}"
+		echo -e "    ${RED}Stderr got: '$stderr_got'${NC}"
+		echo -e "    ${RED}Stderr exp: '$stderr_exp'${NC}"
 		echo -e "    ${RED}Return code: $ret${NC}"
 		return 1
 	fi
@@ -237,21 +276,27 @@ test_should_work()
 	local args="$3"
 	local description="$4"
 	
-	stdout=$(eval "$program $args" < /dev/null 2>/dev/null)
-	stderr=$(eval "$program $args" < /dev/null 2>&1 >/dev/null)
-	ret=$?
+	eval "$program $args" < /dev/null > "$STDOUT_GOT" 2> "$STDERR_GOT"
+	local ret=$?
+	
+	local stdout_got=$(cat -e "$STDOUT_GOT")
+	local stderr_got=$(cat -e "$STDERR_GOT")
+	
+	printf "%b" "" > "$STDERR_EXP"
+	local stderr_exp=$(cat -e "$STDERR_EXP")
 	
 	local col1=$(printf "%-${COL1_WIDTH}s" "$program $args")
 	local col2=$(printf "%-${COL2_WIDTH}s" "$description")
 	local msg="should print to stdout and return 0"
 	
-	if [ -n "$stdout" ] && [ $ret -eq 0 ]; then
+	if [ -n "$stdout_got" ] && [ "$stderr_got" = "$stderr_exp" ] && [ $ret -eq 0 ]; then
 		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} ⇢ ${col2} ⇢ ${msg} ${GRAY}...............${NC} ${GREEN}✔${NC}"
 		return 0
 	else
 		echo -e "Test ${test_num}: ${BLUE}${col1}${NC} ⇢ ${col2} ⇢ ${msg} ${GRAY}...............${NC} ${RED}✖${NC}"
-		echo -e "    ${RED}Stdout: '$stdout'${NC}"
-		echo -e "    ${RED}Stderr: '$stderr'${NC}"
+		echo -e "    ${RED}Stdout got: '$stdout_got'${NC}"
+		echo -e "    ${RED}Stderr got: '$stderr_got'${NC}"
+		echo -e "    ${RED}Stderr exp: '$stderr_exp'${NC}"
 		echo -e "    ${RED}Return code: $ret${NC}"
 		return 1
 	fi
@@ -265,21 +310,30 @@ test_checker_invalid_instruction()
 	local display_stdin="$4"
 	local description="$5"
 	
-	stdout=$(printf '%s' "$stdin_input" | eval "$CHECKER $args" 2>/dev/null)
-	stderr=$(printf '%s' "$stdin_input" | eval "$CHECKER $args" 2>&1 >/dev/null)
-	ret=$?
+	printf '%s' "$stdin_input" | eval "$CHECKER $args" > "$STDOUT_GOT" 2> "$STDERR_GOT"
+	local ret=$?
+	
+	local stdout_got=$(cat -e "$STDOUT_GOT")
+	local stderr_got=$(cat -e "$STDERR_GOT")
+	
+	printf "%b" "" > "$STDOUT_EXP"
+	local stdout_exp=$(cat -e "$STDOUT_EXP")
+	printf "%b" "Error\n" > "$STDERR_EXP"
+	local stderr_exp=$(cat -e "$STDERR_EXP")
 	
 	local col1=$(printf "%-${COL1_WIDTH}s" "$CHECKER $args << \"${display_stdin}\"")
 	local col2=$(printf "%-${COL2_WIDTH}s" "$description")
 	local msg="should print 'Error\\n' to stderr and return > 0"
 	
-	if [ "$stderr" = "Error" ] && [ -z "$stdout" ] && [ $ret -ne 0 ]; then
+	if [ "$stderr_got" = "$stderr_exp" ] && [ "$stdout_got" = "$stdout_exp" ] && [ $ret -ne 0 ]; then
 		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}...${NC} ${GREEN}✔${NC}\n" "$test_num" "$col1" "$col2" "$msg"
 		return 0
 	else
 		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}...${NC} ${RED}✖${NC}\n" "$test_num" "$col1" "$col2" "$msg"
-		echo -e "    ${RED}Stdout: '$stdout'${NC}"
-		echo -e "    ${RED}Stderr: '$stderr'${NC}"
+		echo -e "    ${RED}Stdout got: '$stdout_got'${NC}"
+		echo -e "    ${RED}Stdout exp: '$stdout_exp'${NC}"
+		echo -e "    ${RED}Stderr got: '$stderr_got'${NC}"
+		echo -e "    ${RED}Stderr exp: '$stderr_exp'${NC}"
 		echo -e "    ${RED}Return code: $ret${NC}"
 		return 1
 	fi
@@ -293,21 +347,30 @@ test_checker_should_print_ok()
 	local display_stdin="$4"
 	local description="$5"
 	
-	stdout=$(printf '%s' "$stdin_input" | eval "$CHECKER $args" 2>/dev/null)
-	stderr=$(printf '%s' "$stdin_input" | eval "$CHECKER $args" 2>&1 >/dev/null)
-	ret=$?
+	printf '%s' "$stdin_input" | eval "$CHECKER $args" > "$STDOUT_GOT" 2> "$STDERR_GOT"
+	local ret=$?
+	
+	local stdout_got=$(cat -e "$STDOUT_GOT")
+	local stderr_got=$(cat -e "$STDERR_GOT")
+	
+	printf "%b" "OK\n" > "$STDOUT_EXP"
+	local stdout_exp=$(cat -e "$STDOUT_EXP")
+	printf "%b" "" > "$STDERR_EXP"
+	local stderr_exp=$(cat -e "$STDERR_EXP")
 	
 	local col1=$(printf "%-${COL1_WIDTH}s" "$CHECKER $args << \"${display_stdin}\"")
 	local col2=$(printf "%-${COL2_WIDTH}s" "$description")
 	local msg="should print 'OK\\n' to stdout and return 0"
 	
-	if [ "$stdout" = "OK" ] && [ -z "$stderr" ] && [ $ret -eq 0 ]; then
+	if [ "$stdout_got" = "$stdout_exp" ] && [ "$stderr_got" = "$stderr_exp" ] && [ $ret -eq 0 ]; then
 		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}........${NC} ${GREEN}✔${NC}\n" "$test_num" "$col1" "$col2" "$msg"
 		return 0
 	else
 		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}........${NC} ${RED}✖${NC}\n" "$test_num" "$col1" "$col2" "$msg"
-		echo -e "    ${RED}Stdout: '$stdout'${NC}"
-		echo -e "    ${RED}Stderr: '$stderr'${NC}"
+		echo -e "    ${RED}Stdout got: '$stdout_got'${NC}"
+		echo -e "    ${RED}Stdout exp: '$stdout_exp'${NC}"
+		echo -e "    ${RED}Stderr got: '$stderr_got'${NC}"
+		echo -e "    ${RED}Stderr exp: '$stderr_exp'${NC}"
 		echo -e "    ${RED}Return code: $ret${NC}"
 		return 1
 	fi
@@ -321,21 +384,70 @@ test_checker_should_print_ko()
 	local display_stdin="$4"
 	local description="$5"
 	
-	stdout=$(printf '%s' "$stdin_input" | eval "$CHECKER $args" 2>/dev/null)
-	stderr=$(printf '%s' "$stdin_input" | eval "$CHECKER $args" 2>&1 >/dev/null)
-	ret=$?
+	printf '%s' "$stdin_input" | eval "$CHECKER $args" > "$STDOUT_GOT" 2> "$STDERR_GOT"
+	local ret=$?
+	
+	local stdout_got=$(cat -e "$STDOUT_GOT")
+	local stderr_got=$(cat -e "$STDERR_GOT")
+	
+	printf "%b" "KO\n" > "$STDOUT_EXP"
+	local stdout_exp=$(cat -e "$STDOUT_EXP")
+	printf "%b" "" > "$STDERR_EXP"
+	local stderr_exp=$(cat -e "$STDERR_EXP")
 	
 	local col1=$(printf "%-${COL1_WIDTH}s" "$CHECKER $args << \"${display_stdin}\"")
 	local col2=$(printf "%-${COL2_WIDTH}s" "$description")
 	local msg="should print 'KO\\n' to stdout and return 0"
 	
-	if [ "$stdout" = "KO" ] && [ -z "$stderr" ] && [ $ret -eq 0 ]; then
+	if [ "$stdout_got" = "$stdout_exp" ] && [ "$stderr_got" = "$stderr_exp" ] && [ $ret -eq 0 ]; then
 		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}........${NC} ${GREEN}✔${NC}\n" "$test_num" "$col1" "$col2" "$msg"
 		return 0
 	else
 		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}........${NC} ${RED}✖${NC}\n" "$test_num" "$col1" "$col2" "$msg"
-		echo -e "    ${RED}Stdout: '$stdout'${NC}"
-		echo -e "    ${RED}Stderr: '$stderr'${NC}"
+		echo -e "    ${RED}Stdout got: '$stdout_got'${NC}"
+		echo -e "    ${RED}Stdout exp: '$stdout_exp'${NC}"
+		echo -e "    ${RED}Stderr got: '$stderr_got'${NC}"
+		echo -e "    ${RED}Stderr exp: '$stderr_exp'${NC}"
+		echo -e "    ${RED}Return code: $ret${NC}"
+		return 1
+	fi
+}
+
+test_combined_random()
+{
+	local test_num="$1"
+	
+	# Generate random stack
+	local stack=$(shuf --input-range=0-2147483647 -n 500 | tr '\n' ' ')
+	
+	# Run push_swap | checker
+	eval "$PUSH_SWAP $stack" | eval "$CHECKER $stack" > "$STDOUT_GOT" 2> "$STDERR_GOT"
+	local ret=$?
+	
+	local stdout_got=$(cat -e "$STDOUT_GOT")
+	local stderr_got=$(cat -e "$STDERR_GOT")
+	
+	printf "%b" "OK\n" > "$STDOUT_EXP"
+	local stdout_exp=$(cat -e "$STDOUT_EXP")
+	printf "%b" "" > "$STDERR_EXP"
+	local stderr_exp=$(cat -e "$STDERR_EXP")
+	
+	# Count moves
+	local moves=$(eval "$PUSH_SWAP $stack" 2>/dev/null | wc -l)
+	
+	local col1=$(printf "%-${COL1_WIDTH}s" "$PUSH_SWAP [500 random] | $CHECKER [500 random]")
+	local col2=$(printf "%-${COL2_WIDTH}s" "moves: $moves")
+	local msg="should print 'OK\\n' to stdout and return 0"
+	
+	if [ "$stdout_got" = "$stdout_exp" ] && [ "$stderr_got" = "$stderr_exp" ] && [ $ret -eq 0 ]; then
+		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}........${NC} ${GREEN}✔${NC}\n" "$test_num" "$col1" "$col2" "$msg"
+		return 0
+	else
+		printf "Test %s: ${BLUE}%s${NC} ⇢ %s ⇢ %s ${GRAY}........${NC} ${RED}✖${NC}\n" "$test_num" "$col1" "$col2" "$msg"
+		echo -e "    ${RED}Stdout got: '$stdout_got'${NC}"
+		echo -e "    ${RED}Stdout exp: '$stdout_exp'${NC}"
+		echo -e "    ${RED}Stderr got: '$stderr_got'${NC}"
+		echo -e "    ${RED}Stderr exp: '$stderr_exp'${NC}"
 		echo -e "    ${RED}Return code: $ret${NC}"
 		return 1
 	fi

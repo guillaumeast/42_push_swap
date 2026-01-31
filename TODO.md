@@ -1,6 +1,5 @@
 # SUBMIT
 
-- Test checker with feintes `ra rb`, `rab`, `pp`, `sa `, ` sb`, `\n` at the beginning or at the end of input
 ✅ `Norminette`
 - Update `README.md`
 - Copy `libft` **files** instead of **submodule**
