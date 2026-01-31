@@ -38,7 +38,7 @@ MY_TESTER	:= ./tests/test.sh
 TESTER_DIR	:= tester_SimonCROS
 TESTER_NAME	:= complexity
 TESTER_BIN	:= $(TESTER_DIR)/$(TESTER_NAME)
-TEST_ITER	:= 1000
+TEST_ITER	:= 200
 TEST1_ARGC	:= 100
 TEST1_MAX	:= 700
 TEST2_ARGC	:= 500
@@ -63,7 +63,7 @@ bonus: $(BONUS_OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(BONUS_OBJS) $(LIBFT) -o $(BONUS_NAME)
 
 test: re
-# 	@$(MY_TESTER)
+	@$(MY_TESTER)
 	@$(MAKE) -C $(TESTER_DIR) fr
 	@echo "\n----------"
 	@./$(TESTER_BIN) $(TEST_OPT) $(TEST1_ARGC) $(TEST_ITER) $(TEST1_MAX) || true
@@ -81,6 +81,6 @@ fclean: clean
 	rm -f $(NAME)
 	rm -f $(BONUS_NAME)
 
-re: fclean all
+re: fclean all bonus
 
 .PHONY: all bonus test clean fclean re
