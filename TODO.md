@@ -1,3 +1,17 @@
+# SUBMIT
+
+- Test checker with feintes `ra rb`, `rab`, `pp`, `sa `, ` sb`, `\n` at the beginning or at the end of input
+✅ `Norminette`
+- Update `README.md`
+- Copy `libft` **files** instead of **submodule**
+- Remove `push_swap_visualizer`
+- Remove `tester_SimonCROS`
+- Remove `tests`
+- Remove `docs`
+- Remove `.gitmodules`
+- Remove `imgui.ini`
+- Remove `TODO.md`
+
 # TODO
 
 - `opti_sort_b()`:
@@ -65,17 +79,3 @@
 
 🚨 Conflict = 1 with this input
 `./push_swap 44 16 53 27 67 34 14 61 43 49 18 10 63 65 73 8 86 80 30 25 9 99 69 82 62 75 35 40 45 41 64 3 23 78 79 91 47 13 46 56 96 54 5 15 95 51 98 20 36 60 71 26 93 38 39 76 0 84 32 85 12 94 97 88 33 59 66 77 70 89 57 52 58 22 74 21 55 90 11 68 7 1 72 83 2 42 48 6 31 81 50 87 37 92 17 19 29 28 4 24`
-
----
-
-- `Nominette`
-- Update `README.md`
-- Copy `libft` **files** instead of **submodule**
-- Remove all `TMP: remove before submit` targets (don't forget Makefile!)
-- Remove `push_swap_visualizer`
-- Remove `tester_SimonCROS`
-- Remove `tests`
-- Remove `docs`
-- Remove `.gitmodules`
-- Remove `imgui.ini`
-- Remove `TODO.md`

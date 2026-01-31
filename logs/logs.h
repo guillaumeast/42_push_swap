@@ -97,16 +97,16 @@ void	print_error(const char *fmt, ...)													__attribute__((format(printf,
 
 /* ---------- title.c ---------- */
 
-void	print_title(const char *fmt, ...);													__attribute__((format(printf, 1, 2)));
+void	print_title(const char *fmt, ...)													__attribute__((format(printf, 1, 2)));
 void	print_title_top(bool new_line);
-void	print_title_mid(bool new_line, const char *fmt, ...);								__attribute__((format(printf, 2, 3)));
+void	print_title_mid(bool new_line, const char *fmt, ...)								__attribute__((format(printf, 2, 3)));
 
 /* ---------- log.c ---------- */
 
-void	print_log(const char *fmt, ...);													__attribute__((format(printf, 1, 2)));
-void	print_info(const char *fmt, ...);													__attribute__((format(printf, 1, 2)));
-void	print_warn(const char *fmt, ...);													__attribute__((format(printf, 1, 2)));
-void	print_pass(const char *fmt, ...);													__attribute__((format(printf, 1, 2)));
+void	print_log(const char *fmt, ...)														__attribute__((format(printf, 1, 2)));
+void	print_info(const char *fmt, ...)													__attribute__((format(printf, 1, 2)));
+void	print_warn(const char *fmt, ...)													__attribute__((format(printf, 1, 2)));
+void	print_pass(const char *fmt, ...)													__attribute__((format(printf, 1, 2)));
 void	print_log_custom(t_format format, bool indent, bool new_line, const char *fmt, ...) __attribute__((format(printf, 4, 5)));
 
 /* ---------- result.c ---------- */

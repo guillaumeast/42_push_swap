@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 20:10:12 by gastesan          #+#    #+#             */
-/*   Updated: 2026/01/30 20:10:13 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/01/31 14:08:44 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,6 @@ static int	free_and_print_error(t_state *state)
 {
 	if (state)
 		state_free(state);
-	write(2, "Error\n", 6);
+	(void)write(2, "Error\n", 6);
 	return (EXIT_FAILURE);
 }

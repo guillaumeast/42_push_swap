@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include "libft.h"
 #include "logs.h"
 #include "logs_priv.h"

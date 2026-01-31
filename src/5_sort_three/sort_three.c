@@ -6,7 +6,7 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 20:04:21 by gastesan          #+#    #+#             */
-/*   Updated: 2026/01/30 20:04:22 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/01/31 15:18:11 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ bool	sort_three(t_state *state)
 
 	if (stack_is_sorted(&state->a))
 		return (true);
+	if (state->b.len < 2)
+		return (sa(state));
 	first_value = stack_get_value(&state->b, 0);
 	second_value = stack_get_value(&state->b, 1);
 	if (first_value > second_value)
