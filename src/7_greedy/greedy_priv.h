@@ -6,15 +6,15 @@
 /*   By: gastesan <gastesan@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/30 20:09:11 by gastesan          #+#    #+#             */
-/*   Updated: 2026/01/30 20:09:12 by gastesan         ###   ########.fr       */
+/*   Updated: 2026/02/04 23:48:13 by gastesan         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GREEDY_PRIV_H
 # define GREEDY_PRIV_H
 
-# include "stack.h"
 # include <stddef.h>
+# include <sys/types.h>
 
 typedef struct s_raw_cost
 {
@@ -41,11 +41,10 @@ typedef struct s_total
 
 typedef struct s_insert
 {
+	uint	from_value;
 	size_t	from_index;
 	size_t	target_index;
 	t_total	cost;
 }	t_insert;
-
-t_total	best_cost(const t_stack *a, size_t i_a, const t_stack *b, size_t i_b);
 
 #endif

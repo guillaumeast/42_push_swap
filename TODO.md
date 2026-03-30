@@ -4,9 +4,10 @@
 - Update `README.md` => perso version (explication old_src, visualizer, tester, tester perso...)
 - Update `README.md` => 42 version
 - Copy `libft` **files** instead of **submodule**
+- Remove `tests`
+- Update `make test` to curl the tests dir and execute the test script
 - Remove `push_swap_visualizer`
 - Remove `tester_SimonCROS`
-- Remove `tests`
 - Remove `docs`
 - Remove `.gitmodules`
 - Remove `imgui.ini`
